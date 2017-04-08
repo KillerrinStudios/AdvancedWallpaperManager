@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="WallpaperManager.Pages.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WallpaperManager"
+    xmlns:appControls="using:WallpaperManager.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded"
+    DataContext="{Binding Source={StaticResource Locator}, Path=vm_MainViewModel}">
+
+
+    <SplitView>
+        <SplitView.Pane>
+            <Grid></Grid>
+        </SplitView.Pane>
+        <SplitView.Content>
+            <Grid>
+                <Frame x:Name="MainFrame" Loaded="MainFrame_Loaded" />
+                <appControls:ProgressIndicator x:Name="MainProgressIndicator" Loaded="MainProgressIndicator_Loaded"
+													   VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0"
+													   Visibility="Collapsed"/>
+            </Grid>
+        </SplitView.Content>
+    </SplitView>
+</Page>

@@ -1,0 +1,23 @@
+﻿<Application
+    x:Class="WallpaperManager.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WallpaperManager"
+    xmlns:Converters="using:WallpaperManager.Converters"
+    RequestedTheme="Dark">
+
+    <Application.Resources>
+        
+        <!-- MVVM -->
+        <vm:ViewModelLocator x:Key="Locator" xmlns:vm="using:WallpaperManager.ViewModels" />
+
+        <!-- Converters -->
+        <Converters:ObjectStringConverter x:Key="ObjectStringConverter" />
+        <Converters:EnumStringConverter x:Key="EnumStringConverter" />
+        <Converters:EnumSpaceConverter x:Key="EnumSpaceConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <Converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
+        <Converters:OppositeBooleanConverter x:Key="OppositeBooleanConverter"/>
+        <Converters:RelativeDateTimeConverter x:Key="RelativeDateTime"/>
+    </Application.Resources>
+</Application>
