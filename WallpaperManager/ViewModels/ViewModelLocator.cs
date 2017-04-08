@@ -45,12 +45,14 @@ namespace WallpaperManager.ViewModels
             //}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<ThemesViewModel>();
 
             // Set the Instance
             Instance = this;
         }
 
         public MainViewModel vm_MainViewModel { get { return ServiceLocator.Current.GetInstance<MainViewModel>(); } }
+        public ThemesViewModel vm_ThemesViewModel { get { return ServiceLocator.Current.GetInstance<ThemesViewModel>(); } }
 
         public static void Cleanup()
         {

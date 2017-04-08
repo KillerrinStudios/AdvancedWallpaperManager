@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using WallpaperManager.Pages;
+using WallpaperManager.Repositories;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -23,6 +25,8 @@ namespace WallpaperManager
     /// </summary>
     sealed partial class App : Application
     {
+        public static Random Random = new Random();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -31,6 +35,11 @@ namespace WallpaperManager
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            using (var db = new WallpaperManagerContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         /// <summary>

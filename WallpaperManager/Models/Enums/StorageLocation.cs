@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WallpaperManager.Models.Enums
 {
-    public enum NavigationLocation
+    public enum StorageLocation
     {
-        Default,
-        Themes
+        Local,
+        OneDrive
     }
 }

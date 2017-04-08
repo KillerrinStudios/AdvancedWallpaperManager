@@ -60,6 +60,7 @@ namespace WallpaperManager.ViewModels
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
+            : base()
         {
             if (IsInDesignMode)
             {

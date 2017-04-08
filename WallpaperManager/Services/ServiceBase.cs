@@ -1,13 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using WallpaperManager.Models;
 
 namespace WallpaperManager.Services
 {
-    public abstract class ServiceBase
+    public abstract class ServiceBase : ModelBase
     {
-        public bool ServiceEnabled = true;
+        protected bool m_serviceEnabled = true;
+        public bool ServiceEnabled
+        {
+            get { return m_serviceEnabled; }
+            protected set
+            {
+                if (value == true) EnableService();
+                else DisableService();
+
+                RaisePropertyChanged(nameof(ServiceEnabled));
+            }
+        }
+
+        public virtual void EnableService()
+        {
+            m_serviceEnabled = true;
+        }
+        public virtual void DisableService()
+        {
+            m_serviceEnabled = false;
+        }
     }
 }

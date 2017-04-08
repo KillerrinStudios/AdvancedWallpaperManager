@@ -11,7 +11,6 @@ namespace WallpaperManager.Models
 {
     public abstract class ModelBase : INotifyPropertyChanged
     {
-        //[JsonIgnore]
         public event PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged([CallerMemberName]string property = "")
         {

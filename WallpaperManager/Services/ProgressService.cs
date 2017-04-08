@@ -21,8 +21,6 @@ namespace WallpaperManager.Services
 
         public void Reset()
         {
-            if (!ServiceEnabled) return;
-
             IsRingEnabled = false;
 
             PercentageVisibility = Visibility.Visible;
@@ -101,6 +99,8 @@ namespace WallpaperManager.Services
         }
         public void SetIndicatorAndShow(bool isRingEnabled, double percentage, string message, bool debugWriteLine = false)
         {
+            if (!ServiceEnabled) return;
+
             SetIndicator(isRingEnabled, percentage, message, debugWriteLine);
             Show();
         }

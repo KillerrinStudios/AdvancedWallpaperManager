@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using WallpaperManager.Services;
+using WallpaperManager.Repositories;
 
 namespace WallpaperManager.ViewModels
 {
@@ -53,6 +54,15 @@ namespace WallpaperManager.ViewModels
         }
 
         #endregion
+
+        public WallpaperThemeRepository ThemeRepository { get; set; }
+        public WallpaperDirectoryRepository DirectoryRepository { get; set; }
+        public WallpaperManagerViewModelBase()
+        {
+            var context = new WallpaperManagerContext();
+            ThemeRepository = new WallpaperThemeRepository(context);
+            DirectoryRepository = new WallpaperDirectoryRepository(context);
+        }
 
         public abstract void Loaded();
         public abstract void OnNavigatedTo();
