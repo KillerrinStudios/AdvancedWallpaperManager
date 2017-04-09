@@ -115,7 +115,7 @@ namespace WallpaperManager.ViewModels
                 ThemeRepository.Remove(id);
 
                 // Remove from the Themes List
-                for (int i = Themes.Count - 1; i > 0; i--)
+                for (int i = Themes.Count - 1; i >= 0; i--)
                 {
                     if (Themes[i].ID == id)
                     {

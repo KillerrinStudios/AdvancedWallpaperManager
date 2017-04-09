@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
+    <Compile Include="Models\StorageFolderFiles.cs" />
     <Compile Include="Models\WallpaperDirectory.cs" />
     <Compile Include="Models\WallpaperTheme.cs" />
     <Compile Include="Pages\MainPage.xaml.cs">

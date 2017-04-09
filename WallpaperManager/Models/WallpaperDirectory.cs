@@ -73,6 +73,10 @@ namespace WallpaperManager.Models
                 RaisePropertyChanged(nameof(IsExcluded));
             }
         }
+
+        [JsonIgnore]
+        [NotMapped]
+        public WallpaperDirectory Parent { get; set; }
     }
 
 }

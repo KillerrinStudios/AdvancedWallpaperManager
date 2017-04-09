@@ -11,6 +11,7 @@ using WallpaperManager.Models;
 using WallpaperManager.Pages;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
@@ -55,6 +56,17 @@ namespace WallpaperManager.ViewModels
         private StorageFolder m_storageFolder;
         #endregion
 
+        private ObservableCollection<StorageFolderFiles> m_folderFiles = new ObservableCollection<StorageFolderFiles>();
+        public ObservableCollection<StorageFolderFiles> FolderFiles
+        {
+            get { return m_folderFiles; }
+            set
+            {
+                m_folderFiles = value;
+                RaisePropertyChanged(nameof(FolderFiles));
+            }
+        }
+
         public ThemeDetailsViewModel()
             : base()
         {
@@ -83,13 +95,116 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(OnNavigatedTo)}");
             Theme = (WallpaperTheme)NavigationService.Parameter;
 
-
+            LoadAllFiles();
         }
 
         public override void ResetViewModel()
         {
         }
 
+        public async Task LoadAllFiles()
+        {
+            if (Theme == null) return;
+
+            // Step one we have to populate our openedList with all the directories in the theme
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 1");
+            List <WallpaperDirectory> openedList = new List<WallpaperDirectory>();
+            openedList.AddRange(Theme.Directories);
+            List<WallpaperDirectory> excludedList = openedList.Where(x => x.IsExcluded).ToList();
+
+            // Step two, go through all of the directories and convert them into StorageFolders
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2");
+            List<StorageFolder> allFolders = new List<StorageFolder>();
+            while (openedList.Count > 0)
+            {
+                try
+                {
+                    // If the folder/file is suppose to be excluded, ignore it now
+                    if (openedList[0].IsExcluded)
+                        continue;
+
+                    // Convert the path into a StorageFolder
+                    var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
+                    allFolders.Add(folder);
+
+                    // If we are allowed to gather subdirectories, gather them as wells
+                    if (openedList[0].IncludeSubdirectories)
+                    {
+                        var subfolders = await folder.GetFoldersAsync();
+                        allFolders.AddRange(subfolders);
+                    }
+                }
+                catch (Exception e) { }
+
+                openedList.RemoveAt(0);
+            }
+
+            // Step three, remove all of the excluded directories
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 3");
+            for (int i = excludedList.Count - 1; i >= 0; i--)
+            {
+                bool itemsRemoved = false;
+                for (int x = allFolders.Count - 1; x >= 0; x--)
+                {
+                    if (allFolders[x].Path.Contains(excludedList[i].Path))
+                    {
+                        itemsRemoved = true;
+                        allFolders.RemoveAt(x);
+                    }
+                }
+
+                if (itemsRemoved)
+                    excludedList.RemoveAt(i);
+            }
+
+            // Step four, go through all the StorageFolders and gather their image files
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4");
+            ObservableCollection<StorageFolderFiles> folderFiles = new ObservableCollection<StorageFolderFiles>();
+            for (int i = 0; i < allFolders.Count; i++)
+            {
+                try
+                {
+                    var allFiles = await allFolders[i].GetFilesAsync();
+
+                    StorageFolderFiles tmp = new StorageFolderFiles();
+                    tmp.Folder = allFolders[i];
+                    tmp.Files.AddRange(allFiles);
+                    folderFiles.Add(tmp);
+                }
+                catch (Exception e) { }
+            }
+
+            // Step five, finish off the exclusion list
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 5");
+            for (int i = excludedList.Count - 1; i >= 0; i--)
+            {
+                bool itemsRemoved = false;
+                foreach (var folder in folderFiles)
+                {
+                    for (int x = folder.Files.Count - 1; x >= 0; x--)
+                    {
+                        if (folder.Files[x].Path.Contains(excludedList[i].Path))
+                        {
+                            itemsRemoved = true;
+                            folder.Files.RemoveAt(x);
+                        }
+                    }
+                }
+
+                if (itemsRemoved)
+                    excludedList.RemoveAt(i);
+            }
+
+            // Step six, store the StorageFolderFiles to the side for later
+            Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 6");
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            () =>
+            {
+                FolderFiles = folderFiles;
+            });
+        }
+
+        #region Commands
         #region Open Folder Browser
         public RelayCommand OpenFolderBrowserCommand
         {
@@ -132,8 +247,11 @@ namespace WallpaperManager.ViewModels
                     // Update the Themes Directory List
                     //Theme.Directories.Add(NewDirectory);
 
-                    // Finally, reinstantiate the variable to prepare for additional potential Directory Additions
+                    // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();
+
+                    // Finally, preform the expensive operation to regather all the files in a background thread
+                    LoadAllFiles();
                 });
             }
         }
@@ -196,6 +314,7 @@ namespace WallpaperManager.ViewModels
             }
 
         }
+        #endregion
         #endregion
     }
 }
