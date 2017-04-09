@@ -61,8 +61,8 @@ namespace WallpaperManager.Pages
         #region Loaded
         private void MainFrame_Loaded(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(typeof(ThemesPage));
-            ViewModel.CurrentNavigationLocation = NavigationLocation.Themes;
+            MainFrame.Navigate(typeof(ThemeListPage));
+            ViewModel.CurrentNavigationLocation = NavigationLocation.ThemeList;
 
             if (!SimpleIoc.Default.IsRegistered<NavigationService>())
             {

@@ -12,9 +12,9 @@ using WallpaperManager.Pages;
 
 namespace WallpaperManager.ViewModels
 {
-    public class ThemesViewModel : WallpaperManagerViewModelBase
+    public class ThemeListViewModel : WallpaperManagerViewModelBase
     {
-        public static ThemesViewModel Instance { get { return ServiceLocator.Current.GetInstance<ThemesViewModel>(); } }
+        public static ThemeListViewModel Instance { get { return ServiceLocator.Current.GetInstance<ThemeListViewModel>(); } }
 
         public ObservableCollection<WallpaperTheme> Themes { get; set; } = new ObservableCollection<WallpaperTheme>();
 
@@ -29,7 +29,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        public ThemesViewModel()
+        public ThemeListViewModel()
             : base()
         {
             if (IsInDesignMode)
@@ -54,7 +54,7 @@ namespace WallpaperManager.ViewModels
 
         public override void OnNavigatedTo()
         {
-            Debug.WriteLine($"{nameof(ThemesViewModel)} - {nameof(OnNavigatedTo)}");
+            Debug.WriteLine($"{nameof(ThemeListViewModel)} - {nameof(OnNavigatedTo)}");
             Themes.Clear();
 
             var tmp = ThemeRepository.GetAll();
@@ -88,6 +88,15 @@ namespace WallpaperManager.ViewModels
                     Themes.Add(newTheme);
                 });
             }
+        }
+
+        public void ThemeClicked(WallpaperTheme theme)
+        {
+            if (!CanNavigate)
+                return;
+
+            MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.ThemeDetails;
+            NavigationService.Navigate(typeof(ThemeDetailsPage), theme);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WallpaperManager.Models;
 using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -21,11 +23,11 @@ namespace WallpaperManager.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ThemesPage : Page
+    public sealed partial class ThemeListPage : Page
     {
-        public ThemesViewModel ViewModel { get { return (ThemesViewModel)DataContext; } }
+        public ThemeListViewModel ViewModel { get { return (ThemeListViewModel)DataContext; } }
 
-        public ThemesPage()
+        public ThemeListPage()
         {
             this.InitializeComponent();
         }
@@ -49,6 +51,12 @@ namespace WallpaperManager.Pages
         private void NewTheme_Create_Tapped(object sender, TappedRoutedEventArgs e)
         {
             CreateThemeFlyout.Hide();
+        }
+
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Debug.WriteLine($"{nameof(ThemeListPage)} - {nameof(GridView_ItemClick)}");
+            ViewModel.ThemeClicked((WallpaperTheme)e.ClickedItem);
         }
     }
 }

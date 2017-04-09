@@ -130,8 +130,11 @@
     </Compile>
     <Compile Include="Models\Enums\NavigationLocation.cs" />
     <Compile Include="Models\ModelBase.cs" />
-    <Compile Include="Pages\ThemesPage.xaml.cs">
-      <DependentUpon>ThemesPage.xaml</DependentUpon>
+    <Compile Include="Pages\ThemeDetailsPage.xaml.cs">
+      <DependentUpon>ThemeDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ThemeListPage.xaml.cs">
+      <DependentUpon>ThemeListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\WallpaperDirectoryRepository.cs" />
@@ -143,7 +146,8 @@
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ProgressService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
-    <Compile Include="ViewModels\ThemesViewModel.cs" />
+    <Compile Include="ViewModels\ThemeDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ThemeListViewModel.cs" />
     <Compile Include="ViewModels\WallpaperManagerViewModelBase.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -179,7 +183,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ThemesPage.xaml">
+    <Page Include="Pages\ThemeDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ThemeListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

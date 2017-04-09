@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.Services
 {
-    public class MediaService
+    public class MediaService : ServiceBase
     {
         private MediaElement m_mediaElement;
         public MediaElement MediaPlayer

@@ -42,7 +42,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        private NavigationLocation m_currentNavigationLocation = NavigationLocation.Themes;
+        private NavigationLocation m_currentNavigationLocation = NavigationLocation.None;
         public NavigationLocation CurrentNavigationLocation
         {
             get { return m_currentNavigationLocation; }
@@ -104,8 +104,8 @@ namespace WallpaperManager.ViewModels
                     if (!CanNavigate)
                         return;
 
-                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.Themes;
-                    NavigationService.Navigate(typeof(ThemesPage), null);
+                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.ThemeList;
+                    NavigationService.Navigate(typeof(ThemeListPage), null);
                 });
             }
         }

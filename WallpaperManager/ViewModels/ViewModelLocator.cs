@@ -45,14 +45,16 @@ namespace WallpaperManager.ViewModels
             //}
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<ThemesViewModel>();
+            SimpleIoc.Default.Register<ThemeListViewModel>();
+            SimpleIoc.Default.Register<ThemeDetailsViewModel>();
 
             // Set the Instance
             Instance = this;
         }
 
         public MainViewModel vm_MainViewModel { get { return ServiceLocator.Current.GetInstance<MainViewModel>(); } }
-        public ThemesViewModel vm_ThemesViewModel { get { return ServiceLocator.Current.GetInstance<ThemesViewModel>(); } }
+        public ThemeListViewModel vm_ThemeListViewModel { get { return ServiceLocator.Current.GetInstance<ThemeListViewModel>(); } }
+        public ThemeDetailsViewModel vm_ThemeDetailsViewModel { get { return ServiceLocator.Current.GetInstance<ThemeDetailsViewModel>(); } }
 
         public static void Cleanup()
         {

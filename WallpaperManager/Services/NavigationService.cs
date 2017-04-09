@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Navigation;
 namespace WallpaperManager.Services
 {
 
-    public class NavigationService
+    public class NavigationService : ServiceBase
     {
         public event NavigatingCancelEventHandler Navigating;
         public event BackClickEventHandler BackButtonClicked;
