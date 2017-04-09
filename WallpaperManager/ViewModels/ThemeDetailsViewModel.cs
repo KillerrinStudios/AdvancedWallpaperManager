@@ -164,12 +164,19 @@ namespace WallpaperManager.ViewModels
             {
                 try
                 {
-                    var allFiles = await allFolders[i].GetFilesAsync();
+                    var files = await allFolders[i].GetFilesAsync();
 
                     StorageFolderFiles tmp = new StorageFolderFiles();
                     tmp.Folder = allFolders[i];
-                    tmp.Files.AddRange(allFiles);
-                    folderFiles.Add(tmp);
+
+                    for (int x = 0; x < files.Count; i++)
+                    {
+                        if (files[i].ContentType.ToLower().Contains("image"))
+                            tmp.Files.Add(files[i]);
+                    }
+
+                    if (tmp.Files.Count > 0)
+                        folderFiles.Add(tmp);
                 }
                 catch (Exception e) { }
             }
