@@ -12,18 +12,20 @@
 
 	<SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" CompactPaneLength="50" OpenPaneLength="150">
 		<SplitView.Pane>
-			<StackPanel Orientation="Vertical" Background="Black">
+			<StackPanel Orientation="Vertical" Background="Gray">
 				<Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-					Width="50" Height="50" Background="Transparent" Command="{Binding TogglePaneCommand}"/>
+					    Command="{Binding TogglePaneCommand}"
+                        Width="50" Height="50" Background="Transparent" />
 				<StackPanel Orientation="Horizontal">
-					<Button x:Name="MenuButton1" FontFamily="Segoe MDL2 Assets" Content="&#xE825;"
-					Width="50" Height="50" Background="Transparent"/>
-					<TextBlock Text="Button 1" FontSize="18" VerticalAlignment="Center" />
+                    <Button x:Name="ThemesButton" FontFamily="Segoe MDL2 Assets" Content="&#xE8A9;"
+                            Command="{Binding NavigateThemesCommand}"
+                            Width="50" Height="50" Background="Transparent"/>
+					<TextBlock Text="Themes" FontSize="18" VerticalAlignment="Center" />
 				</StackPanel>
 			</StackPanel>
 		</SplitView.Pane>
 		<SplitView.Content>
-			<Grid>
+			<Grid Margin="10,0,0,0">
 				<Frame x:Name="MainFrame" Loaded="MainFrame_Loaded" />
 				<appControls:ProgressIndicator x:Name="MainProgressIndicator" Loaded="MainProgressIndicator_Loaded"
 													   VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0"

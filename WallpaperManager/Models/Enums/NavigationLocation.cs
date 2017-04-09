@@ -8,7 +8,9 @@ namespace WallpaperManager.Models.Enums
 {
     public enum NavigationLocation
     {
-        Default,
-        Themes
+        Themes,
+        ThemeCreate,
+        ThemeDisplay
+        
     }
 }

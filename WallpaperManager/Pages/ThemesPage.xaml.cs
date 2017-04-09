@@ -45,5 +45,10 @@ namespace WallpaperManager.Pages
             ViewModel.OnNavigatedFrom();
             base.OnNavigatedFrom(e);
         }
+
+        private void NewTheme_Create_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            CreateThemeFlyout.Hide();
+        }
     }
 }

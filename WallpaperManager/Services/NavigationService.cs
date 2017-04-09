@@ -34,6 +34,15 @@ namespace WallpaperManager.Services
             SystemNavigationManager.GetForCurrentView().BackRequested += NavigationService_BackRequested;
             EnableBackButton();
         }
+        public NavigationService(Frame frame, bool backButton)
+        {
+            m_frame = frame;
+
+            SystemNavigationManager.GetForCurrentView().BackRequested += NavigationService_BackRequested;
+
+            if (backButton) EnableBackButton();
+            else DisableBackButton();
+        }
 
         #region Back Button
         public void NavigationService_BackRequested(object sender, BackRequestedEventArgs e)

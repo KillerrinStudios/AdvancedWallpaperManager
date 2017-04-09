@@ -66,7 +66,7 @@ namespace WallpaperManager.Pages
 
             if (!SimpleIoc.Default.IsRegistered<NavigationService>())
             {
-                SimpleIoc.Default.Register<NavigationService>(() => { return new NavigationService(MainFrame); });
+                SimpleIoc.Default.Register<NavigationService>(() => { return new NavigationService(MainFrame, false); });
             }
         }
 

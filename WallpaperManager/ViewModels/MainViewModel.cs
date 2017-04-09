@@ -7,6 +7,7 @@ using Windows.UI.Xaml;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using WallpaperManager.Models.Enums;
+using WallpaperManager.Pages;
 
 namespace WallpaperManager.ViewModels
 {
@@ -41,7 +42,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        private NavigationLocation m_currentNavigationLocation = NavigationLocation.Default;
+        private NavigationLocation m_currentNavigationLocation = NavigationLocation.Themes;
         public NavigationLocation CurrentNavigationLocation
         {
             get { return m_currentNavigationLocation; }
@@ -76,9 +77,7 @@ namespace WallpaperManager.ViewModels
 
         public override void Loaded()
         {
-
             // Handle Launch Args
-
         }
 
         public override void OnNavigatedTo()
@@ -96,13 +95,17 @@ namespace WallpaperManager.ViewModels
         }
 
         #region Navigation Commands
-        public RelayCommand SampleCommand
+        public RelayCommand NavigateThemesCommand
         {
             get
             {
                 return new RelayCommand(() =>
                 {
-                    
+                    if (!CanNavigate)
+                        return;
+
+                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.Themes;
+                    NavigationService.Navigate(typeof(ThemesPage), null);
                 });
             }
         }
