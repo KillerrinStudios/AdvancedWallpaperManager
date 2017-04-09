@@ -58,8 +58,8 @@
 		</Grid>
 
 		<GridView ItemsSource="{Binding Themes}" IsItemClickEnabled="True" ItemClick="GridView_ItemClick"
-				  Grid.Row="1"
-				  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+				  RightTapped="GridView_RightTapped"
+				  Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 				  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 				  ScrollViewer.HorizontalScrollMode="Disabled"
 				  ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -86,6 +86,13 @@
 					</Grid>
 				</DataTemplate>
 			</GridView.ItemTemplate>
+            <GridView.Resources>
+                <MenuFlyout x:Name="themesMenuFlyout">
+                    <MenuFlyout.Items>
+                        <MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
+                    </MenuFlyout.Items>
+                </MenuFlyout>
+            </GridView.Resources>
 		</GridView>
 	</Grid>
 </Page>

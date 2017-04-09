@@ -37,9 +37,23 @@
 
 					<Button.Flyout>
 						<Flyout x:Name="AddDirectoryFlyout">
-							<StackPanel Orientation="Vertical">
-								
-							</StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Button Content="Browse" HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
+                                <ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
+                                              HorizontalAlignment="Stretch"/>
+                                
+                                <ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
+                                              HorizontalAlignment="Stretch"/>
+
+                                <Button HorizontalAlignment="Stretch" Margin="0,20,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Add" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
 						</Flyout>
 					</Button.Flyout>
 				</Button>
@@ -57,7 +71,7 @@
 							<StackPanel Orientation="Vertical">
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="Name" VerticalAlignment="Center"/>
-									<TextBox PlaceholderText="Theme Name" Text="{Binding Theme.Name, Mode=TwoWay}"
+                                    <TextBox PlaceholderText="Theme Name" Text="{Binding NewThemeName, Mode=TwoWay}"
 										 Margin="20,0,0,0" Width="250"
 										 VerticalAlignment="Center"/>
 								</StackPanel>

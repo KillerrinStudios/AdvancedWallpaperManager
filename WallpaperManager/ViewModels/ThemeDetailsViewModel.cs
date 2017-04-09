@@ -26,7 +26,28 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(Theme));
             }
         }
+        private string m_newThemeName = "";
+        public string NewThemeName
+        {
+            get { return m_newThemeName; }
+            set
+            {
+                m_newThemeName = value;
+                RaisePropertyChanged(nameof(NewThemeName));
+            }
+        }
 
+
+        private WallpaperDirectory m_newDirectory = new WallpaperDirectory();
+        public WallpaperDirectory NewDirectory
+        {
+            get { return m_newDirectory; }
+            set
+            {
+                m_newDirectory = value;
+                RaisePropertyChanged(nameof(NewDirectory));
+            }
+        }
 
         public ThemeDetailsViewModel()
             : base()
@@ -61,15 +82,25 @@ namespace WallpaperManager.ViewModels
         {
         }
 
+
+
+
         public RelayCommand EditThemeCommand
         {
             get
             {
                 return new RelayCommand(() =>
                 {
+                    if (string.IsNullOrWhiteSpace(NewThemeName))
+                        return;
+
                     // Update the Theme
+                    Theme.Name = "" + NewThemeName;
                     Theme.DateLastModified = DateTime.UtcNow;
                     ThemeRepository.Update(Theme);
+
+                    // Reset the Variables
+                    NewThemeName = "";
                 });
             }
         }
@@ -80,12 +111,12 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    DisplayDeleteDialog();
+                    DeleteThemeDialog();
                 });
             }
         }
 
-        private async void DisplayDeleteDialog()
+        public async void DeleteThemeDialog()
         {
             ContentDialog deleteDialog = new ContentDialog
             {

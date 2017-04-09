@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
 using WallpaperManager.Pages;
+using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
 {
@@ -76,6 +77,9 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    if (string.IsNullOrWhiteSpace(NewThemeName))
+                        return;
+
                     // Create the New Theme
                     var newTheme = new WallpaperTheme();
                     newTheme.Name = "" + NewThemeName;
@@ -88,6 +92,39 @@ namespace WallpaperManager.ViewModels
                     Themes.Add(newTheme);
                 });
             }
+        }
+
+        public async void DeleteThemeDialog(int id)
+        {
+            ContentDialog deleteDialog = new ContentDialog
+            {
+                Title = "Delete Theme Permanently?",
+                Content = "If you delete this theme you will not be able to recover it. Are you sure you want to PERMANENTLY delete this Theme?",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel"
+            };
+
+            ContentDialogResult result = await deleteDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                // Delete the theme
+                var theme = ThemeRepository.Find(id);
+                if (theme == null)
+                    return;
+                ThemeRepository.Remove(id);
+
+                // Remove from the Themes List
+                for (int i = Themes.Count - 1; i > 0; i--)
+                {
+                    if (Themes[i].ID == id)
+                    {
+                        Themes.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+
         }
 
         public void ThemeClicked(WallpaperTheme theme)

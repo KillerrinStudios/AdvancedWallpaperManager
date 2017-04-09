@@ -58,5 +58,22 @@ namespace WallpaperManager.Pages
             Debug.WriteLine($"{nameof(ThemeListPage)} - {nameof(GridView_ItemClick)}");
             ViewModel.ThemeClicked((WallpaperTheme)e.ClickedItem);
         }
+
+        WallpaperTheme m_rightClickedWallPaperTheme;
+        private void GridView_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            GridView gridView = (GridView)sender;
+            themesMenuFlyout.ShowAt(gridView, e.GetPosition(gridView));
+            m_rightClickedWallPaperTheme = ((FrameworkElement)e.OriginalSource).DataContext as WallpaperTheme;
+        }
+
+        private void MenuFlyoutItem_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_rightClickedWallPaperTheme == null)
+                return;
+
+            ViewModel.DeleteThemeDialog(m_rightClickedWallPaperTheme.ID);
+            m_rightClickedWallPaperTheme = null;
+        }
     }
 }
