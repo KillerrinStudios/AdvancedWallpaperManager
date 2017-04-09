@@ -9,13 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
 using WallpaperManager.Pages;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
 {
     public class ThemeDetailsViewModel : WallpaperManagerViewModelBase
     {
-
+        #region Themes
         private WallpaperTheme m_theme;
         public WallpaperTheme Theme
         {
@@ -36,8 +38,9 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(NewThemeName));
             }
         }
+        #endregion
 
-
+        #region Directory
         private WallpaperDirectory m_newDirectory = new WallpaperDirectory();
         public WallpaperDirectory NewDirectory
         {
@@ -48,6 +51,9 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(NewDirectory));
             }
         }
+
+        private StorageFolder m_storageFolder;
+        #endregion
 
         public ThemeDetailsViewModel()
             : base()
@@ -76,13 +82,61 @@ namespace WallpaperManager.ViewModels
         {
             Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(OnNavigatedTo)}");
             Theme = (WallpaperTheme)NavigationService.Parameter;
+
+
         }
 
         public override void ResetViewModel()
         {
         }
 
+        #region Open Folder Browser
+        public RelayCommand OpenFolderBrowserCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    OpenFolderBrowser();
+                });
+            }
+        }
 
+        private async void OpenFolderBrowser()
+        {
+            FolderPicker folderPicker = new FolderPicker();
+            folderPicker.FileTypeFilter.Add("*");
+            m_storageFolder = await folderPicker.PickSingleFolderAsync();
+
+            // Set the path
+            if (m_storageFolder != null)
+                NewDirectory.Path = m_storageFolder.Path;
+        }
+        #endregion
+
+        public RelayCommand AddDirectoryCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (m_storageFolder == null) return;
+
+                    // Save to the database
+                    NewDirectory.WallpaperThemeID = Theme.ID;
+                    //NewDirectory.Theme = Theme;
+                    NewDirectory.Path = m_storageFolder.Path;
+                    NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
+                    DirectoryRepository.Add(NewDirectory);
+
+                    // Update the Themes Directory List
+                    //Theme.Directories.Add(NewDirectory);
+
+                    // Finally, reinstantiate the variable to prepare for additional potential Directory Additions
+                    NewDirectory = new WallpaperDirectory();
+                });
+            }
+        }
 
 
         public RelayCommand EditThemeCommand
@@ -105,6 +159,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        #region Delete
         public RelayCommand DeleteThemeCommand
         {
             get
@@ -141,5 +196,6 @@ namespace WallpaperManager.ViewModels
             }
 
         }
+        #endregion
     }
 }

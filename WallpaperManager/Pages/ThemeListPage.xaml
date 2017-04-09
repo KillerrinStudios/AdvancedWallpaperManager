@@ -66,7 +66,7 @@
 				  ScrollViewer.VerticalScrollMode="Auto">
 			<GridView.ItemsPanel>
 				<ItemsPanelTemplate>
-					<ItemsWrapGrid Orientation="Horizontal"
+					<ItemsWrapGrid Orientation="Horizontal" ItemWidth="150" ItemHeight="150"
 							ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							ScrollViewer.VerticalScrollBarVisibility="Disabled" />
 				</ItemsPanelTemplate>
@@ -81,18 +81,24 @@
 
 						<Image Source="{Binding RandomImageFromDirectory}" 
 							   Grid.Row="0" Grid.RowSpan="2" />
-						<TextBlock Text="{Binding Name}" TextWrapping="WrapWholeWords"
-								   Grid.Row="1"/>
+
+						<Grid Grid.Row="1">
+							<Grid.Background>
+								<SolidColorBrush Color="Black" Opacity="0.5"/>
+							</Grid.Background>
+							
+							<TextBlock Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center"/>
+						</Grid>
 					</Grid>
 				</DataTemplate>
 			</GridView.ItemTemplate>
-            <GridView.Resources>
-                <MenuFlyout x:Name="themesMenuFlyout">
-                    <MenuFlyout.Items>
-                        <MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
-                    </MenuFlyout.Items>
-                </MenuFlyout>
-            </GridView.Resources>
+			<GridView.Resources>
+				<MenuFlyout x:Name="themesMenuFlyout">
+					<MenuFlyout.Items>
+						<MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
+					</MenuFlyout.Items>
+				</MenuFlyout>
+			</GridView.Resources>
 		</GridView>
 	</Grid>
 </Page>
