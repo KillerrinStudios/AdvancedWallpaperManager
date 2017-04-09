@@ -7,6 +7,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	xmlns:appControls="using:WallpaperManager.Controls"
+	xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_ThemeListViewModel}">
 
