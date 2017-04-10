@@ -10,6 +10,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Search;
 using Windows.Storage.Streams;
+using Windows.System;
 
 namespace Killerrin_Studios_Toolkit
 {
@@ -125,6 +126,28 @@ namespace Killerrin_Studios_Toolkit
         public async Task<IReadOnlyList<IStorageItem>> GetAllItemsInFolder(StorageFolder folder, CommonFileQuery query)
         {
             return await folder.GetItemsAsync();
+        }
+
+        public async Task<IReadOnlyList<StorageFolder>> GetDirectoryTreeFromFolder(StorageFolder folder, bool enableSort)
+        {
+            List<StorageFolder> subfoldersOpenedList = new List<StorageFolder>();
+
+            // Populate the Initial OpenedList
+            var subfolders = await folder.GetFoldersAsync();
+            subfoldersOpenedList.AddRange(subfolders);
+
+            // For each item inside of the OpenedList, go though them, get their Subfolders 
+            // And add them to the OpenedList
+            for (int i = 0; i < subfoldersOpenedList.Count; i++)
+            {
+                subfolders = await subfoldersOpenedList[i].GetFoldersAsync();
+                subfoldersOpenedList.AddRange(subfolders);
+            }
+
+            if (enableSort)
+                subfoldersOpenedList = subfoldersOpenedList.OrderBy(o => o.Path).ToList();
+
+            return subfoldersOpenedList;
         }
         #endregion
 
@@ -273,6 +296,23 @@ namespace Killerrin_Studios_Toolkit
         public static IStorageItem StorageFolderToIStorageItem(StorageFolder folder)
         {
             return (IStorageItem)folder;
+        }
+        #endregion
+
+        #region Open
+        public static async void OpenFile(StorageFile file)
+        {
+            await Launcher.LaunchFileAsync(file);
+        }
+
+        public static async void OpenFolderInExplorer(StorageFolder folder)
+        {
+            await Launcher.LaunchFolderAsync(folder);
+        }
+
+        public static async void OpenFolderInExplorer(StorageFolder folder, FolderLauncherOptions options)
+        {
+            await Launcher.LaunchFolderAsync(folder, options);
         }
         #endregion
     }

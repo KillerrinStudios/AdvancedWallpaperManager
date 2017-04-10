@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Killerrin_Studios_Toolkit;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace WallpaperManager.Pages
         {
             Button btn = (Button)sender;
             StorageFile file = btn.DataContext as StorageFile;
-            ThemeDetailsViewModel.OpenFile(file);
+            StorageTask.OpenFile(file);
         }
 
         private async void OpenDirectoryButton(object sender, RoutedEventArgs e)
@@ -76,7 +77,7 @@ namespace WallpaperManager.Pages
             StorageFolder folder = await file.GetParentAsync();
 
             if (folder != null)
-                ThemeDetailsViewModel.OpenFolderInExplorer(folder);
+                StorageTask.OpenFolderInExplorer(folder);
         }
     }
 }
