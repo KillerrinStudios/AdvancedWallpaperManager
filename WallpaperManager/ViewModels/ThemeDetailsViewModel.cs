@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Killerrin_Studios_Toolkit;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Toolkit.Uwp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,8 +60,19 @@ namespace WallpaperManager.ViewModels
         private StorageFolder m_storageFolder;
         #endregion
 
-        private ObservableCollection<StorageFolderFiles> m_folderFiles = new ObservableCollection<StorageFolderFiles>();
-        public ObservableCollection<StorageFolderFiles> FolderFiles
+        //private ObservableCollection<StorageFolderFiles> m_folderFiles = new ObservableCollection<StorageFolderFiles>();
+        //public ObservableCollection<StorageFolderFiles> FolderFiles
+        //{
+        //    get { return m_folderFiles; }
+        //    set
+        //    {
+        //        m_folderFiles = value;
+        //        RaisePropertyChanged(nameof(FolderFiles));
+        //    }
+        //}
+
+        private IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles> m_folderFiles = new IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles>();
+        public IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles> FolderFiles
         {
             get { return m_folderFiles; }
             set
@@ -122,19 +135,24 @@ namespace WallpaperManager.ViewModels
             progress.Report(new IndicatorProgressReport(true, 0.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 1/7", true));
             List<WallpaperDirectory> openedList = new List<WallpaperDirectory>();
             openedList.AddRange(directories);
-            List<WallpaperDirectory> excludedList = openedList.Where(x => x.IsExcluded).ToList();
+
+            // Grab the Excluded Paths
+            var excludedList = openedList
+                .Where(x => x.IsExcluded)
+                .Select(x => x.Path.ToLower())
+                .ToList();
 
             // Step two, go through all of the directories and convert them into StorageFolders
             progress.Report(new IndicatorProgressReport(true, 15.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2/7", true));
             List<StorageFolder> allFolders = new List<StorageFolder>();
             while (openedList.Count > 0)
             {
+                // If the folder/file is suppose to be excluded, ignore it now
+                if (openedList[0].IsExcluded)
+                    continue;
+
                 try
                 {
-                    // If the folder/file is suppose to be excluded, ignore it now
-                    if (openedList[0].IsExcluded)
-                        continue;
-
                     // Convert the path into a StorageFolder
                     var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
                     allFolders.Add(folder);
@@ -143,16 +161,7 @@ namespace WallpaperManager.ViewModels
                     // If we are allowed to gather subdirectories, gather them as wells
                     if (openedList[0].IncludeSubdirectories)
                     {
-                        List<StorageFolder> subfoldersOpenedList = new List<StorageFolder>();
-                        var subfolders = await folder.GetFoldersAsync();
-                        subfoldersOpenedList.AddRange(subfolders);
-
-                        for (int i = 0; i < subfoldersOpenedList.Count; i++)
-                        {
-                            subfolders = await subfoldersOpenedList[i].GetFoldersAsync();
-                            subfoldersOpenedList.AddRange(subfolders);
-                        }
-
+                        var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(folder, false);
                         allFolders.AddRange(subfoldersOpenedList);
                     }
                 }
@@ -168,21 +177,9 @@ namespace WallpaperManager.ViewModels
 
             // Step three, remove all of the excluded directories
             progress.Report(new IndicatorProgressReport(true, 30.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 3/7", true));
-            for (int i = excludedList.Count - 1; i >= 0; i--)
-            {
-                bool itemsRemoved = false;
-                for (int x = allFolders.Count - 1; x >= 0; x--)
-                {
-                    if (allFolders[x].Path.Contains(excludedList[i].Path))
-                    {
-                        itemsRemoved = true;
-                        allFolders.RemoveAt(x);
-                    }
-                }
-
-                if (itemsRemoved)
-                    excludedList.RemoveAt(i);
-            }
+            allFolders = allFolders
+                .Where(x => !excludedList.Contains(x.Path, StringComparer.OrdinalIgnoreCase))
+                .ToList();
 
             // Step four, sort all the directories
             progress.Report(new IndicatorProgressReport(true, 45.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4/7", true));
@@ -219,26 +216,20 @@ namespace WallpaperManager.ViewModels
                 }
             }
 
-            // Step six, finish off the exclusion list
+            // Step six, finish off the exclusion list by removing individual files
             progress.Report(new IndicatorProgressReport(true, 75.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 6/7", true));
-
             for (int i = excludedList.Count - 1; i >= 0; i--)
             {
-                bool itemsRemoved = false;
                 foreach (var folder in folderFiles)
                 {
                     for (int x = folder.Files.Count - 1; x >= 0; x--)
                     {
-                        if (folder.Files[x].Path.Contains(excludedList[i].Path))
+                        if (folder.Files[x].Path.ToLower().Contains(excludedList[i]))
                         {
-                            itemsRemoved = true;
                             folder.Files.RemoveAt(x);
                         }
                     }
                 }
-
-                if (itemsRemoved)
-                    excludedList.RemoveAt(i);
             }
 
             // Step seven, Do a final passthrough and get rid of all FolderFiles without files
@@ -260,15 +251,11 @@ namespace WallpaperManager.ViewModels
                 Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - COMPLETE");
                 ProgressService.Hide();
 
-                FolderFiles = folderFiles;
-
-                //foreach (var item in FolderFiles)
-                //{
-                //    foreach (var file in item.Files)
-                //    {
-                //        Debug.WriteLine($"{item.Folder.Path} || {file.Path}");
-                //    }
-                //}
+                //FolderFiles = folderFiles;
+                foreach (var item in folderFiles)
+                {
+                    FolderFiles.Add(item);
+                }
             });
         }
 
@@ -392,15 +379,5 @@ namespace WallpaperManager.ViewModels
         }
         #endregion
         #endregion
-
-        public static async void OpenFile(StorageFile file)
-        {
-            await Launcher.LaunchFileAsync(file);
-        }
-
-        public static async void OpenFolderInExplorer(StorageFolder folder)
-        {
-            await Launcher.LaunchFolderAsync(folder);
-        }
     }
 }

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Threading;
 
 namespace WallpaperManager.Models
 {
@@ -30,6 +32,25 @@ namespace WallpaperManager.Models
                 RaisePropertyChanged(nameof(Files));
             }
         }
+    }
 
+    public class StorageFolderFilesSource : IIncrementalSource<StorageFolderFiles>
+    {
+        public readonly List<StorageFolderFiles> FolderFiles;
+
+        public StorageFolderFilesSource()
+        {
+            // Creates an example collection.
+            FolderFiles = new List<StorageFolderFiles>();
+        }
+
+        public async Task<IEnumerable<StorageFolderFiles>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Gets items from the collection according to pageIndex and pageSize parameters.
+            var result = (from p in FolderFiles
+                          select p).Skip(pageIndex * pageSize).Take(pageSize);
+
+            return result;
+        }
     }
 }
