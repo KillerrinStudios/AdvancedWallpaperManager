@@ -104,5 +104,16 @@ namespace WallpaperManager.Services
             SetIndicator(isRingEnabled, percentage, message, debugWriteLine);
             Show();
         }
+
+        public override void EnableService()
+        {
+            Show();
+            base.EnableService();
+        }
+        public override void DisableService()
+        {
+            Hide();
+            base.DisableService();
+        }
     }
 }

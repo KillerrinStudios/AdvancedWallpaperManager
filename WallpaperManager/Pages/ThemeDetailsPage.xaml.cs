@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -54,6 +55,28 @@ namespace WallpaperManager.Pages
         private void EditTheme_Delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
             //EditThemeFlyout.Hide();
+        }
+
+        private void ImageGridRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+        }
+
+        private void OpenFileButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            StorageFile file = btn.DataContext as StorageFile;
+            ThemeDetailsViewModel.OpenFile(file);
+        }
+
+        private async void OpenDirectoryButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            StorageFile file = btn.DataContext as StorageFile;
+            StorageFolder folder = await file.GetParentAsync();
+
+            if (folder != null)
+                ThemeDetailsViewModel.OpenFolderInExplorer(folder);
         }
     }
 }

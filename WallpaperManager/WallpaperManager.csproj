@@ -121,6 +121,10 @@
     <Compile Include="Migrations\20170408214845_InitialMigration.designer.cs">
       <DependentUpon>20170408214845_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170409093944_AddedFutureAccessTokens.cs" />
+    <Compile Include="Migrations\20170409093944_AddedFutureAccessTokens.designer.cs">
+      <DependentUpon>20170409093944_AddedFutureAccessTokens.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
     <Compile Include="Models\StorageFolderFiles.cs" />
@@ -147,6 +151,7 @@
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ProgressService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
+    <Compile Include="Models\IndicatorProgressReport.cs" />
     <Compile Include="ViewModels\ThemeDetailsViewModel.cs" />
     <Compile Include="ViewModels\ThemeListViewModel.cs" />
     <Compile Include="ViewModels\WallpaperManagerViewModelBase.cs" />

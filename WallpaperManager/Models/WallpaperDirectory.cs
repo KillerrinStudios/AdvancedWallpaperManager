@@ -50,6 +50,19 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
+        private string m_faToken = "";
+        public string FutureAccessToken
+        {
+            get { return m_faToken; }
+            set
+            {
+                m_faToken = value;
+                RaisePropertyChanged(nameof(FutureAccessToken));
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
         private bool m_includeSubdirectories = true;
         public bool IncludeSubdirectories
         {
