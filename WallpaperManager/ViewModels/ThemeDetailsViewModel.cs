@@ -271,7 +271,6 @@ namespace WallpaperManager.ViewModels
             folderPicker.FileTypeFilter.Add("*");
             m_storageFolder = await folderPicker.PickSingleFolderAsync();
 
-            // Set the path
             if (m_storageFolder != null)
             {
                 NewDirectory.Path = m_storageFolder.Path;
