@@ -126,7 +126,9 @@
       <DependentUpon>20170409093944_AddedFutureAccessTokens.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
+    <Compile Include="Models\Enums\FileAccessTokenType.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
+    <Compile Include="Models\FileAccessToken.cs" />
     <Compile Include="Models\StorageFolderFiles.cs" />
     <Compile Include="Models\WallpaperDirectory.cs" />
     <Compile Include="Models\WallpaperTheme.cs" />
@@ -142,6 +144,7 @@
       <DependentUpon>ThemeListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\FileAccessTokenRepository.cs" />
     <Compile Include="Repositories\WallpaperDirectoryRepository.cs" />
     <Compile Include="Repositories\WallpaperThemeRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />

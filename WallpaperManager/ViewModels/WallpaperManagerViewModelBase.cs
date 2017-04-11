@@ -57,11 +57,14 @@ namespace WallpaperManager.ViewModels
 
         public WallpaperThemeRepository ThemeRepository { get; set; }
         public WallpaperDirectoryRepository DirectoryRepository { get; set; }
+        public FileAccessTokenRepository AccessTokenRepository { get; set; }
+
         public WallpaperManagerViewModelBase()
         {
             var context = new WallpaperManagerContext();
             ThemeRepository = new WallpaperThemeRepository(context);
             DirectoryRepository = new WallpaperDirectoryRepository(context);
+            AccessTokenRepository = new FileAccessTokenRepository(context);
         }
 
         public abstract void Loaded();

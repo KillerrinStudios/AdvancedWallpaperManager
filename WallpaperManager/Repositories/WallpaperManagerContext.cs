@@ -17,6 +17,7 @@ namespace WallpaperManager.Repositories
         // Create the DbSets
         public DbSet<WallpaperTheme> Themes { get; set; }
         public DbSet<WallpaperDirectory> Directories { get; set; }
+        public DbSet<FileAccessToken> AccessTokens { get; set; }
 
         // Create the Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
