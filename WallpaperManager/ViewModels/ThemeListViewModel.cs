@@ -61,8 +61,21 @@ namespace WallpaperManager.ViewModels
             var tmp = ThemeRepository.GetAll();
             foreach (var item in tmp)
             {
-                Debug.WriteLine($"{item.ID} - {item.Name}");
                 Themes.Add(item);
+            }
+
+            // Print all the values to the screen to debug
+            foreach (var item in AccessTokenRepository.GetAll())
+            {
+                Debug.WriteLine($"Access Tokens: {item.Path} - {item.AccessTokenType} | {item.AccessToken}");
+            }
+            foreach (var item in ThemeRepository.GetAll())
+            {
+                Debug.WriteLine($"Theme: {item.Name}");
+            }
+            foreach (var item in DirectoryRepository.GetAll())
+            {
+                Debug.WriteLine($"Directories: {item.Path}");
             }
         }
 

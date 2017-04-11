@@ -9,20 +9,36 @@ using WallpaperManager.Models.Enums;
 namespace WallpaperManager.Migrations
 {
     [DbContext(typeof(WallpaperManagerContext))]
-    [Migration("20170409093944_AddedFutureAccessTokens")]
-    partial class AddedFutureAccessTokens
+    [Migration("20170411020256_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");
 
+            modelBuilder.Entity("WallpaperManager.Models.FileAccessToken", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AccessToken");
+
+                    b.Property<int>("AccessTokenType");
+
+                    b.Property<string>("Path");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("AccessTokens");
+                });
+
             modelBuilder.Entity("WallpaperManager.Models.WallpaperDirectory", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FutureAccessToken");
+                    b.Property<int>("FileAccessTokenID");
 
                     b.Property<bool>("IncludeSubdirectories");
 
@@ -35,6 +51,8 @@ namespace WallpaperManager.Migrations
                     b.Property<int>("WallpaperThemeID");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("FileAccessTokenID");
 
                     b.HasIndex("WallpaperThemeID");
 
@@ -59,6 +77,11 @@ namespace WallpaperManager.Migrations
 
             modelBuilder.Entity("WallpaperManager.Models.WallpaperDirectory", b =>
                 {
+                    b.HasOne("WallpaperManager.Models.FileAccessToken", "AccessToken")
+                        .WithMany()
+                        .HasForeignKey("FileAccessTokenID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("WallpaperManager.Models.WallpaperTheme", "Theme")
                         .WithMany("Directories")
                         .HasForeignKey("WallpaperThemeID")

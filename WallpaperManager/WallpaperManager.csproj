@@ -117,13 +117,9 @@
     <Compile Include="Killerrin Studios Toolkit\LockscreenTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\StorageTask.cs" />
     <Compile Include="Killerrin Studios Toolkit\TileManager.cs" />
-    <Compile Include="Migrations\20170408214845_InitialMigration.cs" />
-    <Compile Include="Migrations\20170408214845_InitialMigration.designer.cs">
-      <DependentUpon>20170408214845_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170409093944_AddedFutureAccessTokens.cs" />
-    <Compile Include="Migrations\20170409093944_AddedFutureAccessTokens.designer.cs">
-      <DependentUpon>20170409093944_AddedFutureAccessTokens.cs</DependentUpon>
+    <Compile Include="Migrations\20170411020256_InitialMigration.cs" />
+    <Compile Include="Migrations\20170411020256_InitialMigration.designer.cs">
+      <DependentUpon>20170411020256_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Models\Enums\FileAccessTokenType.cs" />

@@ -23,6 +23,11 @@ namespace WallpaperManager.Models
         public int WallpaperThemeID { get; set; }
 
         [JsonIgnore]
+        [ForeignKey(nameof(FileAccessTokenID))]
+        public FileAccessToken AccessToken { get; set; }
+        public int FileAccessTokenID { get; set; }
+
+        [JsonIgnore]
         [NotMapped]
         private StorageLocation m_storageLocation;
         public StorageLocation StorageLocation
@@ -45,19 +50,6 @@ namespace WallpaperManager.Models
             {
                 m_path = value;
                 RaisePropertyChanged(nameof(Path));
-            }
-        }
-
-        [JsonIgnore]
-        [NotMapped]
-        private string m_faToken = "";
-        public string FutureAccessToken
-        {
-            get { return m_faToken; }
-            set
-            {
-                m_faToken = value;
-                RaisePropertyChanged(nameof(FutureAccessToken));
             }
         }
 

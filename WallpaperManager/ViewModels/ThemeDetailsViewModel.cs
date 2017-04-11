@@ -60,17 +60,6 @@ namespace WallpaperManager.ViewModels
         private StorageFolder m_storageFolder;
         #endregion
 
-        //private ObservableCollection<StorageFolderFiles> m_folderFiles = new ObservableCollection<StorageFolderFiles>();
-        //public ObservableCollection<StorageFolderFiles> FolderFiles
-        //{
-        //    get { return m_folderFiles; }
-        //    set
-        //    {
-        //        m_folderFiles = value;
-        //        RaisePropertyChanged(nameof(FolderFiles));
-        //    }
-        //}
-
         private IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles> m_folderFiles = new IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles>();
         public IncrementalLoadingCollection<StorageFolderFilesSource, StorageFolderFiles> FolderFiles
         {
@@ -81,6 +70,8 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(FolderFiles));
             }
         }
+
+        private string m_futureAccessToken = "";
 
         public ThemeDetailsViewModel()
             : base()
@@ -148,28 +139,28 @@ namespace WallpaperManager.ViewModels
             while (openedList.Count > 0)
             {
                 // If the folder/file is suppose to be excluded, ignore it now
-                if (openedList[0].IsExcluded)
-                    continue;
-
-                try
+                if (!openedList[0].IsExcluded)
                 {
-                    // Convert the path into a StorageFolder
-                    var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
-                    allFolders.Add(folder);
-
-                    //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2 - {folder.Path}");
-                    // If we are allowed to gather subdirectories, gather them as wells
-                    if (openedList[0].IncludeSubdirectories)
+                    try
                     {
-                        var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(folder, false);
-                        allFolders.AddRange(subfoldersOpenedList);
+                        // Convert the path into a StorageFolder
+                        var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
+                        allFolders.Add(folder);
+
+                        //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2 - {folder.Path}");
+                        // If we are allowed to gather subdirectories, gather them as wells
+                        if (openedList[0].IncludeSubdirectories)
+                        {
+                            var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(folder, false);
+                            allFolders.AddRange(subfoldersOpenedList);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.ToString());
-                    if (Debugger.IsAttached)
-                        Debugger.Break();
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                        if (Debugger.IsAttached)
+                            Debugger.Break();
+                    }
                 }
 
                 openedList.RemoveAt(0);
@@ -284,8 +275,7 @@ namespace WallpaperManager.ViewModels
                 NewDirectory.Path = m_storageFolder.Path;
 
                 // Add to FA without metadata
-                string faToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(m_storageFolder);
-                NewDirectory.FutureAccessToken = faToken;
+                m_futureAccessToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(m_storageFolder);
             }
         }
         #endregion
@@ -298,18 +288,51 @@ namespace WallpaperManager.ViewModels
                 {
                     if (m_storageFolder == null) return;
 
-                    // Save to the database
+                    // Step one, determine if the Access Token needs to be officially created by using the Path.
+                    FileAccessToken token = null;
+
+                    // If the Access Token for our Path already exists, or our path is within the subdirectories of the existing tokens path
+                    // Then use the existing token
+                    token = AccessTokenRepository.GetAllQuery()
+                        .Where(x => m_storageFolder.Path.Contains(x.Path))
+                        .FirstOrDefault();
+
+                    // If the Access Token for our Path does not exist, create a new token
+                    if (token == null)
+                    {
+                        // Since we are creating a new Access Token, if it isn't in the variable, exit early
+                        if (string.IsNullOrWhiteSpace(m_futureAccessToken))
+                            return;
+
+                        // Create the token
+                        token = new FileAccessToken();
+                        token.AccessToken = "" + m_futureAccessToken;
+                        token.AccessTokenType = Models.Enums.FileAccessTokenType.FutureAccess;
+                        token.Path = m_storageFolder.Path;
+                        AccessTokenRepository.Add(token);
+                    }
+                    else
+                    {
+                        // A valid token already exists, so we can get rid of this token
+                        StorageApplicationPermissions.FutureAccessList.Remove(m_futureAccessToken);
+                    }
+
+                    // If the token.ID is still 0, something has gone wrong and we should exit
+                    if (token.ID == 0) return;
+
+                    // Step two, Add the Directory to the Database
                     NewDirectory.WallpaperThemeID = Theme.ID;
-                    //NewDirectory.Theme = Theme;
+                    NewDirectory.FileAccessTokenID = token.ID;
                     NewDirectory.Path = m_storageFolder.Path;
                     NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
                     DirectoryRepository.Add(NewDirectory);
 
-                    // Update the Themes Directory List
-                    //Theme.Directories.Add(NewDirectory);
-
                     // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();
+
+                    // Reset the browse folder window
+                    m_storageFolder = null;
+                    m_futureAccessToken = "";
 
                     // Finally, preform the expensive operation to regather all the files in a background thread
                     Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
