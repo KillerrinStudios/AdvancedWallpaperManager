@@ -71,8 +71,6 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        private string m_futureAccessToken = "";
-
         public ThemeDetailsViewModel()
             : base()
         {
@@ -94,13 +92,17 @@ namespace WallpaperManager.ViewModels
 
         public override void OnNavigatedFrom()
         {
+            m_storageFolder = null;
         }
 
         public override void OnNavigatedTo()
         {
             Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(OnNavigatedTo)}");
+
+            // Grab the parameter
             Theme = (WallpaperTheme)NavigationService.Parameter;
 
+            // Load the files
             Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
             progress.ProgressChanged += Progress_ProgressChanged;
             LoadAllFiles(progress);
@@ -273,9 +275,6 @@ namespace WallpaperManager.ViewModels
             if (m_storageFolder != null)
             {
                 NewDirectory.Path = m_storageFolder.Path;
-
-                // Add to FA without metadata
-                m_futureAccessToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(m_storageFolder);
             }
         }
         #endregion
@@ -300,9 +299,8 @@ namespace WallpaperManager.ViewModels
                     // If the Access Token for our Path does not exist, create a new token
                     if (token == null)
                     {
-                        // Since we are creating a new Access Token, if it isn't in the variable, exit early
-                        if (string.IsNullOrWhiteSpace(m_futureAccessToken))
-                            return;
+                        // Add to FA without metadata
+                        var m_futureAccessToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(m_storageFolder);
 
                         // Create the token
                         token = new FileAccessToken();
@@ -310,11 +308,6 @@ namespace WallpaperManager.ViewModels
                         token.AccessTokenType = Models.Enums.FileAccessTokenType.FutureAccess;
                         token.Path = m_storageFolder.Path;
                         AccessTokenRepository.Add(token);
-                    }
-                    else
-                    {
-                        // A valid token already exists, so we can get rid of this token
-                        StorageApplicationPermissions.FutureAccessList.Remove(m_futureAccessToken);
                     }
 
                     // If the token.ID is still 0, something has gone wrong and we should exit
@@ -332,7 +325,6 @@ namespace WallpaperManager.ViewModels
 
                     // Reset the browse folder window
                     m_storageFolder = null;
-                    m_futureAccessToken = "";
 
                     // Finally, preform the expensive operation to regather all the files in a background thread
                     Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
