@@ -128,7 +128,7 @@ namespace Killerrin_Studios_Toolkit
             return await folder.GetItemsAsync();
         }
 
-        public async Task<IReadOnlyList<StorageFolder>> GetDirectoryTreeFromFolder(StorageFolder folder, bool enableSort)
+        public async Task<IReadOnlyList<StorageFolder>> GetDirectoryTreeFromFolder(StorageFolder folder, bool alphabeticallySort)
         {
             List<StorageFolder> subfoldersOpenedList = new List<StorageFolder>();
 
@@ -144,7 +144,7 @@ namespace Killerrin_Studios_Toolkit
                 subfoldersOpenedList.AddRange(subfolders);
             }
 
-            if (enableSort)
+            if (alphabeticallySort)
                 subfoldersOpenedList = subfoldersOpenedList.OrderBy(o => o.Path).ToList();
 
             return subfoldersOpenedList;
