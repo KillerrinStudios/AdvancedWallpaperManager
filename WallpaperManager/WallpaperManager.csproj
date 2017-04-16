@@ -111,6 +111,7 @@
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIProgress.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIResponse.cs" />
+    <Compile Include="Killerrin Studios Toolkit\IApplicationSetting.cs" />
     <Compile Include="Killerrin Studios Toolkit\CortanaTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\DebugTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\KillerrinApplicationData.cs" />
@@ -125,14 +126,24 @@
     <Compile Include="Models\Enums\FileAccessTokenType.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
     <Compile Include="Models\FileAccessToken.cs" />
+    <Compile Include="Models\Settings\ActiveThemeSetting.cs" />
+    <Compile Include="Models\Settings\FileDiscoveryLastRunSetting.cs" />
+    <Compile Include="Models\Settings\FileDiscoveryFrequencySetting.cs" />
+    <Compile Include="Models\Settings\FileDiscoveryEnableSetting.cs" />
     <Compile Include="Models\StorageFolderFiles.cs" />
     <Compile Include="Models\WallpaperDirectory.cs" />
     <Compile Include="Models\WallpaperTheme.cs" />
+    <Compile Include="Pages\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Enums\NavigationLocation.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ThemeDetailsPage.xaml.cs">
       <DependentUpon>ThemeDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -151,6 +162,8 @@
     <Compile Include="Services\ProgressService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Models\IndicatorProgressReport.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\ThemeDetailsViewModel.cs" />
     <Compile Include="ViewModels\ThemeListViewModel.cs" />
     <Compile Include="ViewModels\WallpaperManagerViewModelBase.cs" />
@@ -184,9 +197,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ThemeDetailsPage.xaml">
       <SubType>Designer</SubType>

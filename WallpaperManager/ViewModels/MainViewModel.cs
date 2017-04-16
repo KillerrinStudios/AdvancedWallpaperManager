@@ -110,77 +110,49 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        #region Navigate Settings Command
-        //public RelayCommand NavigateSettingsCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(() =>
-        //        {
-        //            NavigateSettings();
-        //        });
-        //    }
-        //}
+        public RelayCommand NavigateAboutCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (!CanNavigate)
+                        return;
 
-        //public void NavigateSettings()
-        //{
-        //    Debug.WriteLine("Navigate Settings");
-        //    if (!CanNavigate)
-        //        return;
+                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.About;
+                    NavigationService.Navigate(typeof(AboutPage), null);
+                });
+            }
+        }
 
-        //    if (CurrentVisualState?.Name != AdaptiveTriggerConsts.DesktopMinimumWidthName)
-        //        IsPaneOpen = false;
+        public RelayCommand NavigateSettingsCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (!CanNavigate)
+                        return;
 
-        //    NavigationService.Navigate(typeof(SettingsPage), null);
-        //}
-        #endregion
+                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.Settings;
+                    NavigationService.Navigate(typeof(SettingsPage), null);
+                });
+            }
+        }
 
-        #region Navigate About Command
-        //public RelayCommand NavigateAboutCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(() =>
-        //        {
-        //            NavigateAbout();
-        //        });
-        //    }
-        //}
+        public RelayCommand RateAppCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (!CanNavigate)
+                        return;
 
-        //public void NavigateAbout()
-        //{
-        //    Debug.WriteLine("Navigate About");
-        //    if (!CanNavigate)
-        //        return;
-
-        //    if (CurrentVisualState?.Name != AdaptiveTriggerConsts.DesktopMinimumWidthName)
-        //        IsPaneOpen = false;
-
-        //    NavigationService.Navigate(typeof(AboutPage), null);
-        //}
-        #endregion
-
-        #region Rate App Command
-        //public RelayCommand RateAppCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(() =>
-        //        {
-        //            RateApp();
-        //        });
-        //    }
-        //}
-
-        //public void RateApp()
-        //{
-        //    Debug.WriteLine("Rating App");
-        //    if (!CanNavigate)
-        //        return;
-
-        //    ViewModelLocator.Instance.vm_AboutViewModel.ApplicationData.LaunchReview();
-        //}
-        #endregion
+                    ViewModelLocator.Instance.vm_AboutViewModel.ApplicationData.LaunchReview();
+                });
+            }
+        }
         #endregion
     }
 }

@@ -45,6 +45,8 @@ namespace WallpaperManager.ViewModels
             //}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<AboutViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<ThemeListViewModel>();
             SimpleIoc.Default.Register<ThemeDetailsViewModel>();
 
@@ -53,6 +55,8 @@ namespace WallpaperManager.ViewModels
         }
 
         public MainViewModel vm_MainViewModel { get { return ServiceLocator.Current.GetInstance<MainViewModel>(); } }
+        public AboutViewModel vm_AboutViewModel { get { return ServiceLocator.Current.GetInstance<AboutViewModel>(); } }
+        public SettingsViewModel vm_SettingsViewModel { get { return ServiceLocator.Current.GetInstance<SettingsViewModel>(); } }
         public ThemeListViewModel vm_ThemeListViewModel { get { return ServiceLocator.Current.GetInstance<ThemeListViewModel>(); } }
         public ThemeDetailsViewModel vm_ThemeDetailsViewModel { get { return ServiceLocator.Current.GetInstance<ThemeDetailsViewModel>(); } }
 

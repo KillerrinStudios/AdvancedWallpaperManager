@@ -1,0 +1,40 @@
+﻿<Page
+	x:Class="WallpaperManager.Pages.SettingsPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:WallpaperManager.Pages"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Loaded="Page_Loaded"
+	DataContext="{Binding Source={StaticResource Locator}, Path=vm_SettingsViewModel}">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<StackPanel Orientation="Vertical">
+			<ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}"/>
+
+			<TextBlock Text="File Discovery Frequency"/>
+			<StackPanel Orientation="Horizontal">
+				<ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
+				<ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
+				<ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
+				<Button VerticalAlignment="Bottom" Command="{Binding RevertFileDiscoveryFrequency}" Margin="10,0,0,0">
+					<Button.Content>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+							<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
+				<Button VerticalAlignment="Bottom" Command="{Binding SaveFileDiscoveryFrequency}">
+					<Button.Content>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+							<TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</Page>
