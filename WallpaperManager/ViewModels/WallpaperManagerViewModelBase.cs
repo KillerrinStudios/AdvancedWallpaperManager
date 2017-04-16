@@ -58,6 +58,7 @@ namespace WallpaperManager.ViewModels
         public WallpaperThemeRepository ThemeRepository { get; set; }
         public WallpaperDirectoryRepository DirectoryRepository { get; set; }
         public FileAccessTokenRepository AccessTokenRepository { get; set; }
+        public FileDiscoveryCacheRepository FileDiscoveryCacheRepository { get; set; }
 
         public WallpaperManagerViewModelBase()
         {
@@ -65,6 +66,7 @@ namespace WallpaperManager.ViewModels
             ThemeRepository = new WallpaperThemeRepository(context);
             DirectoryRepository = new WallpaperDirectoryRepository(context);
             AccessTokenRepository = new FileAccessTokenRepository(context);
+            FileDiscoveryCacheRepository = new FileDiscoveryCacheRepository(context);
         }
 
         public abstract void Loaded();

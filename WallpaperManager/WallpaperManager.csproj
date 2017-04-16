@@ -159,6 +159,7 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\WallpaperManagerContext.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
+    <Compile Include="Services\FileDiscoveryService.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ProgressService.cs" />

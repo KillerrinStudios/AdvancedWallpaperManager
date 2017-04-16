@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
 using WallpaperManager.Pages;
+using WallpaperManager.Services;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
@@ -71,6 +72,17 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        private ObservableCollection<FileDiscoveryCache> m_fileCache = new ObservableCollection<FileDiscoveryCache>();
+        public ObservableCollection<FileDiscoveryCache> FileCache
+        {
+            get { return m_fileCache; }
+            set
+            {
+                m_fileCache = value;
+                RaisePropertyChanged(nameof(FileCache));
+            }
+        }
+
         public ThemeDetailsViewModel()
             : base()
         {
@@ -111,6 +123,9 @@ namespace WallpaperManager.ViewModels
         private void Progress_ProgressChanged(object sender, IndicatorProgressReport e)
         {
             ProgressService.SetIndicatorAndShow(e.RingEnabled, e.Percentage, e.StatusMessage, e.WriteToDebugConsole);
+
+            if (e.Percentage >= 100.0)
+                ProgressService.Hide();
         }
 
         public override void ResetViewModel()
@@ -120,136 +135,147 @@ namespace WallpaperManager.ViewModels
         {
             if (Theme == null) return;
 
-            var directories = DirectoryRepository.GetAllQuery()
-                .Where(x => x.WallpaperThemeID == Theme.ID)
-                .ToList();
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
+            var cache = await fileDiscoveryService.PreformFileDiscovery(Theme, progress);
 
-            // Step one we have to populate our openedList with all the directories in the theme
-            progress.Report(new IndicatorProgressReport(true, 0.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 1/7", true));
-            List<WallpaperDirectory> openedList = new List<WallpaperDirectory>();
-            openedList.AddRange(directories);
-
-            // Grab the Excluded Paths
-            var excludedList = openedList
-                .Where(x => x.IsExcluded)
-                .Select(x => x.Path.ToLower())
-                .ToList();
-
-            // Step two, go through all of the directories and convert them into StorageFolders
-            progress.Report(new IndicatorProgressReport(true, 15.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2/7", true));
-            List<StorageFolder> allFolders = new List<StorageFolder>();
-            while (openedList.Count > 0)
+            FileCache.Clear();
+            foreach (var c in cache)
             {
-                // If the folder/file is suppose to be excluded, ignore it now
-                if (!openedList[0].IsExcluded)
-                {
-                    try
-                    {
-                        // Convert the path into a StorageFolder
-                        var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
-                        allFolders.Add(folder);
-
-                        //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2 - {folder.Path}");
-                        // If we are allowed to gather subdirectories, gather them as wells
-                        if (openedList[0].IncludeSubdirectories)
-                        {
-                            var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(folder, false);
-                            allFolders.AddRange(subfoldersOpenedList);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.ToString());
-                        if (Debugger.IsAttached)
-                            Debugger.Break();
-                    }
-                }
-
-                openedList.RemoveAt(0);
+                FileCache.Add(c);
             }
 
-            // Step three, remove all of the excluded directories
-            progress.Report(new IndicatorProgressReport(true, 30.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 3/7", true));
-            allFolders = allFolders
-                .Where(x => !excludedList.Contains(x.Path, StringComparer.OrdinalIgnoreCase))
-                .ToList();
 
-            // Step four, sort all the directories
-            progress.Report(new IndicatorProgressReport(true, 45.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4/7", true));
-            allFolders = allFolders.OrderBy(o => o.Path).ToList();
+            ////var directories = DirectoryRepository.GetAllQuery()
+            ////    .Where(x => x.WallpaperThemeID == Theme.ID)
+            ////    .ToList();
+            //var directories = Theme.Directories;
 
-            // Step five, go through all the StorageFolders and gather their image files
-            progress.Report(new IndicatorProgressReport(true, 60.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 5/7", true));
-            ObservableCollection<StorageFolderFiles> folderFiles = new ObservableCollection<StorageFolderFiles>();
-            for (int i = 0; i < allFolders.Count; i++)
-            {
-                try
-                {
-                    StorageFolderFiles tmp = new StorageFolderFiles();
-                    tmp.Folder = allFolders[i];
+            //// Step one we have to populate our openedList with all the directories in the theme
+            //progress.Report(new IndicatorProgressReport(true, 0.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 1/7", true));
+            //List<WallpaperDirectory> openedList = new List<WallpaperDirectory>();
+            //openedList.AddRange(directories);
 
-                    var files = await allFolders[i].GetFilesAsync();
-                    foreach (var file in files)
-                    {
-                        //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4 - {tmp.Folder.Path} | {file.Path}");
-                        if (file.ContentType.ToLower().Contains("image"))
-                        {
-                            tmp.Files.Add(file);
-                        }
-                    }
+            //// Grab the Excluded Paths
+            //var excludedList = openedList
+            //    .Where(x => x.IsExcluded)
+            //    .Select(x => x.Path.ToLower())
+            //    .ToList();
 
-                    if (tmp.Files.Count > 0)
-                        folderFiles.Add(tmp);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.ToString());
-                    if (Debugger.IsAttached)
-                        Debugger.Break();
-                }
-            }
+            //// Step two, go through all of the directories and convert them into StorageFolders
+            //progress.Report(new IndicatorProgressReport(true, 15.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2/7", true));
+            //List<StorageFolder> allFolders = new List<StorageFolder>();
+            //while (openedList.Count > 0)
+            //{
+            //    // If the folder/file is suppose to be excluded, ignore it now
+            //    if (!openedList[0].IsExcluded)
+            //    {
+            //        try
+            //        {
+            //            // Convert the path into a StorageFolder
+            //            var folder = await StorageFolder.GetFolderFromPathAsync(openedList[0].Path);
+            //            allFolders.Add(folder);
 
-            // Step six, finish off the exclusion list by removing individual files
-            progress.Report(new IndicatorProgressReport(true, 75.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 6/7", true));
-            for (int i = excludedList.Count - 1; i >= 0; i--)
-            {
-                foreach (var folder in folderFiles)
-                {
-                    for (int x = folder.Files.Count - 1; x >= 0; x--)
-                    {
-                        if (folder.Files[x].Path.ToLower().Contains(excludedList[i]))
-                        {
-                            folder.Files.RemoveAt(x);
-                        }
-                    }
-                }
-            }
+            //            //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 2 - {folder.Path}");
+            //            // If we are allowed to gather subdirectories, gather them as wells
+            //            if (openedList[0].IncludeSubdirectories)
+            //            {
+            //                var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(folder, false);
+            //                allFolders.AddRange(subfoldersOpenedList);
+            //            }
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            Debug.WriteLine(e.ToString());
+            //            if (Debugger.IsAttached)
+            //                Debugger.Break();
+            //        }
+            //    }
 
-            // Step seven, Do a final passthrough and get rid of all FolderFiles without files
-            progress.Report(new IndicatorProgressReport(true, 99.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 7/7", true));
-            for (int i = folderFiles.Count - 1; i >= 0; i--)
-            {
-                var folderFile = folderFiles[i];
+            //    openedList.RemoveAt(0);
+            //}
 
-                if (folderFile.Folder == null)
-                    folderFiles.RemoveAt(i);
-                if (folderFile.Files.Count <= 0)
-                    folderFiles.RemoveAt(i);
-            }
+            //// Step three, remove all of the excluded directories
+            //progress.Report(new IndicatorProgressReport(true, 30.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 3/7", true));
+            //allFolders = allFolders
+            //    .Where(x => !excludedList.Contains(x.Path, StringComparer.OrdinalIgnoreCase))
+            //    .ToList();
 
-            // Finally, Cache the variable for later
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-            () =>
-            {
-                Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - COMPLETE");
-                ProgressService.Hide();
+            //// Step four, sort all the directories
+            //progress.Report(new IndicatorProgressReport(true, 45.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4/7", true));
+            //allFolders = allFolders.OrderBy(o => o.Path).ToList();
 
-                //FolderFiles = folderFiles;
-                foreach (var item in folderFiles)
-                {
-                    FolderFiles.Add(item);
-                }
-            });
+            //// Step five, go through all the StorageFolders and gather their image files
+            //progress.Report(new IndicatorProgressReport(true, 60.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 5/7", true));
+            //ObservableCollection<StorageFolderFiles> folderFiles = new ObservableCollection<StorageFolderFiles>();
+            //for (int i = 0; i < allFolders.Count; i++)
+            //{
+            //    try
+            //    {
+            //        StorageFolderFiles tmp = new StorageFolderFiles();
+            //        tmp.Folder = allFolders[i];
+
+            //        var files = await allFolders[i].GetFilesAsync();
+            //        foreach (var file in files)
+            //        {
+            //            //Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 4 - {tmp.Folder.Path} | {file.Path}");
+            //            if (file.ContentType.ToLower().Contains("image"))
+            //            {
+            //                tmp.Files.Add(file);
+            //            }
+            //        }
+
+            //        if (tmp.Files.Count > 0)
+            //            folderFiles.Add(tmp);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.WriteLine(e.ToString());
+            //        if (Debugger.IsAttached)
+            //            Debugger.Break();
+            //    }
+            //}
+
+            //// Step six, finish off the exclusion list by removing individual files
+            //progress.Report(new IndicatorProgressReport(true, 75.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 6/7", true));
+            //for (int i = excludedList.Count - 1; i >= 0; i--)
+            //{
+            //    foreach (var folder in folderFiles)
+            //    {
+            //        for (int x = folder.Files.Count - 1; x >= 0; x--)
+            //        {
+            //            if (folder.Files[x].Path.ToLower().Contains(excludedList[i]))
+            //            {
+            //                folder.Files.RemoveAt(x);
+            //            }
+            //        }
+            //    }
+            //}
+
+            //// Step seven, Do a final passthrough and get rid of all FolderFiles without files
+            //progress.Report(new IndicatorProgressReport(true, 99.0, $"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - Step 7/7", true));
+            //for (int i = folderFiles.Count - 1; i >= 0; i--)
+            //{
+            //    var folderFile = folderFiles[i];
+
+            //    if (folderFile.Folder == null)
+            //        folderFiles.RemoveAt(i);
+            //    if (folderFile.Files.Count <= 0)
+            //        folderFiles.RemoveAt(i);
+            //}
+
+            //// Finally, Cache the variable for later
+            //await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            //() =>
+            //{
+            //    Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - COMPLETE");
+            //    ProgressService.Hide();
+
+            //    //FolderFiles = folderFiles;
+            //    foreach (var item in folderFiles)
+            //    {
+            //        FolderFiles.Add(item);
+            //    }
+            //});
         }
 
         #region Commands

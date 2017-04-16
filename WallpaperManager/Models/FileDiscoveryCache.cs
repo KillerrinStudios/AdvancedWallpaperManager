@@ -42,14 +42,27 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
-        private string m_path = "";
-        public string Path
+        private string m_folderPath = "";
+        public string FolderPath
         {
-            get { return m_path; }
+            get { return m_folderPath; }
             set
             {
-                m_path = value;
-                RaisePropertyChanged(nameof(Path));
+                m_folderPath = value;
+                RaisePropertyChanged(nameof(FolderPath));
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        private string m_filePath = "";
+        public string FilePath
+        {
+            get { return m_filePath; }
+            set
+            {
+                m_filePath = value;
+                RaisePropertyChanged(nameof(FilePath));
             }
         }
     }
