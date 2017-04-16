@@ -146,7 +146,6 @@ namespace WallpaperManager.Services
                 fileCacheRepo.AddRange(updatedThemeFilesCache);
             }
 
-            progress?.Report(new IndicatorProgressReport(true, 100.0, $"{nameof(PreformFileDiscovery)} - {theme.Name} - COMPLETE", true));
             return updatedThemeFilesCache;
         }
     }
