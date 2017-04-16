@@ -131,6 +131,7 @@
     <Compile Include="Models\Settings\FileDiscoveryFrequencySetting.cs" />
     <Compile Include="Models\Settings\FileDiscoveryEnableSetting.cs" />
     <Compile Include="Models\StorageFolderFiles.cs" />
+    <Compile Include="Models\FileDiscoveryCache.cs" />
     <Compile Include="Models\WallpaperDirectory.cs" />
     <Compile Include="Models\WallpaperTheme.cs" />
     <Compile Include="Pages\AboutPage.xaml.cs">
@@ -152,6 +153,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FileAccessTokenRepository.cs" />
+    <Compile Include="Repositories\FileDiscoveryCacheRepository.cs" />
     <Compile Include="Repositories\WallpaperDirectoryRepository.cs" />
     <Compile Include="Repositories\WallpaperThemeRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
