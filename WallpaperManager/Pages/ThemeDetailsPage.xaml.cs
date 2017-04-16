@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WallpaperManager.Models;
 using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -69,17 +70,19 @@ namespace WallpaperManager.Pages
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
 
-        private void OpenFileButton(object sender, RoutedEventArgs e)
+        private async void OpenFileButton(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            StorageFile file = btn.DataContext as StorageFile;
+            FileDiscoveryCache cache = btn.DataContext as FileDiscoveryCache;
+            StorageFile file = await StorageFile.GetFileFromPathAsync(cache.FilePath);
             StorageTask.OpenFile(file);
         }
 
         private async void OpenDirectoryButton(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            StorageFile file = btn.DataContext as StorageFile;
+            FileDiscoveryCache cache = btn.DataContext as FileDiscoveryCache;
+            StorageFile file = await StorageFile.GetFileFromPathAsync(cache.FilePath);
             StorageFolder folder = await file.GetParentAsync();
 
             if (folder != null)
