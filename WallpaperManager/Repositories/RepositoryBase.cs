@@ -69,6 +69,7 @@ namespace WallpaperManager.Repositories
         }
         public virtual void RemoveRange(IEnumerable<T> items)
         {
+            _dbSet.AttachRange(items);
             _dbSet.RemoveRange(items);
             _context.SaveChanges();
         }
