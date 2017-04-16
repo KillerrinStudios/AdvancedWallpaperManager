@@ -58,7 +58,13 @@ namespace WallpaperManager.Pages
             //EditThemeFlyout.Hide();
         }
 
-        private void ImageGridRightTapped(object sender, RightTappedRoutedEventArgs e)
+
+        private void ImageGridTapped_OpenFlyout(object sender, TappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+        }
+
+        private void ImageGridRightTapped_OpenFlyout(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }

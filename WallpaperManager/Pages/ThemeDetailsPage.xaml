@@ -135,7 +135,7 @@
                                 </GridView.ItemsPanel>
                                 <GridView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid IsRightTapEnabled="True" RightTapped="ImageGridRightTapped">
+                                        <Grid IsTapEnabled="True" IsRightTapEnabled="True" Tapped="ImageGridTapped_OpenFlyout" RightTapped="ImageGridRightTapped_OpenFlyout">
                                             <Image Source="{Binding Path}" />
                                             <FlyoutBase.AttachedFlyout>
                                                 <Flyout>
