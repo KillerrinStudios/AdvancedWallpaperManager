@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models.Enums;
+using Windows.Storage;
 
 namespace WallpaperManager.Models
 {
@@ -67,4 +68,9 @@ namespace WallpaperManager.Models
         }
     }
 
+    public class GroupedFileCache : ModelBase
+    {
+        public string FolderPath { get; set; }
+        public List<FileDiscoveryCache> Files { get; set; } = new List<FileDiscoveryCache>();
+    }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
@@ -72,8 +73,8 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        private ObservableCollection<FileDiscoveryCache> m_fileCache = new ObservableCollection<FileDiscoveryCache>();
-        public ObservableCollection<FileDiscoveryCache> FileCache
+        private ObservableCollection<GroupedFileCache> m_fileCache = new ObservableCollection<GroupedFileCache>();
+        public ObservableCollection<GroupedFileCache> FileCache
         {
             get { return m_fileCache; }
             set
@@ -138,11 +139,27 @@ namespace WallpaperManager.ViewModels
             FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
             var cache = await fileDiscoveryService.PreformFileDiscovery(Theme, progress);
 
-            FileCache.Clear();
-            foreach (var c in cache)
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            () =>
             {
-                FileCache.Add(c);
-            }
+                Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - COMPLETE");
+                //ProgressService.Hide();
+
+                Dictionary<string, List<FileDiscoveryCache>> cacheDictionary = (from c in cache
+                                                                                group c by c.FolderPath
+                                                                                into groupedCache
+                                                                                select groupedCache).ToDictionary(x => x.Key, x => x.ToList());
+
+                FileCache.Clear();
+                foreach (var c in cacheDictionary)
+                {
+                    GroupedFileCache groupedCache = new GroupedFileCache();
+                    groupedCache.FolderPath = c.Key;
+                    groupedCache.Files = c.Value;
+                    FileCache.Add(groupedCache);
+                }
+            });
+
 
 
             ////var directories = DirectoryRepository.GetAllQuery()
