@@ -9,9 +9,10 @@ using WallpaperManager.Models.Enums;
 namespace WallpaperManager.Migrations
 {
     [DbContext(typeof(WallpaperManagerContext))]
-    partial class WallpaperManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20170416210506_AddedFileDiscoveryCache")]
+    partial class AddedFileDiscoveryCache
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");

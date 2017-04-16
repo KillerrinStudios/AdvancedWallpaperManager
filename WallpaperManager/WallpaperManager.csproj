@@ -122,6 +122,10 @@
     <Compile Include="Migrations\20170411020256_InitialMigration.designer.cs">
       <DependentUpon>20170411020256_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.cs" />
+    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.designer.cs">
+      <DependentUpon>20170416210506_AddedFileDiscoveryCache.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Models\Enums\FileAccessTokenType.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
