@@ -12,12 +12,15 @@ namespace WallpaperManager.Repositories
         int Count { get; }
 
         void Add(T item);
+        void AddRange(IEnumerable<T> items);
         bool Exists(int key);
         T Find(int key);
         IEnumerable<T> GetAll();
         IQueryable<T> GetAllQuery();
         void Remove(int key);
+        void RemoveRange(IEnumerable<T> items);
         void Update(T item);
+        void Clear();
 
         void Commit();
         void Dispose();

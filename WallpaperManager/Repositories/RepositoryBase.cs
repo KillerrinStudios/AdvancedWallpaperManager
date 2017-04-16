@@ -25,6 +25,18 @@ namespace WallpaperManager.Repositories
             _dbSet.Add(item);
             _context.SaveChanges();
         }
+        public virtual void AddRange(IEnumerable<T> items)
+        {
+            _dbSet.AddRange(items);
+            _context.SaveChanges();
+        }
+
+        public virtual void Clear()
+        {
+            var allItems = GetAll();
+            _dbSet.RemoveRange(allItems);
+            _context.SaveChanges();
+        }
 
         public virtual bool Exists(int key)
         {
@@ -53,6 +65,11 @@ namespace WallpaperManager.Repositories
                 _dbSet.Attach(entity);
 
             _dbSet.Remove(entity);
+            _context.SaveChanges();
+        }
+        public virtual void RemoveRange(IEnumerable<T> items)
+        {
+            _dbSet.RemoveRange(items);
             _context.SaveChanges();
         }
 
