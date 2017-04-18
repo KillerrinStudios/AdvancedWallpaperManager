@@ -103,6 +103,7 @@ namespace WallpaperManager.ViewModels
 
             // Grab the parameter
             Theme = (WallpaperTheme)NavigationService.Parameter;
+            FileCache.Clear();
 
             // Load the files
             Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
@@ -122,7 +123,7 @@ namespace WallpaperManager.ViewModels
         {
         }
 
-        private async Task LoadFileCache(IProgress<IndicatorProgressReport> progress)
+        private void LoadFileCache(IProgress<IndicatorProgressReport> progress)
         {
             if (Theme == null) return;
 
@@ -130,19 +131,24 @@ namespace WallpaperManager.ViewModels
                 .Where(x => x.WallpaperThemeID == Theme.ID)
                 .OrderBy(x => x.FilePath)
                 .ToList();
-            await SetFileCache(cache);
+
+            // If the cache exists, use it
+            if (cache.Count > 0)
+                SetFileCache(cache);
+            else // Otherwise, lets try creating it
+                RefreshFileCache(progress);
         }
 
-        public async Task RefreshFileCache(IProgress<IndicatorProgressReport> progress)
+        public async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
             if (Theme == null) return;
 
-            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);
             var cache = await fileDiscoveryService.PreformFileDiscovery(Theme, progress);
-            await SetFileCache(cache);
+            SetFileCache(cache);
         }
 
-        private async Task SetFileCache(List<FileDiscoveryCache> cache)
+        private async void SetFileCache(List<FileDiscoveryCache> cache)
         {
             // Because the cache can either from from the Database or a recent Cache Discovery, we sort the cache here before moving on to display
             //cache = cache.OrderBy(x => x.FilePath).ToList();

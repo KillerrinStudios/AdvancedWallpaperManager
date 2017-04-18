@@ -137,7 +137,6 @@ namespace WallpaperManager.ViewModels
                     }
                 }
             }
-
         }
 
         public void ThemeClicked(WallpaperTheme theme)

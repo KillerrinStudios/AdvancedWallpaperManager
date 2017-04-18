@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using WallpaperManager.Services;
+using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
 {
@@ -95,7 +96,7 @@ namespace WallpaperManager.ViewModels
         public override void OnNavigatedTo()
         {
             // Set the Defaults
-            RevertFileDiscoveryFrequency.Execute(null);
+            RevertFileDiscoveryFrequencyCommand.Execute(null);
         }
 
         public override void OnNavigatedFrom()
@@ -116,13 +117,15 @@ namespace WallpaperManager.ViewModels
                 ProgressService.Hide();
         }
 
-        private async Task RefreshFileCache(Progress<IndicatorProgressReport> progress)
+        private async Task RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
-            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
+            Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - BEGIN CACHE TASK");
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);
             var cache = await fileDiscoveryService.PreformFileDiscovery(progress);
+            Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - CACHE TASK COMPLETE");
         }
 
-        public RelayCommand SaveFileDiscoveryFrequency
+        public RelayCommand SaveFileDiscoveryFrequencyCommand
         {
             get
             {
@@ -132,7 +135,7 @@ namespace WallpaperManager.ViewModels
                 });
             }
         }
-        public RelayCommand RevertFileDiscoveryFrequency
+        public RelayCommand RevertFileDiscoveryFrequencyCommand
         {
             get
             {
@@ -141,6 +144,27 @@ namespace WallpaperManager.ViewModels
                     FrequencyDays = FileDiscoveryFrequency.Value.Days;
                     FrequencyHours = FileDiscoveryFrequency.Value.Hours;
                     FrequencyMinutes = FileDiscoveryFrequency.Value.Minutes;
+                });
+            }
+        }
+
+        public RelayCommand ShowProgressCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ProgressService.Show();
+                });
+            }
+        }
+        public RelayCommand HideProgressCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ProgressService.Hide();
                 });
             }
         }
@@ -154,6 +178,16 @@ namespace WallpaperManager.ViewModels
                     Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
                     progress.ProgressChanged += Progress_ProgressChanged;
                     RefreshFileCache(progress);
+                });
+            }
+        }
+        public RelayCommand DeleteFileCacheCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    FileDiscoveryCacheRepository.Clear();
                 });
             }
         }
