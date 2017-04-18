@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
+using WallpaperManager.Services;
 
 namespace WallpaperManager.ViewModels
 {
@@ -106,6 +108,20 @@ namespace WallpaperManager.ViewModels
 
         }
 
+        private void Progress_ProgressChanged(object sender, IndicatorProgressReport e)
+        {
+            ProgressService.SetIndicatorAndShow(e.RingEnabled, e.Percentage, e.StatusMessage, e.WriteToDebugConsole);
+
+            if (e.Percentage >= 100.0)
+                ProgressService.Hide();
+        }
+
+        private async Task RefreshFileCache(Progress<IndicatorProgressReport> progress)
+        {
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
+            var cache = await fileDiscoveryService.PreformFileDiscovery(progress);
+        }
+
         public RelayCommand SaveFileDiscoveryFrequency
         {
             get
@@ -125,6 +141,19 @@ namespace WallpaperManager.ViewModels
                     FrequencyDays = FileDiscoveryFrequency.Value.Days;
                     FrequencyHours = FileDiscoveryFrequency.Value.Hours;
                     FrequencyMinutes = FileDiscoveryFrequency.Value.Minutes;
+                });
+            }
+        }
+
+        public RelayCommand RefreshFileCacheCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
+                    progress.ProgressChanged += Progress_ProgressChanged;
+                    RefreshFileCache(progress);
                 });
             }
         }

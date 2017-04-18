@@ -9,32 +9,56 @@
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_SettingsViewModel}">
 
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<StackPanel Orientation="Vertical">
-			<ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}"/>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-			<TextBlock Text="File Discovery Frequency"/>
-			<StackPanel Orientation="Horizontal">
-				<ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
-				<ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
-				<ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
-				<Button VerticalAlignment="Bottom" Command="{Binding RevertFileDiscoveryFrequency}" Margin="10,0,0,0">
-					<Button.Content>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-							<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Button.Content>
-				</Button>
-				<Button VerticalAlignment="Bottom" Command="{Binding SaveFileDiscoveryFrequency}">
-					<Button.Content>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-							<TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Button.Content>
-				</Button>
-			</StackPanel>
-		</StackPanel>
-	</Grid>
+        <TextBlock Text="Settings" Style="{ThemeResource HeaderTextBlockStyle}"/>
+
+        <ScrollViewer Grid.Row="1" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Auto">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                    
+                    <ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}"/>
+
+                    <TextBlock Text="File Discovery Frequency" />
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
+                        <ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
+                        <ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
+                        <Button VerticalAlignment="Bottom" Command="{Binding RevertFileDiscoveryFrequency}" Margin="10,0,0,0">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button VerticalAlignment="Bottom" Command="{Binding SaveFileDiscoveryFrequency}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                    <TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                    <Button Width="200" Command="{Binding RefreshFileCacheCommand}" >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                <TextBlock Text="Refresh File Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Page>

@@ -65,18 +65,18 @@ namespace WallpaperManager.ViewModels
             }
 
             // Print all the values to the screen to debug
-            foreach (var item in AccessTokenRepository.GetAll())
-            {
-                Debug.WriteLine($"Access Tokens: {item.Path} - {item.AccessTokenType} | {item.AccessToken}");
-            }
-            foreach (var item in ThemeRepository.GetAll())
-            {
-                Debug.WriteLine($"Theme: {item.Name}");
-            }
-            foreach (var item in DirectoryRepository.GetAll())
-            {
-                Debug.WriteLine($"Directories: {item.Path}");
-            }
+            //foreach (var item in AccessTokenRepository.GetAll())
+            //{
+            //    Debug.WriteLine($"Access Tokens: {item.Path} - {item.AccessTokenType} | {item.AccessToken}");
+            //}
+            //foreach (var item in ThemeRepository.GetAll())
+            //{
+            //    Debug.WriteLine($"Theme: {item.Name}");
+            //}
+            //foreach (var item in DirectoryRepository.GetAll())
+            //{
+            //    Debug.WriteLine($"Directories: {item.Path}");
+            //}
         }
 
         public override void ResetViewModel()
@@ -144,6 +144,8 @@ namespace WallpaperManager.ViewModels
         {
             if (!CanNavigate)
                 return;
+
+            Debug.WriteLine($"Navigating To: {theme.ID} - {theme.Name}");
 
             MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.ThemeDetails;
             NavigationService.Navigate(typeof(ThemeDetailsPage), theme);

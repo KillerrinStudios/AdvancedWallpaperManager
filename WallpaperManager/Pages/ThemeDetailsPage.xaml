@@ -28,42 +28,16 @@
 			<StackPanel Orientation="Horizontal" Grid.Column="1" Margin="20,0,20,0"
 						HorizontalAlignment="Right" VerticalAlignment="Center">
 
-				<Button Width="150">
+				<Button Width="100" Command="{Binding RefreshFileCacheCommand}">
 					<Button.Content>
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-							<TextBlock Text="Add Directories" Margin="10,0,0,0" VerticalAlignment="Center"/>
+							<TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+							<TextBlock Text="Refresh" Margin="10,0,0,0" VerticalAlignment="Center"/>
 						</StackPanel>
 					</Button.Content>
-
-					<Button.Flyout>
-						<Flyout x:Name="AddDirectoryFlyout">
-							<StackPanel Orientation="Vertical">
-
-								<TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
-								<Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}"
-										HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
-
-								<ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
-											  HorizontalAlignment="Stretch"/>
-								<ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
-											  HorizontalAlignment="Stretch"/>
-
-								<Button Command="{Binding AddDirectoryCommand}"
-										HorizontalAlignment="Stretch" Margin="0,20,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-											<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
-										</StackPanel>
-									</Button.Content>
-								</Button>
-							</StackPanel>
-						</Flyout>
-					</Button.Flyout>
 				</Button>
 
-				<Button Width="150">
+				<Button Width="100">
 					<Button.Content>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
@@ -104,10 +78,46 @@
 						</Flyout>
 					</Button.Flyout>
 				</Button>
+				
+				<Button Width="150">
+					<Button.Content>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+							<TextBlock Text="Add Directories" Margin="10,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button.Content>
+
+					<Button.Flyout>
+						<Flyout x:Name="AddDirectoryFlyout">
+							<StackPanel Orientation="Vertical">
+
+								<TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
+								<Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}"
+										HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
+
+								<ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
+											  HorizontalAlignment="Stretch"/>
+								<ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
+											  HorizontalAlignment="Stretch"/>
+
+								<Button Command="{Binding AddDirectoryCommand}"
+										HorizontalAlignment="Stretch" Margin="0,20,0,0">
+									<Button.Content>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+											<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Button.Content>
+								</Button>
+							</StackPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+
 			</StackPanel>
 		</Grid>
 
-        <ListView ItemsSource="{Binding FileCache}"
+		<ListView ItemsSource="{Binding FileCache}"
 				  Grid.Row="1" 
 				  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 				  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollMode="Disabled"
@@ -122,7 +132,7 @@
 				<DataTemplate>
 					<Grid>
 						<controls:Expander Header="{Binding FolderPath}" IsExpanded="False" VerticalAlignment="Top">
-                            <GridView ItemsSource="{Binding Files}" 
+							<GridView ItemsSource="{Binding Files}" 
 									  HorizontalAlignment="Stretch" VerticalAlignment="Top"
 									  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollMode="Disabled"
 									  ScrollViewer.VerticalScrollBarVisibility="Auto"	ScrollViewer.VerticalScrollMode="Auto">
@@ -136,13 +146,13 @@
 								<GridView.ItemTemplate>
 									<DataTemplate>
 										<Grid IsTapEnabled="True" IsRightTapEnabled="True" Tapped="ImageGridTapped_OpenFlyout" RightTapped="ImageGridRightTapped_OpenFlyout">
-                                            <Image Source="{Binding FilePath}" />
+											<Image Source="{Binding FilePath}" />
 											<FlyoutBase.AttachedFlyout>
 												<Flyout>
 													<StackPanel Orientation="Vertical" Margin="0,10,0,10">
 														<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                                            <TextBlock Text="NAME" Width="430" TextWrapping="WrapWholeWords" HorizontalAlignment="Center"/>
-                                                            <Image Source="{Binding FilePath}" Width="430" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+															<TextBlock Text="NAME" Width="430" TextWrapping="WrapWholeWords" HorizontalAlignment="Center"/>
+															<Image Source="{Binding FilePath}" Width="430" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 														</StackPanel>
 														<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
 															<Button Click="OpenFileButton">

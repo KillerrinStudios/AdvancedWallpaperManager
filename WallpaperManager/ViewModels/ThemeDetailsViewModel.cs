@@ -107,7 +107,7 @@ namespace WallpaperManager.ViewModels
             // Load the files
             Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
             progress.ProgressChanged += Progress_ProgressChanged;
-            LoadAllFiles(progress);
+            LoadFileCache(progress);
         }
 
         private void Progress_ProgressChanged(object sender, IndicatorProgressReport e)
@@ -121,17 +121,37 @@ namespace WallpaperManager.ViewModels
         public override void ResetViewModel()
         {
         }
-        public async Task LoadAllFiles(IProgress<IndicatorProgressReport> progress)
+
+        private async Task LoadFileCache(IProgress<IndicatorProgressReport> progress)
+        {
+            if (Theme == null) return;
+
+            var cache = FileDiscoveryCacheRepository.GetAllQuery()
+                .Where(x => x.WallpaperThemeID == Theme.ID)
+                .OrderBy(x => x.FilePath)
+                .ToList();
+            await SetFileCache(cache);
+        }
+
+        public async Task RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
             if (Theme == null) return;
 
             FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
             var cache = await fileDiscoveryService.PreformFileDiscovery(Theme, progress);
+            await SetFileCache(cache);
+        }
 
+        private async Task SetFileCache(List<FileDiscoveryCache> cache)
+        {
+            // Because the cache can either from from the Database or a recent Cache Discovery, we sort the cache here before moving on to display
+            //cache = cache.OrderBy(x => x.FilePath).ToList();
+
+            // Once the Cache is sorted, begin the proccessing to update the UI
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
             () =>
             {
-                Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(LoadAllFiles)} - COMPLETE");
+                Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(RefreshFileCache)} - COMPLETE");
                 ProgressService.Hide();
 
                 // Group into an easy to process Dictionary
@@ -153,6 +173,19 @@ namespace WallpaperManager.ViewModels
         }
 
         #region Commands
+        public RelayCommand RefreshFileCacheCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
+                    progress.ProgressChanged += Progress_ProgressChanged;
+                    RefreshFileCache(progress);
+                });
+            }
+        }
+
         #region Open Folder Browser
         public RelayCommand OpenFolderBrowserCommand
         {
@@ -228,7 +261,7 @@ namespace WallpaperManager.ViewModels
                     // Finally, preform the expensive operation to regather all the files in a background thread
                     Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
                     progress.ProgressChanged += Progress_ProgressChanged;
-                    LoadAllFiles(progress);
+                    RefreshFileCache(progress);
                 });
             }
         }
