@@ -217,6 +217,7 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    if (Theme == null) return;
                     if (m_storageFolder == null) return;
 
                     // Step one, determine if the Access Token needs to be officially created by using the Path.
@@ -251,6 +252,7 @@ namespace WallpaperManager.ViewModels
                     NewDirectory.Path = m_storageFolder.Path;
                     NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
                     DirectoryRepository.Add(NewDirectory);
+                    Theme.Directories.Add(NewDirectory);
 
                     // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();
