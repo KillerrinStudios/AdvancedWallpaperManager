@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Killerrin_Studios_Toolkit.Settings;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class FileDiscoveryEnableSetting : ApplicationSettingBase<bool>
+    public class ActiveLockscreenThemeSetting : ApplicationSettingBase<int?>
     {
-        public FileDiscoveryEnableSetting()
-            :base(StorageTask.LocalSettings, "FileDiscoveryEnable", false)
+        public ActiveLockscreenThemeSetting()
+            :base(StorageTask.LocalSettings, "ActiveLockscreenTheme", null)
         {
         }
     }

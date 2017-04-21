@@ -111,6 +111,7 @@
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIProgress.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIResponse.cs" />
+    <Compile Include="Killerrin Studios Toolkit\ApplicationSettingBase.cs" />
     <Compile Include="Killerrin Studios Toolkit\IApplicationSetting.cs" />
     <Compile Include="Killerrin Studios Toolkit\CortanaTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\DebugTools.cs" />
@@ -130,7 +131,8 @@
     <Compile Include="Models\Enums\FileAccessTokenType.cs" />
     <Compile Include="Models\Enums\StorageLocation.cs" />
     <Compile Include="Models\FileAccessToken.cs" />
-    <Compile Include="Models\Settings\ActiveThemeSetting.cs" />
+    <Compile Include="Models\Settings\ActiveLockscreenThemeSetting.cs" />
+    <Compile Include="Models\Settings\ActiveDesktopThemeSetting.cs" />
     <Compile Include="Models\Settings\FileDiscoveryLastRunSetting.cs" />
     <Compile Include="Models\Settings\FileDiscoveryFrequencySetting.cs" />
     <Compile Include="Models\Settings\FileDiscoveryEnableSetting.cs" />

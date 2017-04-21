@@ -4,18 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WallpaperManager.Killerrin_Studios_Toolkit;
+using WallpaperManager.Killerrin_Studios_Toolkit.Settings;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class FileDiscoveryLastRunSetting : ModelBase, IApplicationSetting<DateTime>
+    public class FileDiscoveryLastRunSetting : ApplicationSettingBase<DateTime>
     {
-        public ApplicationDataContainer Container { get; }
-
-        public string Key { get { return "FileDiscoveryLastRun"; } }
-        public DateTime Value
+        public override DateTime Value
         {
             get { return DateTime.ParseExact((string)Container.Values[Key], "MM/dd/yyyy hh:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture); }
             set
@@ -26,16 +23,8 @@ namespace WallpaperManager.Models.Settings
         }
 
         public FileDiscoveryLastRunSetting()
+            :base(StorageTask.LocalSettings, "FileDiscoveryLastRun", DateTime.MinValue)
         {
-            Container = StorageTask.LocalSettings;
-
-            if (!Container.Values.ContainsKey(Key))
-                Value = DateTime.MinValue;
-        }
-
-        public override string ToString()
-        {
-            return $"Application Setting: {Key} | {Value.ToString()}";
         }
     }
 }

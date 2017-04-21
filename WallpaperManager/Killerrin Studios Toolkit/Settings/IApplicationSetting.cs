@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 
-namespace WallpaperManager.Killerrin_Studios_Toolkit
+namespace WallpaperManager.Killerrin_Studios_Toolkit.Settings
 {
     public interface IApplicationSetting<T>
     {
         ApplicationDataContainer Container { get; }
 
         string Key { get; }
+        T DefaultValue { get; set; }
         T Value { get; set; }
-
     }
+
 }

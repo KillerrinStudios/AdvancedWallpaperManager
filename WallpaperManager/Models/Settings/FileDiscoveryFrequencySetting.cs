@@ -4,37 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WallpaperManager.Killerrin_Studios_Toolkit;
+using WallpaperManager.Killerrin_Studios_Toolkit.Settings;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class FileDiscoveryFrequencySetting : ModelBase, IApplicationSetting<TimeSpan>
+    public class FileDiscoveryFrequencySetting : ApplicationSettingBase<TimeSpan>
     {
-        public ApplicationDataContainer Container { get; }
-
-        public string Key { get { return "FileDiscoveryFrequency"; } }
-        public TimeSpan Value
-        {
-            get { return (TimeSpan)Container.Values[Key]; }
-            set {
-                Container.Values[Key] = value;
-                RaisePropertyChanged(nameof(Value));
-            }
-        }
-
         public FileDiscoveryFrequencySetting()
+            :base(StorageTask.LocalSettings, "FileDiscoveryFrequency", TimeSpan.FromHours(1.0))
         {
-            Container = StorageTask.LocalSettings;
-
-            if (!Container.Values.ContainsKey(Key))
-                Value = TimeSpan.FromHours(1.0);
-        }
-
-        public override string ToString()
-        {
-            return $"Application Setting: {Key} | {Value.ToString()}";
         }
     }
 }
