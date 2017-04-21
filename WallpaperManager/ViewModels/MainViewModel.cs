@@ -149,9 +149,14 @@ namespace WallpaperManager.ViewModels
                     if (!CanNavigate)
                         return;
 
-                    ViewModelLocator.Instance.vm_AboutViewModel.ApplicationData.LaunchReview();
+                    LaunchReview();
                 });
             }
+        }
+
+        public async void LaunchReview()
+        {
+            await ViewModelLocator.Instance.vm_AboutViewModel.ApplicationData.LaunchReview();
         }
         #endregion
     }

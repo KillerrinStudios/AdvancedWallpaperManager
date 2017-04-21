@@ -78,7 +78,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        public async Task EmailFeedback()
+        public async void EmailFeedback()
         {
             Debug.WriteLine("Emailing Feedback");
             await KillerrinApplicationData.SendEmail(ApplicationData.FeedbackUrl, ApplicationData.FeedbackSubject, "");
@@ -97,7 +97,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        public async Task EmailSupport()
+        public async void EmailSupport()
         {
             Debug.WriteLine("Emailing Support");
             await KillerrinApplicationData.SendEmail(ApplicationData.SupportUrl, ApplicationData.SupportSubject, "");

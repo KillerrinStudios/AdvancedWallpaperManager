@@ -45,7 +45,12 @@ namespace Killerrin_Studios_Toolkit
 
         public TileManager()
         {
-            StorageTask.Instance.CreateFolder(RootFolder, TileManager.TileImagesFolderName, CreationCollisionOption.OpenIfExists);
+            CreateStorageFolders();
+        }
+
+        private async void CreateStorageFolders()
+        {
+            await StorageTask.Instance.CreateFolder(RootFolder, TileManager.TileImagesFolderName, CreationCollisionOption.OpenIfExists);
         }
 
         public async Task<SecondaryTile> CreateTile(string tileID, string displayName, string activationArguments, TileImages tileImages, bool roamingEnabled = false)

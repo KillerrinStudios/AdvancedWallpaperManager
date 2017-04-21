@@ -51,8 +51,7 @@ namespace Killerrin_Studios_Toolkit
 
         public async Task<bool> LaunchReview()
         {
-            bool result = await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:review?PFN=" + PackageID));
-            return result;
+            return await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:review?PFN=" + PackageID));
         }
 
         public static async Task SendEmail(string emailAddress, string subject, string body)

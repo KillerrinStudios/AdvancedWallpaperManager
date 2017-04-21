@@ -13,7 +13,6 @@ namespace WallpaperManager.Services
 
     public class NavigationService : ServiceBase
     {
-        public event NavigatingCancelEventHandler Navigating;
         public event BackClickEventHandler BackButtonClicked;
 
         private Frame m_frame;
@@ -50,8 +49,7 @@ namespace WallpaperManager.Services
             e.Handled = true;
 
             BackClickEventArgs backClickEventArgs = new BackClickEventArgs();
-            if (BackButtonClicked != null)
-                BackButtonClicked(sender, backClickEventArgs);
+            BackButtonClicked?.Invoke(sender, backClickEventArgs);
 
             if (GoBack()) { }
             else

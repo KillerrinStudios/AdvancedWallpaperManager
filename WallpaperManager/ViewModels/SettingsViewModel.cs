@@ -117,7 +117,7 @@ namespace WallpaperManager.ViewModels
                 ProgressService.Hide();
         }
 
-        private async Task RefreshFileCache(IProgress<IndicatorProgressReport> progress)
+        private async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - BEGIN CACHE TASK");
             FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);

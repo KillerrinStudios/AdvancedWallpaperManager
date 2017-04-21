@@ -46,11 +46,13 @@ namespace WallpaperManager.Models
 
         public async Task<IEnumerable<StorageFolderFiles>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default(CancellationToken))
         {
-            // Gets items from the collection according to pageIndex and pageSize parameters.
-            var result = (from p in FolderFiles
-                          select p).Skip(pageIndex * pageSize).Take(pageSize);
-
-            return result;
+            return await Task.Run(() =>
+            {
+                // Gets items from the collection according to pageIndex and pageSize parameters.
+                var result = (from p in FolderFiles
+                              select p).Skip(pageIndex * pageSize).Take(pageSize);
+                return result;
+            });
         }
     }
 }

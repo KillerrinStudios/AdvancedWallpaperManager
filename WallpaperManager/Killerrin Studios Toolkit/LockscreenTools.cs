@@ -28,7 +28,7 @@ namespace Killerrin_Studios_Toolkit
             SetupFolders();
         }
 
-        private async Task SetupFolders()
+        private async void SetupFolders()
         {
             LockscreenImagesFolder = await StorageTask.Instance.CreateFolder(RootFolder, LockscreenTools.LockscreenImagesFolderName, CreationCollisionOption.OpenIfExists);
             WallpaperImagesFolder  = await StorageTask.Instance.CreateFolder(RootFolder, LockscreenTools.WallpaperImagesFolderName, CreationCollisionOption.OpenIfExists);
