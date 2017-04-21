@@ -111,8 +111,9 @@
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIProgress.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIResponse.cs" />
-    <Compile Include="Killerrin Studios Toolkit\ApplicationSettingBase.cs" />
-    <Compile Include="Killerrin Studios Toolkit\IApplicationSetting.cs" />
+    <Compile Include="Killerrin Studios Toolkit\Settings\ApplicationSettingBase.cs" />
+    <Compile Include="Killerrin Studios Toolkit\Settings\GenericApplicationSetting.cs" />
+    <Compile Include="Killerrin Studios Toolkit\Settings\IApplicationSetting.cs" />
     <Compile Include="Killerrin Studios Toolkit\CortanaTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\DebugTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\KillerrinApplicationData.cs" />
