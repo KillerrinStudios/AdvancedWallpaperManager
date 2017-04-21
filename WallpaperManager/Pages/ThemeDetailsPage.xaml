@@ -79,7 +79,7 @@
 					</Button.Flyout>
 				</Button>
 				
-				<Button Width="150">
+				<Button x:Name="addDirectoryButton" Width="150">
 					<Button.Content>
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>

@@ -210,11 +210,15 @@ namespace WallpaperManager.ViewModels
             folderPicker.FileTypeFilter.Add("*");
             m_storageFolder = await folderPicker.PickSingleFolderAsync();
 
+            FolderBrowserClosed?.Invoke(this, new EventArgs());
+
             if (m_storageFolder != null)
             {
                 NewDirectory.Path = m_storageFolder.Path;
             }
         }
+
+        public event EventHandler FolderBrowserClosed;
         #endregion
 
         public RelayCommand AddDirectoryCommand

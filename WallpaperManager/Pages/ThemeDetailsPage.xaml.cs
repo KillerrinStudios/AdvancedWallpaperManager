@@ -41,10 +41,13 @@ namespace WallpaperManager.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            ViewModel.FolderBrowserClosed += ViewModel_FolderBrowserClosed;
             ViewModel.OnNavigatedTo();
         }
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            ViewModel.FolderBrowserClosed -= ViewModel_FolderBrowserClosed;
             ViewModel.OnNavigatedFrom();
             base.OnNavigatedFrom(e);
         }
@@ -59,6 +62,10 @@ namespace WallpaperManager.Pages
             //EditThemeFlyout.Hide();
         }
 
+        private void ViewModel_FolderBrowserClosed(object sender, EventArgs e)
+        {
+            addDirectoryButton.Flyout.ShowAt(addDirectoryButton);
+        }
 
         private void ImageGridTapped_OpenFlyout(object sender, TappedRoutedEventArgs e)
         {
