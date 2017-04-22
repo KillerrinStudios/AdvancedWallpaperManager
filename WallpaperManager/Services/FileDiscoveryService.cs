@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
+using WallpaperManager.Models.Settings;
 using WallpaperManager.Repositories;
 using Windows.Storage;
 
@@ -25,7 +26,7 @@ namespace WallpaperManager.Services
         WallpaperDirectoryRepository DirectoryRepo;
         FileDiscoveryCacheRepository FileCacheRepo;
 
-        public FileDiscoveryService() 
+        public FileDiscoveryService()
             : this(new WallpaperManagerContext())
         {
             createdContext = true;
@@ -45,7 +46,7 @@ namespace WallpaperManager.Services
                 Context.Dispose();
         }
 
-        public async Task<List<FileDiscoveryCache>> PreformFileDiscovery(IProgress<IndicatorProgressReport> progress)
+        public async Task<List<FileDiscoveryCache>> PreformFileDiscoveryAll(IProgress<IndicatorProgressReport> progress)
         {
             // Cache the old Progress Variable
             allCacheProgress = progress;
@@ -59,21 +60,20 @@ namespace WallpaperManager.Services
                 allCacheProgress?.Report(new IndicatorProgressReport(e.RingEnabled, percentage, e.StatusMessage, e.WriteToDebugConsole));
             });
 
-
             // Go through all the themes and begin the caching process
             List<FileDiscoveryCache> updatedThemeFilesCache = new List<FileDiscoveryCache>();
-            //using (WallpaperManagerContext context = new WallpaperManagerContext())
-            //{
-            //    WallpaperThemeRepository themeRepo = new WallpaperThemeRepository(context);
+            var allThemes = ThemeRepo.GetAll();
+            foreach (var theme in allThemes)
+            {
+                var cache = await PreformFileDiscovery(theme, internalProgress);
+                updatedThemeFilesCache.AddRange(cache);
+            }
 
-                var allThemes = ThemeRepo.GetAll();
-                foreach (var theme in allThemes)
-                {
-                    var cache = await PreformFileDiscovery(theme, internalProgress);
-                    updatedThemeFilesCache.AddRange(cache);
-                }
-            //}
+            // Update the Last Run
+            var fileDiscoveryLastRunSetting = new FileDiscoveryLastRunSetting();
+            fileDiscoveryLastRunSetting.Value = DateTime.UtcNow;
 
+            // Report back completion and return
             allCacheProgress = null;
             progress?.Report(new IndicatorProgressReport(true, 100.0, $"Cache Recreated", true));
             return updatedThemeFilesCache;
@@ -86,114 +86,114 @@ namespace WallpaperManager.Services
             List<FileDiscoveryCache> updatedThemeFilesCache = new List<FileDiscoveryCache>();
             //using (WallpaperManagerContext context = new WallpaperManagerContext())
             //{
-                progress?.Report(new IndicatorProgressReport(true, 0.0, $"Grabbing Theme directories - {theme.Name} - Step 1/1", true));
-                //WallpaperDirectoryRepository directoryRepo = new WallpaperDirectoryRepository(context);
-                var directories = DirectoryRepo.GetAllQuery()
-                    .Where(x => x.WallpaperThemeID == theme.ID)
-                    .ToList();
+            progress?.Report(new IndicatorProgressReport(true, 0.0, $"Grabbing Theme directories - {theme.Name} - Step 1/1", true));
+            //WallpaperDirectoryRepository directoryRepo = new WallpaperDirectoryRepository(context);
+            var directories = DirectoryRepo.GetAllQuery()
+                .Where(x => x.WallpaperThemeID == theme.ID)
+                .ToList();
 
-                if (directories.Count == 0) return new List<FileDiscoveryCache>();
+            if (directories.Count == 0) return new List<FileDiscoveryCache>();
 
-                // Step one we have to populate our openedList with all the directories in the theme
-                Stack<WallpaperDirectory> openedList = new Stack<WallpaperDirectory>(directories);
+            // Step one we have to populate our openedList with all the directories in the theme
+            Stack<WallpaperDirectory> openedList = new Stack<WallpaperDirectory>(directories);
 
-                // Grab the Excluded Paths
-                var excludedList = directories
-                    .Where(x => x.IsExcluded)
-                    .Select(x => x.Path.ToLower())
-                    .ToList();
+            // Grab the Excluded Paths
+            var excludedList = directories
+                .Where(x => x.IsExcluded)
+                .Select(x => x.Path.ToLower())
+                .ToList();
 
-                // Begin the discovery process
-                while (openedList.Count > 0)
+            // Begin the discovery process
+            while (openedList.Count > 0)
+            {
+                var currentDirectory = openedList.Pop();
+                if (currentDirectory.IsExcluded) continue;
+
+                try
                 {
-                    var currentDirectory = openedList.Pop();
-                    if (currentDirectory.IsExcluded) continue;
+                    List<StorageFolder> allFolders = new List<StorageFolder>();
 
-                    try
+                    // Convert the path into a StorageFolder
+                    progress?.Report(new IndicatorProgressReport(true, 20.0, $"Discovering Folders For Theme - {theme.Name} - Step 1/3", true));
+                    var rootFolder = await StorageFolder.GetFolderFromPathAsync(currentDirectory.Path);
+                    allFolders.Add(rootFolder);
+
+                    // If we are allowed to gather subdirectories, gather them as well
+                    if (currentDirectory.IncludeSubdirectories)
                     {
-                        List<StorageFolder> allFolders = new List<StorageFolder>();
+                        progress?.Report(new IndicatorProgressReport(true, 30.0, $"Discovering Subfolders For Theme - {theme.Name} - Step 2/3", true));
+                        var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(rootFolder, false);
+                        allFolders.AddRange(subfoldersOpenedList);
+                    }
 
-                        // Convert the path into a StorageFolder
-                        progress?.Report(new IndicatorProgressReport(true, 20.0, $"Discovering Folders For Theme - {theme.Name} - Step 1/3", true));
-                        var rootFolder = await StorageFolder.GetFolderFromPathAsync(currentDirectory.Path);
-                        allFolders.Add(rootFolder);
-
-                        // If we are allowed to gather subdirectories, gather them as well
-                        if (currentDirectory.IncludeSubdirectories)
+                    // Next go through all the folders and get their files
+                    progress?.Report(new IndicatorProgressReport(true, 40.0, $"Discovering Files For Theme - {theme.Name} - Step 3/3", true));
+                    foreach (var currentFolder in allFolders)
+                    {
+                        try
                         {
-                            progress?.Report(new IndicatorProgressReport(true, 30.0, $"Discovering Subfolders For Theme - {theme.Name} - Step 2/3", true));
-                            var subfoldersOpenedList = await StorageTask.Instance.GetDirectoryTreeFromFolder(rootFolder, false);
-                            allFolders.AddRange(subfoldersOpenedList);
-                        }
-
-                        // Next go through all the folders and get their files
-                        progress?.Report(new IndicatorProgressReport(true, 40.0, $"Discovering Files For Theme - {theme.Name} - Step 3/3", true));
-                        foreach (var currentFolder in allFolders)
-                        {
-                            try
+                            var files = await currentFolder.GetFilesAsync();
+                            foreach (var currentFile in files)
                             {
-                                var files = await currentFolder.GetFilesAsync();
-                                foreach (var currentFile in files)
+                                if (currentFile.ContentType.ToLower().Contains("image"))
                                 {
-                                    if (currentFile.ContentType.ToLower().Contains("image"))
-                                    {
-                                        FileDiscoveryCache cache = new FileDiscoveryCache();
-                                        cache.WallpaperThemeID = currentDirectory.WallpaperThemeID;
-                                        cache.FileAccessTokenID = currentDirectory.FileAccessTokenID;
-                                        cache.StorageLocation = currentDirectory.StorageLocation;
-                                        cache.FolderPath = currentFolder.Path;
-                                        cache.FilePath = currentFile.Path;
-                                        updatedThemeFilesCache.Add(cache);
-                                    }
+                                    FileDiscoveryCache cache = new FileDiscoveryCache();
+                                    cache.WallpaperThemeID = currentDirectory.WallpaperThemeID;
+                                    cache.FileAccessTokenID = currentDirectory.FileAccessTokenID;
+                                    cache.StorageLocation = currentDirectory.StorageLocation;
+                                    cache.FolderPath = currentFolder.Path;
+                                    cache.FilePath = currentFile.Path;
+                                    updatedThemeFilesCache.Add(cache);
                                 }
                             }
-                            catch (Exception e)
-                            {
-                                Debug.WriteLine(e.ToString());
-                                if (Debugger.IsAttached)
-                                    Debugger.Break();
-                            }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.ToString());
-                        if (Debugger.IsAttached)
-                            Debugger.Break();
-                    }
-                }
-
-                // Check the exclusion list and remove what shouldn't exist
-                progress?.Report(new IndicatorProgressReport(true, 60.0, $"Excluding Items - {theme.Name} - Step 1/1", true));
-                for (int i = updatedThemeFilesCache.Count - 1; i >= 0; i--)
-                {
-                    foreach (var excludedPath in excludedList)
-                    {
-                        if (updatedThemeFilesCache[i].FilePath.ToLower().Contains(excludedPath))
+                        catch (Exception e)
                         {
-                            updatedThemeFilesCache.RemoveAt(i);
-                            break;
+                            Debug.WriteLine(e.ToString());
+                            if (Debugger.IsAttached)
+                                Debugger.Break();
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.ToString());
+                    if (Debugger.IsAttached)
+                        Debugger.Break();
+                }
+            }
 
-                // Order the Cache
-                progress?.Report(new IndicatorProgressReport(true, 70.0, $"Ordering Cache - {theme.Name} - Step 1/1", true));
-                updatedThemeFilesCache = updatedThemeFilesCache.OrderBy(x => x.FolderPath)
-                    .ThenBy(x => x.FilePath)
-                    .ToList();
+            // Check the exclusion list and remove what shouldn't exist
+            progress?.Report(new IndicatorProgressReport(true, 60.0, $"Excluding Items - {theme.Name} - Step 1/1", true));
+            for (int i = updatedThemeFilesCache.Count - 1; i >= 0; i--)
+            {
+                foreach (var excludedPath in excludedList)
+                {
+                    if (updatedThemeFilesCache[i].FilePath.ToLower().Contains(excludedPath))
+                    {
+                        updatedThemeFilesCache.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
 
-                // Setup the File Cache Repo
-                //FileDiscoveryCacheRepository fileCacheRepo = new FileDiscoveryCacheRepository(context);
+            // Order the Cache
+            progress?.Report(new IndicatorProgressReport(true, 70.0, $"Ordering Cache - {theme.Name} - Step 1/1", true));
+            updatedThemeFilesCache = updatedThemeFilesCache.OrderBy(x => x.FolderPath)
+                .ThenBy(x => x.FilePath)
+                .ToList();
 
-                // Before we upload to the repo, we need to clear the cache for the current theme
-                progress?.Report(new IndicatorProgressReport(true, 80.0, $"Clearing Old Cache - {theme.Name} - Step 1/2", true));
-                var currentThemeCache = FileCacheRepo.GetAllQuery().Where(x => x.WallpaperThemeID == theme.ID).ToList();
-                FileCacheRepo.RemoveRange(currentThemeCache);
+            // Setup the File Cache Repo
+            //FileDiscoveryCacheRepository fileCacheRepo = new FileDiscoveryCacheRepository(context);
 
-                // With the current items out of the way, we can now add in our new items
-                progress?.Report(new IndicatorProgressReport(true, 90.0, $"Updating Cache - {theme.Name} - Step 2/2", true));
-                FileCacheRepo.AddRange(updatedThemeFilesCache);
+            // Before we upload to the repo, we need to clear the cache for the current theme
+            progress?.Report(new IndicatorProgressReport(true, 80.0, $"Clearing Old Cache - {theme.Name} - Step 1/2", true));
+            var currentThemeCache = FileCacheRepo.GetAllQuery().Where(x => x.WallpaperThemeID == theme.ID).ToList();
+            FileCacheRepo.RemoveRange(currentThemeCache);
+
+            // With the current items out of the way, we can now add in our new items
+            progress?.Report(new IndicatorProgressReport(true, 90.0, $"Updating Cache - {theme.Name} - Step 2/2", true));
+            FileCacheRepo.AddRange(updatedThemeFilesCache);
             //}
 
             progress?.Report(new IndicatorProgressReport(true, 100.0, $"Completed Cache For - {theme.Name}", true));

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WallpaperManager.BackgroundTask;
 using WallpaperManager.Pages;
 using WallpaperManager.Repositories;
 using Windows.ApplicationModel;
@@ -36,10 +37,20 @@ namespace WallpaperManager
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            // Migrate and Update the DB
             using (var db = new WallpaperManagerContext())
             {
                 db.Database.Migrate();
             }
+
+            // Register the Background Tasks
+            RegisterBackgroundTasks();
+        }
+
+        private async void RegisterBackgroundTasks()
+        {
+            FileDiscoveryBackgroundTask backgroundTask = new FileDiscoveryBackgroundTask();
+            await backgroundTask.RegisterBackgroundTask();
         }
 
         /// <summary>

@@ -19,7 +19,12 @@ namespace WallpaperManager.Models.Settings
             {
                 Container.Values[Key] = value.ToString("MM/dd/yyyy hh:mm:ss.fff");
                 RaisePropertyChanged(nameof(Value));
+                RaisePropertyChanged(nameof(ValueAsString));
             }
+        }
+        public string ValueAsString
+        {
+            get { return (string)Container.Values[Key]; }
         }
 
         public FileDiscoveryLastRunSetting()

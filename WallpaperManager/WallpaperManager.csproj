@@ -96,6 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BackgroundTask\FileDiscoveryBackgroundTask.cs" />
     <Compile Include="Controls\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
@@ -113,6 +114,7 @@
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIProgress.cs" />
     <Compile Include="Killerrin Studios Toolkit\APIResponse.cs" />
+    <Compile Include="Killerrin Studios Toolkit\BackgroundTaskTools.cs" />
     <Compile Include="Killerrin Studios Toolkit\Settings\ApplicationSettingBase.cs" />
     <Compile Include="Killerrin Studios Toolkit\Settings\GenericApplicationSetting.cs" />
     <Compile Include="Killerrin Studios Toolkit\Settings\IApplicationSetting.cs" />

@@ -21,7 +21,10 @@
 			<StackPanel Orientation="Vertical">
 				<StackPanel Orientation="Vertical">
 					<TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />
-					
+                    <TextBlock>
+                        <Run>File Discovery Last Run: </Run>
+                        <Run Text="{Binding FileDiscoveryLastRun.ValueAsString}"/>
+                    </TextBlock>
 					<ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}"/>
 
 					<TextBlock Text="File Discovery Frequency" />

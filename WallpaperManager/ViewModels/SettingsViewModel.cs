@@ -121,7 +121,7 @@ namespace WallpaperManager.ViewModels
         {
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - BEGIN CACHE TASK");
             FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);
-            var cache = await fileDiscoveryService.PreformFileDiscovery(progress);
+            var cache = await fileDiscoveryService.PreformFileDiscoveryAll(progress);
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - CACHE TASK COMPLETE");
         }
 
@@ -131,6 +131,8 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    // Due to Background Tasks limitations, the value must be >= 15 Minutes in order to successfully work
+                    if (FrequencyDays <= 0 && FrequencyHours <= 0 && FrequencyMinutes < 15) return;
                     FileDiscoveryFrequency.Value = new TimeSpan(FrequencyDays, FrequencyHours, FrequencyMinutes, 0);
                 });
             }
