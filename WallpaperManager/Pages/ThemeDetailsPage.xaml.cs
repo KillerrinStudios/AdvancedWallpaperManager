@@ -9,6 +9,7 @@ using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -93,7 +94,11 @@ namespace WallpaperManager.Pages
             StorageFolder folder = await file.GetParentAsync();
 
             if (folder != null)
-                StorageTask.OpenFolderInExplorer(folder);
+            {
+                FolderLauncherOptions launchOptions = new FolderLauncherOptions();
+                launchOptions.ItemsToSelect.Add(file);
+                StorageTask.OpenFolderInExplorer(folder, launchOptions);
+            }
         }
     }
 }
