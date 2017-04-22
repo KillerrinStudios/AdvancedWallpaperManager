@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using WallpaperManager.BackgroundTask;
+using WallpaperManager.BackgroundTasks;
 using WallpaperManager.Pages;
-using WallpaperManager.Repositories;
+using WallpaperManager.DAL.Repositories;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -26,8 +26,6 @@ namespace WallpaperManager
     /// </summary>
     sealed partial class App : Application
     {
-        public static Random Random = new Random();
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -49,8 +47,8 @@ namespace WallpaperManager
 
         private async void RegisterBackgroundTasks()
         {
-            FileDiscoveryBackgroundTask backgroundTask = new FileDiscoveryBackgroundTask();
-            await backgroundTask.RegisterBackgroundTask();
+            FileDiscoveryBackgroundTaskHelper backgroundTaskHelper = new FileDiscoveryBackgroundTaskHelper();
+            //await backgroundTaskHelper.RegisterBackgroundTask();
         }
 
         /// <summary>

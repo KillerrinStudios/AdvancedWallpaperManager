@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Killerrin_Studios_Toolkit;
+using KillerrinStudiosToolkit;
+using KillerrinStudiosToolkit.Models;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Toolkit.Uwp;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WallpaperManager.DAL.Repositories;
 using WallpaperManager.Models;
 using WallpaperManager.Pages;
 using WallpaperManager.Services;
@@ -145,7 +147,7 @@ namespace WallpaperManager.ViewModels
         {
             if (Theme == null) return;
 
-            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService((WallpaperManagerContext)ThemeRepository.DatabaseInfo.Context);
             var cache = await fileDiscoveryService.PreformFileDiscovery(Theme, progress);
             SetFileCache(cache);
         }

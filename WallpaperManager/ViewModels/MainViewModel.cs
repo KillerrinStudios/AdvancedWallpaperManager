@@ -6,6 +6,7 @@ using System;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using KillerrinStudiosToolkit.Helpers;
 using WallpaperManager.Models.Enums;
 using WallpaperManager.Pages;
 
@@ -52,7 +53,7 @@ namespace WallpaperManager.ViewModels
                 m_currentNavigationLocation = value;
                 RaisePropertyChanged(nameof(CurrentNavigationLocation));
 
-                TopNavBarText = Helpers.StringHelpers.AddSpacesToSentence(m_currentNavigationLocation.ToString(), true);
+                TopNavBarText = StringHelpers.AddSpacesToSentence(m_currentNavigationLocation.ToString(), true);
             }
         }
         #endregion

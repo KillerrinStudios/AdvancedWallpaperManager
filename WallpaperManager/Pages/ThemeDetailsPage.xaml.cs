@@ -1,4 +1,4 @@
-﻿using Killerrin_Studios_Toolkit;
+﻿using KillerrinStudiosToolkit;
 using System;
 using System.Collections.Generic;
 using System.IO;

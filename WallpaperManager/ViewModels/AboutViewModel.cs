@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Killerrin_Studios_Toolkit;
+using KillerrinStudiosToolkit;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;

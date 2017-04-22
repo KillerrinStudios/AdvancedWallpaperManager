@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
+using KillerrinStudiosToolkit.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;

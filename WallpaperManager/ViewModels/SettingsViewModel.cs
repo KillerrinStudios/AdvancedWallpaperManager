@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Killerrin_Studios_Toolkit;
+using KillerrinStudiosToolkit;
+using KillerrinStudiosToolkit.Models;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WallpaperManager.DAL.Repositories;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using WallpaperManager.Services;
@@ -120,7 +122,7 @@ namespace WallpaperManager.ViewModels
         private async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - BEGIN CACHE TASK");
-            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService(ThemeRepository.DatabaseInfo.Context);
+            FileDiscoveryService fileDiscoveryService = new FileDiscoveryService((WallpaperManagerContext)ThemeRepository.DatabaseInfo.Context);
             var cache = await fileDiscoveryService.PreformFileDiscoveryAll(progress);
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - CACHE TASK COMPLETE");
         }

@@ -96,55 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackgroundTask\FileDiscoveryBackgroundTask.cs" />
-    <Compile Include="Controls\ProgressIndicator.xaml.cs">
-      <DependentUpon>ProgressIndicator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\EnumSpaceConverter.cs" />
-    <Compile Include="Converters\InverseNullToVisibilityConverter.cs" />
-    <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\EnumStringConverter.cs" />
-    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\ObjectStringConverter.cs" />
-    <Compile Include="Converters\OppositeBooleanConverter.cs" />
-    <Compile Include="Converters\RelativeDateTimeConverter.cs" />
-    <Compile Include="Helpers\AdaptiveTriggerConsts.cs" />
-    <Compile Include="Helpers\DateTimeExtensions.cs" />
-    <Compile Include="Helpers\StringHelpers.cs" />
-    <Compile Include="Killerrin Studios Toolkit\APIProgress.cs" />
-    <Compile Include="Killerrin Studios Toolkit\APIResponse.cs" />
-    <Compile Include="Killerrin Studios Toolkit\BackgroundTaskTools.cs" />
-    <Compile Include="Killerrin Studios Toolkit\Settings\ApplicationSettingBase.cs" />
-    <Compile Include="Killerrin Studios Toolkit\Settings\GenericApplicationSetting.cs" />
-    <Compile Include="Killerrin Studios Toolkit\Settings\IApplicationSetting.cs" />
-    <Compile Include="Killerrin Studios Toolkit\CortanaTools.cs" />
-    <Compile Include="Killerrin Studios Toolkit\DebugTools.cs" />
-    <Compile Include="Killerrin Studios Toolkit\KillerrinApplicationData.cs" />
-    <Compile Include="Killerrin Studios Toolkit\LockscreenTools.cs" />
-    <Compile Include="Killerrin Studios Toolkit\StorageTask.cs" />
-    <Compile Include="Killerrin Studios Toolkit\TileManager.cs" />
-    <Compile Include="Migrations\20170411020256_InitialMigration.cs" />
-    <Compile Include="Migrations\20170411020256_InitialMigration.designer.cs">
-      <DependentUpon>20170411020256_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.cs" />
-    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.designer.cs">
-      <DependentUpon>20170416210506_AddedFileDiscoveryCache.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
-    <Compile Include="Models\Enums\FileAccessTokenType.cs" />
-    <Compile Include="Models\Enums\StorageLocation.cs" />
-    <Compile Include="Models\FileAccessToken.cs" />
-    <Compile Include="Models\Settings\ActiveLockscreenThemeSetting.cs" />
-    <Compile Include="Models\Settings\ActiveDesktopThemeSetting.cs" />
-    <Compile Include="Models\Settings\FileDiscoveryLastRunSetting.cs" />
-    <Compile Include="Models\Settings\FileDiscoveryFrequencySetting.cs" />
-    <Compile Include="Models\Settings\FileDiscoveryEnableSetting.cs" />
-    <Compile Include="Models\StorageFolderFiles.cs" />
-    <Compile Include="Models\FileDiscoveryCache.cs" />
-    <Compile Include="Models\WallpaperDirectory.cs" />
-    <Compile Include="Models\WallpaperTheme.cs" />
+    <Compile Include="BackgroundTasks\FileDiscoveryBackgroundTaskHelper.cs" />
     <Compile Include="Pages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -154,8 +106,6 @@
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Enums\NavigationLocation.cs" />
-    <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -166,19 +116,6 @@
       <DependentUpon>ThemeListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\FileAccessTokenRepository.cs" />
-    <Compile Include="Repositories\FileDiscoveryCacheRepository.cs" />
-    <Compile Include="Repositories\WallpaperDirectoryRepository.cs" />
-    <Compile Include="Repositories\WallpaperThemeRepository.cs" />
-    <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Repositories\WallpaperManagerContext.cs" />
-    <Compile Include="Repositories\RepositoryBase.cs" />
-    <Compile Include="Services\FileDiscoveryService.cs" />
-    <Compile Include="Services\MediaService.cs" />
-    <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\ProgressService.cs" />
-    <Compile Include="Services\ServiceBase.cs" />
-    <Compile Include="Models\IndicatorProgressReport.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
@@ -211,10 +148,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\ProgressIndicator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -289,7 +222,32 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\KillerrinStudiosToolkit\KillerrinStudiosToolkit.csproj">
+      <Project>{65cd8fcf-c313-4977-9f80-2c383537b979}</Project>
+      <Name>KillerrinStudiosToolkit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WallpaperManager.BackgroundTasks\WallpaperManager.BackgroundTasks.csproj">
+      <Project>{e1be99f9-7782-4259-9c92-ad1cde193c97}</Project>
+      <Name>WallpaperManager.BackgroundTasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WallpaperManager.Contracts\WallpaperManager.Contracts.csproj">
+      <Project>{80d84dba-4c25-41f6-ab69-358ff70805d7}</Project>
+      <Name>WallpaperManager.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WallpaperManager.DAL\WallpaperManager.DAL.csproj">
+      <Project>{975bb8dd-aa6d-4622-9d47-5cb42639bb0c}</Project>
+      <Name>WallpaperManager.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WallpaperManager.Models\WallpaperManager.Models.csproj">
+      <Project>{629ac313-4d92-42fc-afca-afef73842410}</Project>
+      <Name>WallpaperManager.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WallpaperManager.Services\WallpaperManager.Services.csproj">
+      <Project>{970642bd-7445-4127-83fd-893c900bd9b9}</Project>
+      <Name>WallpaperManager.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

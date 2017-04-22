@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
-using WallpaperManager.Services;
-using WallpaperManager.Repositories;
+using WallpaperManager.DAL.Repositories;
+using KillerrinStudiosToolkit.Services;
 
 namespace WallpaperManager.ViewModels
 {

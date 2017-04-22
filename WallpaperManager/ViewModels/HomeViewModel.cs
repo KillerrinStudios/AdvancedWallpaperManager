@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Killerrin_Studios_Toolkit;
+using KillerrinStudiosToolkit;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WallpaperManager.Killerrin_Studios_Toolkit.Settings;
+using KillerrinStudiosToolkit.Settings;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using Windows.UI.Xaml.Controls;
