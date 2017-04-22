@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WallpaperManager.Repositories;
 
 namespace WallpaperManager.Models
 {
@@ -55,20 +56,42 @@ namespace WallpaperManager.Models
             }
         }
 
-        public ObservableCollection<WallpaperDirectory> Directories { get; set; } = new ObservableCollection<WallpaperDirectory>();
-
         [JsonIgnore]
         [NotMapped]
-        public string RandomImageFromDirectory
+        public string RandomImageFromCache
         {
             get
             {
-                if (Directories.Count == 0) return "";
+                using (var context = new WallpaperManagerContext())
+                {
+                    var repo = new FileDiscoveryCacheRepository(context);
+                    var files = repo.GetAllQuery().Where(x => x.WallpaperThemeID == ID).ToList();
 
-                var rnd = App.Random.Next(0, Directories.Count);
+                    if (files.Count == 0) return "";
 
-                var file = Directories[rnd].Path;
-                return file;
+                    var rnd = App.Random.Next(0, files.Count);
+                    var file = files[rnd].FilePath;
+                    return file;
+                }
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        public string FirstImageImageFromDirectories
+        {
+            get
+            {
+                using (var context = new WallpaperManagerContext())
+                {
+                    var repo = new FileDiscoveryCacheRepository(context);
+                    var files = repo.GetAllQuery().Where(x => x.WallpaperThemeID == ID).ToList();
+
+                    if (files.Count == 0) return "";
+
+                    var file = files[0].FilePath;
+                    return file;
+                }
             }
         }
     }

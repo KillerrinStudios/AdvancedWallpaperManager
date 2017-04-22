@@ -17,6 +17,8 @@
         <Converters:EnumSpaceConverter x:Key="EnumSpaceConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
         <Converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibility"/>
+        <Converters:InverseNullToVisibilityConverter x:Key="InverseNullToVisibility"/>
         <Converters:OppositeBooleanConverter x:Key="OppositeBooleanConverter"/>
         <Converters:RelativeDateTimeConverter x:Key="RelativeDateTime"/>
     </Application.Resources>

@@ -15,14 +15,24 @@
 		<SplitView.Pane>
 			<Grid Background="DarkSlateGray">
 				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="*" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
-				
-				<StackPanel Orientation="Vertical" Grid.Row="0">
-					<Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+
+				<Button x:Name="HamburgerButton" Grid.Row="0"
+						FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
 						Command="{Binding TogglePaneCommand}"
 						Width="50" Height="50" Background="Transparent" />
+
+				<StackPanel Orientation="Vertical" Grid.Row="1">
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE80F;"
+							Command="{Binding NavigateHomeCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="Home" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+					
 					<StackPanel Orientation="Horizontal">
 						<Button x:Name="ThemesButton" FontFamily="Segoe MDL2 Assets" Content="&#xE8A9;"
 							Command="{Binding NavigateThemesCommand}"
@@ -31,7 +41,7 @@
 					</StackPanel>
 				</StackPanel>
 
-				<StackPanel Orientation="Vertical" Grid.Row="1">
+				<StackPanel Orientation="Vertical" Grid.Row="2">
 
 					<Rectangle Margin="0,0" Height="1" Fill="White" Opacity="0.5"/>
 

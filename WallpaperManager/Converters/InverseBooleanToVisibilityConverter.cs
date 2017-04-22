@@ -14,10 +14,10 @@ namespace WallpaperManager.Converters
         {
             if (value is string)
             {
-                string b = ((string)value);
-                if (b == "true" || b == "True" || b == "TRUE")
+                string b = ((string)value).ToLower();
+                if (b == "true")
                     return Visibility.Collapsed;
-                else if (b == "false" || b == "False" || b == "FALSE")
+                else if (b == "false")
                     return Visibility.Visible;
             }
             else if (value is bool)

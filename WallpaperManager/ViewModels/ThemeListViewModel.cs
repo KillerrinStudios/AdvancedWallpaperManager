@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.Models;
+using WallpaperManager.Models.Settings;
 using WallpaperManager.Pages;
 using Windows.UI.Xaml.Controls;
 
@@ -139,7 +140,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        public void ThemeClicked(WallpaperTheme theme)
+        public void NavigateTheme(WallpaperTheme theme)
         {
             if (!CanNavigate)
                 return;
@@ -148,6 +149,19 @@ namespace WallpaperManager.ViewModels
 
             MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.ThemeDetails;
             NavigationService.Navigate(typeof(ThemeDetailsPage), theme);
+        }
+
+        public void SetActiveDesktopTheme(WallpaperTheme theme)
+        {
+            Debug.WriteLine($"Setting Active Desktop Theme To: {theme.ID} - {theme.Name}");
+            ActiveDesktopThemeSetting setting = new ActiveDesktopThemeSetting();
+            setting.Value = theme.ID;
+        }
+        public void SetActiveLockscreenTheme(WallpaperTheme theme)
+        {
+            Debug.WriteLine($"Setting Active Lockscreen Theme To: {theme.ID} - {theme.Name}");
+            ActiveLockscreenThemeSetting setting = new ActiveLockscreenThemeSetting();
+            setting.Value = theme.ID;
         }
     }
 }

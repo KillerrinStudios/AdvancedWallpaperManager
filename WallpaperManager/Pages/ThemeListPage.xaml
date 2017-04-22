@@ -23,7 +23,7 @@
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBlock Text="Themes" Grid.Column="0" FontSize="64"/>
+			<TextBlock Text="Themes" Grid.Column="0" Style="{ThemeResource HeaderTextBlockStyle}"/>
 			<Button Grid.Column="1" Width="150" Margin="20,0,20,0"
 					HorizontalAlignment="Right" VerticalAlignment="Center">
 				<Button.Content>
@@ -80,7 +80,7 @@
 							<RowDefinition Height="*"/>
 						</Grid.RowDefinitions>
 
-						<Image Source="{Binding RandomImageFromDirectory}" 
+						<Image Source="{Binding RandomImageFromCache}" 
 							   Grid.Row="0" Grid.RowSpan="2" />
 
 						<Grid Grid.Row="1">
@@ -96,7 +96,9 @@
 			<GridView.Resources>
 				<MenuFlyout x:Name="themesMenuFlyout">
 					<MenuFlyout.Items>
-						<MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
+                        <MenuFlyoutItem x:Name="SetActiveWallpaper" Text="Set to Active Wallpaper" Click="MenuFlyoutItem_SetActiveWallpaper_Click"/>
+                        <MenuFlyoutItem x:Name="SetActiveLockscreen" Text="Set to Active Lockscreen" Click="MenuFlyoutItem_SetActiveLockscreen_Click"/>
+                        <MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
 					</MenuFlyout.Items>
 				</MenuFlyout>
 			</GridView.Resources>

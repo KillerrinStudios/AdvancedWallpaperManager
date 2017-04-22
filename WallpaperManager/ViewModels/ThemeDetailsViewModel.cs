@@ -79,6 +79,8 @@ namespace WallpaperManager.ViewModels
             if (IsInDesignMode)
             {
                 // Code runs in Blend --> create design time data.
+                Theme = new WallpaperTheme();
+                Theme.Name = "Theme Name";
             }
             else
             {
@@ -148,7 +150,7 @@ namespace WallpaperManager.ViewModels
             SetFileCache(cache);
         }
 
-        private async void SetFileCache(List<FileDiscoveryCache> cache)
+        private async void SetFileCache(IEnumerable<FileDiscoveryCache> cache)
         {
             // Because the cache can either from from the Database or a recent Cache Discovery, we sort the cache here before moving on to display
             //cache = cache.OrderBy(x => x.FilePath).ToList();
@@ -160,20 +162,14 @@ namespace WallpaperManager.ViewModels
                 Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(RefreshFileCache)} - COMPLETE");
                 ProgressService.Hide();
 
-                // Group into an easy to process Dictionary
-                Dictionary<string, List<FileDiscoveryCache>> cacheDictionary = (from c in cache
-                                                                                group c by c.FolderPath
-                                                                                into groupedCache
-                                                                                select groupedCache).ToDictionary(x => x.Key, x => x.ToList());
+                // Get the Grouped Cache
+                var groupedCache = GroupedFileCache.FromCacheList(cache);
 
                 // Clear the previous Cache and add in the new ones
                 FileCache.Clear();
-                foreach (var c in cacheDictionary)
+                foreach (var c in groupedCache)
                 {
-                    GroupedFileCache groupedCache = new GroupedFileCache();
-                    groupedCache.FolderPath = c.Key;
-                    groupedCache.Files = c.Value;
-                    FileCache.Add(groupedCache);
+                    FileCache.Add(c);
                 }
             });
         }
@@ -262,7 +258,6 @@ namespace WallpaperManager.ViewModels
                     NewDirectory.Path = m_storageFolder.Path;
                     NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
                     DirectoryRepository.Add(NewDirectory);
-                    Theme.Directories.Add(NewDirectory);
 
                     // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();

@@ -95,6 +95,21 @@ namespace WallpaperManager.ViewModels
         }
 
         #region Navigation Commands
+        public RelayCommand NavigateHomeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (!CanNavigate)
+                        return;
+
+                    MainViewModel.Instance.CurrentNavigationLocation = Models.Enums.NavigationLocation.Home;
+                    NavigationService.Navigate(typeof(HomePage), null);
+                });
+            }
+        }
+
         public RelayCommand NavigateThemesCommand
         {
             get

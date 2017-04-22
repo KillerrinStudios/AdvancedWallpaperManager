@@ -56,7 +56,7 @@ namespace WallpaperManager.Pages
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Debug.WriteLine($"{nameof(ThemeListPage)} - {nameof(GridView_ItemClick)}");
-            ViewModel.ThemeClicked((WallpaperTheme)e.ClickedItem);
+            ViewModel.NavigateTheme((WallpaperTheme)e.ClickedItem);
         }
 
         WallpaperTheme m_rightClickedWallPaperTheme;
@@ -73,6 +73,23 @@ namespace WallpaperManager.Pages
                 return;
 
             ViewModel.DeleteThemeDialog(m_rightClickedWallPaperTheme.ID);
+            m_rightClickedWallPaperTheme = null;
+        }
+
+        private void MenuFlyoutItem_SetActiveWallpaper_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_rightClickedWallPaperTheme == null)
+                return;
+
+            ViewModel.SetActiveDesktopTheme(m_rightClickedWallPaperTheme);
+            m_rightClickedWallPaperTheme = null;
+        }
+        private void MenuFlyoutItem_SetActiveLockscreen_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_rightClickedWallPaperTheme == null)
+                return;
+
+            ViewModel.SetActiveLockscreenTheme(m_rightClickedWallPaperTheme);
             m_rightClickedWallPaperTheme = null;
         }
     }

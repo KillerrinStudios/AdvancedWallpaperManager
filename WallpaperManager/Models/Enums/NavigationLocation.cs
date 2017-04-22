@@ -11,6 +11,7 @@ namespace WallpaperManager.Models.Enums
         None,
         About,
         Settings,
+        Home,
         ThemeList,
         ThemeDetails
     }

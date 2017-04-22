@@ -72,5 +72,26 @@ namespace WallpaperManager.Models
     {
         public string FolderPath { get; set; }
         public List<FileDiscoveryCache> Files { get; set; } = new List<FileDiscoveryCache>();
+
+        public static IEnumerable<GroupedFileCache> FromCacheList(IEnumerable<FileDiscoveryCache> cache)
+        {
+            // Group into an easy to process Dictionary
+            Dictionary<string, List<FileDiscoveryCache>> cacheDictionary = (from c in cache
+                                                                            group c by c.FolderPath
+                                                                            into groupedCache
+                                                                            select groupedCache).ToDictionary(x => x.Key, x => x.ToList());
+
+            // Create the Cache
+            var groupCache = new List<GroupedFileCache>();
+            foreach (var c in cacheDictionary)
+            {
+                GroupedFileCache groupedCache = new GroupedFileCache();
+                groupedCache.FolderPath = c.Key;
+                groupedCache.Files = c.Value;
+                groupCache.Add(groupedCache);
+            }
+
+            return groupCache;
+        }
     }
 }

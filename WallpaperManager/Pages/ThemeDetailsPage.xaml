@@ -23,7 +23,7 @@
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBlock Text="{Binding Theme.Name}" Grid.Column="0" FontSize="64"/>
+            <TextBlock Text="{Binding Theme.Name}" Grid.Column="0" Style="{ThemeResource HeaderTextBlockStyle}"/>
 
 			<StackPanel Orientation="Horizontal" Grid.Column="1" Margin="20,0,20,0"
 						HorizontalAlignment="Right" VerticalAlignment="Center">
