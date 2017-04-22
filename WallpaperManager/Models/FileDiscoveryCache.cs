@@ -66,6 +66,13 @@ namespace WallpaperManager.Models
                 RaisePropertyChanged(nameof(FilePath));
             }
         }
+
+        [JsonIgnore]
+        [NotMapped]
+        public string FileName
+        {
+            get { return System.IO.Path.GetFileNameWithoutExtension(FilePath); }
+        }
     }
 
     public class GroupedFileCache : ModelBase
