@@ -67,7 +67,7 @@
 				  ScrollViewer.VerticalScrollMode="Auto">
 			<GridView.ItemsPanel>
 				<ItemsPanelTemplate>
-					<ItemsWrapGrid Orientation="Horizontal" ItemWidth="150" ItemHeight="150"
+					<ItemsWrapGrid Orientation="Horizontal" ItemWidth="200" ItemHeight="200"
 							ScrollViewer.HorizontalScrollBarVisibility="Visible"
 							ScrollViewer.VerticalScrollBarVisibility="Disabled" />
 				</ItemsPanelTemplate>
