@@ -48,7 +48,7 @@ namespace WallpaperManager
         private async void RegisterBackgroundTasks()
         {
             FileDiscoveryBackgroundTaskHelper backgroundTaskHelper = new FileDiscoveryBackgroundTaskHelper();
-            //await backgroundTaskHelper.RegisterBackgroundTask();
+            await backgroundTaskHelper.RegisterBackgroundTask();
         }
 
         /// <summary>
