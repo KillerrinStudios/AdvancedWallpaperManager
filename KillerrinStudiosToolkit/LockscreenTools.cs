@@ -16,8 +16,6 @@ namespace KillerrinStudiosToolkit
     {
         public static LockscreenTools Instance { get; } = new LockscreenTools();
 
-        public static StorageFolder WallpaperImagesFolder;
-        public const string WallpaperImagesFolderName = "WallpaperImages";
         public static StorageFolder LockscreenImagesFolder;
         public const string LockscreenImagesFolderName = "LockscreenImages";
 
@@ -25,28 +23,20 @@ namespace KillerrinStudiosToolkit
 
         public LockscreenTools()
         {
-            SetupFolders();
+            SetupFolder();
         }
 
-        private async void SetupFolders()
+        private async void SetupFolder()
         {
             LockscreenImagesFolder = await StorageTask.Instance.CreateFolder(RootFolder, LockscreenTools.LockscreenImagesFolderName, CreationCollisionOption.OpenIfExists);
-            WallpaperImagesFolder  = await StorageTask.Instance.CreateFolder(RootFolder, LockscreenTools.WallpaperImagesFolderName, CreationCollisionOption.OpenIfExists);
         }
 
 
-        #region Delete All Images
-        public static async Task<bool> DeleteAllImagesInWallpaperFolder()
-        {
-            return await StorageTask.Instance.DeleteAllFilesInFolder(LockscreenTools.WallpaperImagesFolder);
-        }
         public static async Task<bool> DeleteAllImagesInLockscreenFolder()
         {
             return await StorageTask.Instance.DeleteAllFilesInFolder(LockscreenTools.LockscreenImagesFolder);
         }
-        #endregion
 
-        #region Set Image
         private async Task<StorageFile> GetStorageFile(StorageFolder folder, Uri imageToSet, string id)
         {
             if (folder == null) return null;
@@ -64,7 +54,6 @@ namespace KillerrinStudiosToolkit
             return file;
         }
 
-        #region Set Lockscreen Image
         public async Task<bool> SetLockscreenImage(Uri imageToSet, string id)
         {
             StorageFile file = await GetStorageFile(LockscreenTools.LockscreenImagesFolder, imageToSet, id);
@@ -88,36 +77,7 @@ namespace KillerrinStudiosToolkit
                 return false;
             }
         }
-        #endregion
 
-        #region Set Wallpaper Image
-        public async Task<bool> SetWallpaperImage(Uri imageToSet, string id)
-        {
-            StorageFile file = await GetStorageFile(LockscreenTools.WallpaperImagesFolder, imageToSet, id);
-
-            if (file == null) return false;
-            return await SetWallpaperImage(file);
-        }
-
-        public async Task<bool> SetWallpaperImage(StorageFile imageFile)
-        {
-            if (imageFile == null) return false;
-
-            try
-            {
-                bool success = await UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(imageFile);
-                return success;
-            }
-            catch (Exception e)
-            {
-                DebugTools.PrintOutException(e, "Wallpaper: Set Image");
-                return false;
-            }
-        }
-        #endregion
-        #endregion
-
-        #region Get Lockscreen Image
         public static IRandomAccessStream GetLockscreenImageStream()
         {
             IRandomAccessStream imageStream = LockScreen.GetImageStream();
@@ -134,6 +94,5 @@ namespace KillerrinStudiosToolkit
             }
             return null;
         }
-        #endregion
     }
 }

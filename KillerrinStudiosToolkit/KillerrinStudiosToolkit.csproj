@@ -130,6 +130,7 @@
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="KillerrinApplicationData.cs" />
+    <Compile Include="WallpaperTools.cs" />
     <Compile Include="LockscreenTools.cs" />
     <Compile Include="Models\IndicatorProgressReport.cs" />
     <Compile Include="Models\ModelBase.cs" />
