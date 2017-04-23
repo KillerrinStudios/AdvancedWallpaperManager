@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,18 +23,25 @@ namespace WallpaperManager.BackgroundTasks
             if (!fileDiscoveryEnabled.Value) return false;
 
             // Due to Background Tasks limitations, ensure the value be >= 15 Minutes
-            var fileDiscoveryFrequency = new FileDiscoveryFrequencySetting();
-            if (fileDiscoveryFrequency.Value.Days <= 0 &&
-                fileDiscoveryFrequency.Value.Hours <= 0 &&
-                fileDiscoveryFrequency.Value.Minutes < 15)
+            if (!DoesFrequencyMeetMinimumTimespan())
                 return false;
 
+            return true;
+        }
+
+        public static bool DoesFrequencyMeetMinimumTimespan()
+        {
+            var fileDiscoveryFrequency = new FileDiscoveryFrequencySetting();
+            if (fileDiscoveryFrequency.Value < TimeSpan.FromMinutes(15))
+                return false;
             return true;
         }
 
         BackgroundTaskDeferral _deferral;
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
+            Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(Run)} - Begun");
+
             // Register the Monitoring Events
             taskInstance.Canceled += TaskInstance_Canceled;
             taskInstance.Task.Completed += Task_Completed;
@@ -43,6 +51,7 @@ namespace WallpaperManager.BackgroundTasks
             if (!IsTaskAllowedToRun()) return;
 
             // Otherwise, we jump into File Discovery Process
+            _deferral = taskInstance.GetDeferral();
             using (var context = new WallpaperManagerContext())
             {
                 var themeRepo = new WallpaperThemeRepository(context);
@@ -54,48 +63,51 @@ namespace WallpaperManager.BackgroundTasks
                 //_deferral.Complete();
 
                 // Preform File Discovery for the Desktop Wallpaper Theme
-                _deferral = taskInstance.GetDeferral();
+                Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(ActiveDesktopThemeSetting)} - Started");
                 var activeDesktopThemeSetting = new ActiveDesktopThemeSetting();
-                if (activeDesktopThemeSetting.Value.HasValue)
+                var activeDesktopThemeSettingValue = activeDesktopThemeSetting.Value;
+                if (activeDesktopThemeSettingValue.HasValue)
                 {
-                    var activeWallpaperTheme = themeRepo.Find(activeDesktopThemeSetting.Value.Value);
+                    var activeWallpaperTheme = themeRepo.Find(activeDesktopThemeSettingValue.Value);
                     await fileDiscoveryService.PreformFileDiscovery(activeWallpaperTheme, null);
                 }
-                _deferral.Complete();
+                Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(ActiveDesktopThemeSetting)} - Completed");
 
                 // Preform File Discovery for the Lockscreen Theme
-                _deferral = taskInstance.GetDeferral();
+                Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(ActiveLockscreenThemeSetting)} - Started");
                 var activeLockscreenThemeSetting = new ActiveLockscreenThemeSetting();
-                if (activeLockscreenThemeSetting.Value.HasValue &&
-                    activeLockscreenThemeSetting.Value != activeDesktopThemeSetting.Value)
+                var activeLockscreenThemeSettingValue = activeLockscreenThemeSetting.Value;
+                if (activeLockscreenThemeSettingValue.HasValue &&
+                    activeLockscreenThemeSettingValue != activeDesktopThemeSettingValue)
                 {
-                    var activeLockscreenTheme = themeRepo.Find(activeLockscreenThemeSetting.Value.Value);
+                    var activeLockscreenTheme = themeRepo.Find(activeLockscreenThemeSettingValue.Value);
                     await fileDiscoveryService.PreformFileDiscovery(activeLockscreenTheme, null);
-
                 }
-                _deferral.Complete();
+
+                Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(ActiveLockscreenThemeSetting)} - Completed");
             }
 
             // Update the FileDiscovery Last Run
-            _deferral = taskInstance.GetDeferral();
             var fileDiscoveryLastRunSetting = new FileDiscoveryLastRunSetting();
             fileDiscoveryLastRunSetting.Value = DateTime.UtcNow;
+
+            Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(Run)} - Completed");
             _deferral.Complete();
         }
 
         private void TaskInstance_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
-
+            Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(TaskInstance_Canceled)}");
         }
 
         private void Task_Progress(BackgroundTaskRegistration sender, BackgroundTaskProgressEventArgs args)
         {
-
+            Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(Task_Progress)} - {args.InstanceId} : {args.Progress}");
         }
 
         private void Task_Completed(BackgroundTaskRegistration sender, BackgroundTaskCompletedEventArgs args)
         {
-
+            Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(Task_Completed)}");
         }
     }
 }
