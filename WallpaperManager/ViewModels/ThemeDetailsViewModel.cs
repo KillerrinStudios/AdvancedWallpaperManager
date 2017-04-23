@@ -248,7 +248,7 @@ namespace WallpaperManager.ViewModels
                         token.AccessToken = "" + m_futureAccessToken;
                         token.AccessTokenType = Models.Enums.FileAccessTokenType.FutureAccess;
                         token.Path = m_storageFolder.Path;
-                        AccessTokenRepository.Add(token);
+                        AccessTokenRepository.AddAndCommit(token);
                     }
 
                     // If the token.ID is still 0, something has gone wrong and we should exit
@@ -259,7 +259,7 @@ namespace WallpaperManager.ViewModels
                     NewDirectory.FileAccessTokenID = token.ID;
                     NewDirectory.Path = m_storageFolder.Path;
                     NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
-                    DirectoryRepository.Add(NewDirectory);
+                    DirectoryRepository.AddAndCommit(NewDirectory);
 
                     // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();
@@ -288,7 +288,7 @@ namespace WallpaperManager.ViewModels
                     // Update the Theme
                     Theme.Name = "" + NewThemeName;
                     Theme.DateLastModified = DateTime.UtcNow;
-                    ThemeRepository.Update(Theme);
+                    ThemeRepository.UpdateAndCommit(Theme);
 
                     // Reset the Variables
                     NewThemeName = "";
@@ -326,7 +326,7 @@ namespace WallpaperManager.ViewModels
                 var theme = ThemeRepository.Find(Theme.ID);
                 if (theme == null)
                     return;
-                ThemeRepository.Remove(Theme.ID);
+                ThemeRepository.RemoveAndCommit(Theme.ID);
 
                 // Redirect to the MainPage
                 MainViewModel.Instance.NavigateThemesCommand.Execute(null);

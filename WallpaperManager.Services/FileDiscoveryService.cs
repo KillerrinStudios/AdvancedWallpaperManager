@@ -74,7 +74,7 @@ namespace WallpaperManager.Services
             foreach (var theme in allThemes)
             {
                 theme.DateCacheDiscovered = DateTime.UtcNow;
-                ThemeRepo.Update(theme);
+                ThemeRepo.UpdateAndCommit(theme);
             }
 
             // Update the Cache
@@ -120,7 +120,7 @@ namespace WallpaperManager.Services
             if (allCacheProgress == null)
             {
                 theme.DateCacheDiscovered = DateTime.UtcNow;
-                ThemeRepo.Update(theme);
+                ThemeRepo.UpdateAndCommit(theme);
             }
 
             // Begin the discovery process

@@ -23,7 +23,11 @@ namespace WallpaperManager.DAL.Repositories
         public virtual void Add(T item)
         {
             _dbSet.Add(item);
-            _context.SaveChanges();
+        }
+        public virtual void AddAndCommit(T item)
+        {
+            Add(item);
+            Commit();
         }
         public virtual void AddRange(IEnumerable<T> items)
         {
@@ -65,7 +69,11 @@ namespace WallpaperManager.DAL.Repositories
                 _dbSet.Attach(entity);
 
             _dbSet.Remove(entity);
-            _context.SaveChanges();
+        }
+        public virtual void RemoveAndCommit(int key)
+        {
+            Remove(key);
+            Commit();
         }
         public virtual void RemoveRange(IEnumerable<T> items)
         {
@@ -78,7 +86,11 @@ namespace WallpaperManager.DAL.Repositories
         {
             _dbSet.Attach(item);
             _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
+        }
+        public virtual void UpdateAndCommit(T item)
+        {
+            Update(item);
+            Commit();
         }
 
         public virtual void Commit()

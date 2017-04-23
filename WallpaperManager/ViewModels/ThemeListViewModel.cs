@@ -99,7 +99,7 @@ namespace WallpaperManager.ViewModels
                     newTheme.Name = "" + NewThemeName;
                     newTheme.DateLastModified = DateTime.UtcNow;
                     newTheme.DateCreated = DateTime.UtcNow;
-                    ThemeRepository.Add(newTheme);
+                    ThemeRepository.AddAndCommit(newTheme);
 
                     // Reset the variables and add to GridView
                     NewThemeName = "";
@@ -126,7 +126,7 @@ namespace WallpaperManager.ViewModels
                 var theme = ThemeRepository.Find(id);
                 if (theme == null)
                     return;
-                ThemeRepository.Remove(id);
+                ThemeRepository.RemoveAndCommit(id);
 
                 // Remove from the Themes List
                 for (int i = Themes.Count - 1; i >= 0; i--)
