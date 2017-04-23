@@ -33,5 +33,19 @@ namespace WallpaperManager.Models.Settings
             :base(StorageTask.LocalSettings, "ActiveLockscreenThemeHistory", null)
         {
         }
+
+        public void Add(string str)
+        {
+            // Save the Value to a Temp variable then Enqueue the item
+            var tmpValue = Value;
+            tmpValue.Enqueue(str);
+
+            // Restrict to the MAX_ITEMS
+            while (tmpValue.Count > MAX_ITEMS)
+                tmpValue.Dequeue();
+
+            // Reupdate the Value
+            Value = tmpValue;
+        }
     }
 }

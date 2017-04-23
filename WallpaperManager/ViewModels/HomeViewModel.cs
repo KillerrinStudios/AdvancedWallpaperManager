@@ -20,6 +20,8 @@ namespace WallpaperManager.ViewModels
 
         public ActiveDesktopThemeSetting ActiveDesktopThemeSetting { get; } = new ActiveDesktopThemeSetting();
         public ActiveLockscreenThemeSetting ActiveLockscreenThemeSetting { get; } = new ActiveLockscreenThemeSetting();
+        public ActiveDesktopThemeHistorySetting ActiveDesktopThemeHistorySetting { get; } = new ActiveDesktopThemeHistorySetting();
+        public ActiveLockscreenThemeHistorySetting ActiveLockscreenThemeHistorySetting { get; } = new ActiveLockscreenThemeHistorySetting();
 
         WallpaperTheme m_activeWallpaperTheme = null;
         public WallpaperTheme ActiveWallpaperTheme
@@ -170,6 +172,7 @@ namespace WallpaperManager.ViewModels
             if (result == ContentDialogResult.Primary)
             {
                 ActiveDesktopThemeSetting.RevertToDefault();
+                ActiveDesktopThemeHistorySetting.RevertToDefault();
                 ActiveWallpaperTheme = null;
             }
         }
@@ -199,6 +202,7 @@ namespace WallpaperManager.ViewModels
             if (result == ContentDialogResult.Primary)
             {
                 ActiveLockscreenThemeSetting.RevertToDefault();
+                ActiveLockscreenThemeHistorySetting.RevertToDefault();
                 ActiveLockscreenTheme = null;
             }
         }
