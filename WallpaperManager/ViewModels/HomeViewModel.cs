@@ -67,17 +67,25 @@ namespace WallpaperManager.ViewModels
 
         public override void OnNavigatedTo()
         {
-            if (ActiveDesktopThemeSetting.Value.HasValue)
+            try
             {
-                ActiveWallpaperTheme = ThemeRepository.Find(ActiveDesktopThemeSetting.Value.Value);
-                Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme.ID} - {ActiveWallpaperTheme.Name}");
+                if (ActiveDesktopThemeSetting.Value.HasValue)
+                {
+                    ActiveWallpaperTheme = ThemeRepository.Find(ActiveDesktopThemeSetting.Value.Value);
+                    Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme?.ID} - {ActiveWallpaperTheme?.Name}");
+                }
             }
+            catch (Exception) { ActiveDesktopThemeSetting.RevertToDefault(); }
 
-            if (ActiveLockscreenThemeSetting.Value.HasValue)
-            {
-                ActiveLockscreenTheme = ThemeRepository.Find(ActiveLockscreenThemeSetting.Value.Value);
-                Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme.ID} - {ActiveLockscreenTheme.Name}");
+            try
+            { 
+                if (ActiveLockscreenThemeSetting.Value.HasValue)
+                {
+                    ActiveLockscreenTheme = ThemeRepository.Find(ActiveLockscreenThemeSetting.Value.Value);
+                    Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme?.ID} - {ActiveLockscreenTheme?.Name}");
+                }
             }
+            catch (Exception) { ActiveLockscreenThemeSetting.RevertToDefault(); }
         }
 
         public override void OnNavigatedFrom()

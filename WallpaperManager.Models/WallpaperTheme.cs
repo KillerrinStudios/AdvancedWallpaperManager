@@ -60,6 +60,19 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
+        private DateTime m_dateCacheDiscovered;
+        public DateTime DateCacheDiscovered
+        {
+            get { return m_dateCacheDiscovered; }
+            set
+            {
+                m_dateCacheDiscovered = value;
+                RaisePropertyChanged(nameof(DateCacheDiscovered));
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
         public string RandomImageFromCache
         {
             get

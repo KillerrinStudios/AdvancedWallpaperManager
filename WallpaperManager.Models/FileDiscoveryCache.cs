@@ -70,6 +70,19 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
+        private DateTime m_dateDiscovered;
+        public DateTime DateDiscovered
+        {
+            get { return m_dateDiscovered; }
+            set
+            {
+                m_dateDiscovered = value;
+                RaisePropertyChanged(nameof(DateDiscovered));
+            }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
         public string FileName
         {
             get { return System.IO.Path.GetFileNameWithoutExtension(FilePath); }

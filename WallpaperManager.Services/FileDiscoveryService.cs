@@ -69,6 +69,15 @@ namespace WallpaperManager.Services
             // Go through all the themes and begin the caching process
             List<FileDiscoveryCache> updatedThemeFilesCache = new List<FileDiscoveryCache>();
             var allThemes = ThemeRepo.GetAll();
+            
+            // Update the Cache Discovery Date
+            foreach (var theme in allThemes)
+            {
+                theme.DateCacheDiscovered = DateTime.UtcNow;
+                ThemeRepo.Update(theme);
+            }
+
+            // Update the Cache
             foreach (var theme in allThemes)
             {
                 var cache = await PreformFileDiscovery(theme, internalProgress);
@@ -106,6 +115,13 @@ namespace WallpaperManager.Services
                 .Where(x => x.IsExcluded)
                 .Select(x => x.Path.ToLower())
                 .ToList();
+
+            // Mark the File Discovery Date on the Theme and Update it
+            if (allCacheProgress == null)
+            {
+                theme.DateCacheDiscovered = DateTime.UtcNow;
+                ThemeRepo.Update(theme);
+            }
 
             // Begin the discovery process
             while (openedList.Count > 0)
@@ -147,6 +163,7 @@ namespace WallpaperManager.Services
                                     cache.StorageLocation = currentDirectory.StorageLocation;
                                     cache.FolderPath = currentFolder.Path;
                                     cache.FilePath = currentFile.Path;
+                                    cache.DateDiscovered = theme.DateCacheDiscovered;
                                     updatedThemeFilesCache.Add(cache);
                                 }
                             }

@@ -29,6 +29,7 @@ namespace WallpaperManager.Models.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    DateCacheDiscovered = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateLastModified = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true)
@@ -36,6 +37,36 @@ namespace WallpaperManager.Models.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Themes", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FileDiscoveryCache",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DateDiscovered = table.Column<DateTime>(nullable: false),
+                    FileAccessTokenID = table.Column<int>(nullable: false),
+                    FilePath = table.Column<string>(nullable: true),
+                    FolderPath = table.Column<string>(nullable: true),
+                    StorageLocation = table.Column<int>(nullable: false),
+                    WallpaperThemeID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileDiscoveryCache", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_FileDiscoveryCache_AccessTokens_FileAccessTokenID",
+                        column: x => x.FileAccessTokenID,
+                        principalTable: "AccessTokens",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FileDiscoveryCache_Themes_WallpaperThemeID",
+                        column: x => x.WallpaperThemeID,
+                        principalTable: "Themes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,6 +100,16 @@ namespace WallpaperManager.Models.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FileDiscoveryCache_FileAccessTokenID",
+                table: "FileDiscoveryCache",
+                column: "FileAccessTokenID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileDiscoveryCache_WallpaperThemeID",
+                table: "FileDiscoveryCache",
+                column: "WallpaperThemeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Directories_FileAccessTokenID",
                 table: "Directories",
                 column: "FileAccessTokenID");
@@ -81,6 +122,9 @@ namespace WallpaperManager.Models.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FileDiscoveryCache");
+
             migrationBuilder.DropTable(
                 name: "Directories");
 

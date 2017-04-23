@@ -37,6 +37,8 @@ namespace WallpaperManager.Models.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateDiscovered");
+
                     b.Property<int>("FileAccessTokenID");
 
                     b.Property<string>("FilePath");
@@ -87,6 +89,8 @@ namespace WallpaperManager.Models.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateCacheDiscovered");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateLastModified");
@@ -119,7 +123,7 @@ namespace WallpaperManager.Models.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WallpaperManager.Models.WallpaperTheme", "Theme")
-                        .WithMany("Directories")
+                        .WithMany()
                         .HasForeignKey("WallpaperThemeID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

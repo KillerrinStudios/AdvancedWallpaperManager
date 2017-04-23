@@ -111,13 +111,9 @@
     <Compile Include="Enums\StorageLocation.cs" />
     <Compile Include="FileAccessToken.cs" />
     <Compile Include="FileDiscoveryCache.cs" />
-    <Compile Include="Migrations\20170411020256_InitialMigration.cs" />
-    <Compile Include="Migrations\20170411020256_InitialMigration.Designer.cs">
-      <DependentUpon>20170411020256_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.cs" />
-    <Compile Include="Migrations\20170416210506_AddedFileDiscoveryCache.Designer.cs">
-      <DependentUpon>20170416210506_AddedFileDiscoveryCache.cs</DependentUpon>
+    <Compile Include="Migrations\20170423054925_InitialMigration.cs" />
+    <Compile Include="Migrations\20170423054925_InitialMigration.designer.cs">
+      <DependentUpon>20170423054925_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +154,7 @@
       <Name>WallpaperManager.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
