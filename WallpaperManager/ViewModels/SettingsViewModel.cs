@@ -116,7 +116,10 @@ namespace WallpaperManager.ViewModels
             ProgressService.SetIndicatorAndShow(e.RingEnabled, e.Percentage, e.StatusMessage, e.WriteToDebugConsole);
 
             if (e.Percentage >= 100.0)
+            {
                 ProgressService.Hide();
+                FileDiscoveryLastRun.RaiseValuePropertiesChanged();
+            }
         }
 
         private async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
@@ -133,8 +136,6 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    // Due to Background Tasks limitations, the value must be >= 15 Minutes in order to successfully work
-                    if (FrequencyDays <= 0 && FrequencyHours <= 0 && FrequencyMinutes < 15) return;
                     FileDiscoveryFrequency.Value = new TimeSpan(FrequencyDays, FrequencyHours, FrequencyMinutes, 0);
                 });
             }
