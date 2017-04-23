@@ -72,7 +72,6 @@ namespace KillerrinStudiosToolkit.UserProfile
             if (await StorageTask.Instance.SaveFileFromServer(LockscreenTools.LockscreenImagesFolder, filename, internetImageUrl))
                 file = await StorageTask.Instance.GetFile(LockscreenTools.LockscreenImagesFolder, filename);
 
-            if (file == null) return false;
             return await SetLockscreenImage(file);
         }
 
@@ -86,10 +85,11 @@ namespace KillerrinStudiosToolkit.UserProfile
             var tmpFile = await StorageFile.GetFileFromPathAsync(path);
             if (tmpFile == null) return false;
 
-            var file = await tmpFile.CopyAsync(LockscreenTools.LockscreenImagesFolder, tmpFile.Name, NameCollisionOption.ReplaceExisting);
-            if (file == null) return false;
+            var copiedFile = await tmpFile.CopyAsync(LockscreenTools.LockscreenImagesFolder, tmpFile.Name, NameCollisionOption.ReplaceExisting);
 
-            return await SetLockscreenImage(file);
+            var localStorageUri = StorageTask.CreateUri(StorageLocationPrefix.LocalFolder, $"{LockscreenImagesFolderName}/{copiedFile.Name}");
+            var localStorageFile = await StorageFile.GetFileFromApplicationUriAsync(localStorageUri);
+            return await SetLockscreenImage(localStorageFile);
         }        
 
         public static IRandomAccessStream GetLockscreenImageStream()
