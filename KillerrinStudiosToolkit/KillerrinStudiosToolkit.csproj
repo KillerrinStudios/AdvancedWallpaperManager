@@ -109,7 +109,8 @@
   <ItemGroup>
     <Compile Include="APIProgress.cs" />
     <Compile Include="APIResponse.cs" />
-    <Compile Include="BackgroundTaskTools.cs" />
+    <Compile Include="BackgroundTasks\BackgroundTaskHelperBase.cs" />
+    <Compile Include="BackgroundTasks\BackgroundTaskTools.cs" />
     <Compile Include="Controls\ProgressIndicator.xaml.cs">
       <DependentUpon>ProgressIndicator.xaml</DependentUpon>
     </Compile>
