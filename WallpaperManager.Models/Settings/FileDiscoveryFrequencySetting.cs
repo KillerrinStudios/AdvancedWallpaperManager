@@ -12,6 +12,20 @@ namespace WallpaperManager.Models.Settings
 {
     public class FileDiscoveryFrequencySetting : ApplicationSettingBase<TimeSpan>
     {
+
+        public override TimeSpan Value
+        {
+            get { return (TimeSpan)Container.Values[Key]; }
+            set
+            {
+                // Due to Background Tasks limitations, the value must be >= 15 Minutes in order to successfully work
+                if (value < TimeSpan.FromMinutes(15)) return;
+
+                Container.Values[Key] = value;
+                RaisePropertyChanged(nameof(Value));
+            }
+        }
+
         public FileDiscoveryFrequencySetting()
             :base(StorageTask.LocalSettings, "FileDiscoveryFrequency", TimeSpan.FromHours(1.0))
         {
