@@ -11,6 +11,8 @@ using KillerrinStudiosToolkit.Settings;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using Windows.UI.Xaml.Controls;
+using System.IO;
+using KillerrinStudiosToolkit.UserProfile;
 
 namespace WallpaperManager.ViewModels
 {
@@ -107,17 +109,71 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
+                    NextDesktopWallpaper();
                 });
             }
         }
+        public async void NextDesktopWallpaper()
+        {
+            if (ActiveWallpaperTheme == null) return;
+            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Begin");
+
+            // Grab a Random Image
+            string randomImagePath = ActiveWallpaperTheme.RandomImageFromCache;
+            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Random Image Selected: {randomImagePath}");
+
+            // Get the Storage File
+            StorageTask storageTask = new StorageTask();
+            var file = await storageTask.GetFileFromPath(new Uri(randomImagePath));
+            Debug.WriteLine($"{nameof(NextLockscreen)} - Converted Path to File: {file.Name}");
+
+            // Set the Wallpaper
+            WallpaperTools wallpaperTools = new WallpaperTools();
+            if (await wallpaperTools.SetWallpaperImage(file))
+            {
+                Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Successfully Changed Image");
+
+                // Add it to the history if successful
+                ActiveDesktopThemeHistorySetting.Add(randomImagePath);
+            }
+            else { Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Failed"); }
+
+            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Completed");
+        }
+
         public RelayCommand NextLockscreenCommand
         {
             get
             {
                 return new RelayCommand(() =>
                 {
+                    NextLockscreen();
                 });
             }
+        }
+
+        public async void NextLockscreen()
+        {
+            if (ActiveLockscreenTheme == null) return;
+            Debug.WriteLine($"{nameof(NextLockscreen)} - Begin");
+
+            // Grab a Random Image
+            string randomImagePath = ActiveLockscreenTheme.RandomImageFromCache;
+            var randomImageName = Path.GetFileNameWithoutExtension(randomImagePath);
+            Debug.WriteLine($"{nameof(NextLockscreen)} - Random Image Selected: {randomImagePath}");
+
+            // Set the Lockscreen
+            LockscreenTools lockscreenTools = new LockscreenTools();
+            if (await lockscreenTools.SetLockscreenImageFromFileSystem(randomImagePath))
+            {
+                Debug.WriteLine($"{nameof(NextLockscreen)} - Successfully Changed Image");
+
+                // Add it to the history if successful
+                ActiveLockscreenThemeHistorySetting.Add(randomImagePath);
+            }
+            else { Debug.WriteLine($"{nameof(NextLockscreen)} - Failed"); }
+
+            Debug.WriteLine($"{nameof(NextLockscreen)} - Completed");
         }
         #endregion
 

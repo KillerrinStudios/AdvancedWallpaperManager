@@ -49,10 +49,12 @@ namespace KillerrinStudiosToolkit.BackgroundTasks
         }
         public bool IsAccessAllowed(BackgroundAccessStatus accessStatus)
         {
-            if (accessStatus == BackgroundAccessStatus.Denied ||
+            if (accessStatus == BackgroundAccessStatus.Unspecified ||
+#pragma warning disable CS0618 // Type or member is obsolete
+                accessStatus == BackgroundAccessStatus.Denied ||
+#pragma warning restore CS0618 // Type or member is obsolete
                 accessStatus == BackgroundAccessStatus.DeniedBySystemPolicy ||
-                accessStatus == BackgroundAccessStatus.DeniedByUser ||
-                accessStatus == BackgroundAccessStatus.Unspecified)
+                accessStatus == BackgroundAccessStatus.DeniedByUser)
                 return false;
             return true;
         } 

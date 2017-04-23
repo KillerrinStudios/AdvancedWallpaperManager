@@ -8,7 +8,6 @@ using Windows.ApplicationModel.Background;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using WallpaperManager.DAL.Repositories;
-using System.Diagnostics;
 using WallpaperManager.Services;
 using KillerrinStudiosToolkit;
 

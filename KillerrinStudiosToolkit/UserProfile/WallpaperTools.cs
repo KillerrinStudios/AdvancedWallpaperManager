@@ -10,7 +10,7 @@ using Windows.System;
 using Windows.System.UserProfile;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace KillerrinStudiosToolkit
+namespace KillerrinStudiosToolkit.UserProfile
 {
     public class WallpaperTools
     {
@@ -19,16 +19,17 @@ namespace KillerrinStudiosToolkit
         public static StorageFolder WallpaperImagesFolder;
         public const string WallpaperImagesFolderName = "WallpaperImages";
 
-        protected static StorageFolder RootFolder { get { return StorageTask.LocalFolder; } }
+        public bool IsSupported { get { return UserProfilePersonalizationSettings.IsSupported(); } }
 
         public WallpaperTools()
         {
+            Debug.WriteLine($"{nameof(WallpaperTools)} - IsSupported: {IsSupported}");
             SetupFolder();
         }
 
         private async void SetupFolder()
         {
-            WallpaperImagesFolder  = await StorageTask.Instance.CreateFolder(RootFolder, WallpaperTools.WallpaperImagesFolderName, CreationCollisionOption.OpenIfExists);
+            WallpaperImagesFolder  = await StorageTask.Instance.CreateFolder(StorageTask.LocalFolder, WallpaperTools.WallpaperImagesFolderName, CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<bool> DeleteAllImagesInWallpaperFolder()

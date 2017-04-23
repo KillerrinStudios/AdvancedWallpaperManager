@@ -130,8 +130,8 @@
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="KillerrinApplicationData.cs" />
-    <Compile Include="WallpaperTools.cs" />
-    <Compile Include="LockscreenTools.cs" />
+    <Compile Include="UserProfile\WallpaperTools.cs" />
+    <Compile Include="UserProfile\LockscreenTools.cs" />
     <Compile Include="Models\IndicatorProgressReport.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="Settings\GenericApplicationSetting.cs" />
     <Compile Include="Settings\IApplicationSetting.cs" />
     <Compile Include="StorageTask.cs" />
-    <Compile Include="TileManager.cs" />
+    <Compile Include="UserProfile\TileManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
