@@ -62,6 +62,10 @@ namespace WallpaperManager.Services
                 allCacheProgress?.Report(new IndicatorProgressReport(e.RingEnabled, percentage, e.StatusMessage, e.WriteToDebugConsole));
             });
 
+            // Clear the FileDiscoveryCache
+            progress?.Report(new IndicatorProgressReport(true, 0.0, $"Clearing the Cache - 1/1", true));
+            FileCacheRepo.Clear();
+
             // Go through all the themes and begin the caching process
             List<FileDiscoveryCache> updatedThemeFilesCache = new List<FileDiscoveryCache>();
             var allThemes = ThemeRepo.GetAll();
@@ -77,7 +81,7 @@ namespace WallpaperManager.Services
 
             // Report back completion and return
             allCacheProgress = null;
-            progress?.Report(new IndicatorProgressReport(true, 100.0, $"Cache Recreated", true));
+            progress?.Report(new IndicatorProgressReport(true, 100.0, $"File Discovery Completed", true));
             return updatedThemeFilesCache;
         }
 
@@ -86,10 +90,8 @@ namespace WallpaperManager.Services
             if (theme == null) return new List<FileDiscoveryCache>();
 
             List<FileDiscoveryCache> updatedThemeFilesCache = new List<FileDiscoveryCache>();
-            //using (WallpaperManagerContext context = new WallpaperManagerContext())
-            //{
+
             progress?.Report(new IndicatorProgressReport(true, 0.0, $"Grabbing Theme directories - {theme.Name} - Step 1/1", true));
-            //WallpaperDirectoryRepository directoryRepo = new WallpaperDirectoryRepository(context);
             var directories = DirectoryRepo.GetAllQuery()
                 .Where(x => x.WallpaperThemeID == theme.ID)
                 .ToList();
@@ -185,18 +187,18 @@ namespace WallpaperManager.Services
                 .ThenBy(x => x.FilePath)
                 .ToList();
 
-            // Setup the File Cache Repo
-            //FileDiscoveryCacheRepository fileCacheRepo = new FileDiscoveryCacheRepository(context);
-
-            // Before we upload to the repo, we need to clear the cache for the current theme
-            progress?.Report(new IndicatorProgressReport(true, 80.0, $"Clearing Old Cache - {theme.Name} - Step 1/2", true));
-            var currentThemeCache = FileCacheRepo.GetAllQuery().Where(x => x.WallpaperThemeID == theme.ID).ToList();
-            FileCacheRepo.RemoveRange(currentThemeCache);
+            // Before we clear the cache, make sure we aren't running within the scope of PreformFileDiscoveryAll
+            if (allCacheProgress == null)
+            {
+                // Before we upload to the repo, we need to clear the cache for the current theme
+                progress?.Report(new IndicatorProgressReport(true, 80.0, $"Clearing Old Cache - {theme.Name} - Step 1/2", true));
+                var currentThemeCache = FileCacheRepo.GetAllQuery().Where(x => x.WallpaperThemeID == theme.ID).ToList();
+                FileCacheRepo.RemoveRange(currentThemeCache);
+            }
 
             // With the current items out of the way, we can now add in our new items
             progress?.Report(new IndicatorProgressReport(true, 90.0, $"Updating Cache - {theme.Name} - Step 2/2", true));
             FileCacheRepo.AddRange(updatedThemeFilesCache);
-            //}
 
             progress?.Report(new IndicatorProgressReport(true, 100.0, $"Completed Cache For - {theme.Name}", true));
             return updatedThemeFilesCache;
