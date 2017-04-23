@@ -30,7 +30,7 @@ namespace WallpaperManager.Models.Settings
         }
 
         public ActiveLockscreenThemeHistorySetting()
-            :base(StorageTask.LocalSettings, "ActiveLockscreenThemeHistory", null)
+            :base(StorageTask.LocalSettings, "ActiveLockscreenThemeHistory", new Queue<string>())
         {
         }
 
