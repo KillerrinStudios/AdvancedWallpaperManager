@@ -128,17 +128,15 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(NextLockscreen)} - Converted Path to File: {file.Name}");
 
             // Set the Wallpaper
-            WallpaperTools wallpaperTools = new WallpaperTools();
-            if (await wallpaperTools.SetWallpaperImage(file))
+            KillerrinStudiosToolkit.UserProfile.WallpaperManager wallpaperTools = new KillerrinStudiosToolkit.UserProfile.WallpaperManager();
+            if (await wallpaperTools.SetImage(file))
             {
-                Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Successfully Changed Image");
-
                 // Add it to the history if successful
                 ActiveDesktopThemeHistorySetting.Add(randomImagePath);
+
+                Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Successfully Changed Image");
             }
             else { Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Failed"); }
-
-            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Completed");
         }
 
         public RelayCommand NextLockscreenCommand
@@ -163,17 +161,15 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(NextLockscreen)} - Random Image Selected: {randomImagePath}");
 
             // Set the Lockscreen
-            LockscreenTools lockscreenTools = new LockscreenTools();
-            if (await lockscreenTools.SetLockscreenImageFromFileSystem(randomImagePath))
+            LockscreenManager lockscreenTools = new LockscreenManager();
+            if (await lockscreenTools.SetImageFromFileSystem(randomImagePath))
             {
-                Debug.WriteLine($"{nameof(NextLockscreen)} - Successfully Changed Image");
-
                 // Add it to the history if successful
                 ActiveLockscreenThemeHistorySetting.Add(randomImagePath);
+
+                Debug.WriteLine($"{nameof(NextLockscreen)} - Successfully Changed Image");
             }
             else { Debug.WriteLine($"{nameof(NextLockscreen)} - Failed"); }
-
-            Debug.WriteLine($"{nameof(NextLockscreen)} - Completed");
         }
         #endregion
 
