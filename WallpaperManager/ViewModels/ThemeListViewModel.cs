@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using WallpaperManager.Models;
 using WallpaperManager.Models.Settings;
 using WallpaperManager.Pages;
+using WallpaperManager.Services;
 using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
@@ -154,20 +155,14 @@ namespace WallpaperManager.ViewModels
         public void SetActiveDesktopTheme(WallpaperTheme theme)
         {
             Debug.WriteLine($"Setting Active Desktop Theme To: {theme.ID} - {theme.Name}");
-            ActiveDesktopThemeSetting setting = new ActiveDesktopThemeSetting();
-            setting.Value = theme.ID;
-
-            ActiveDesktopThemeHistorySetting historySetting = new ActiveDesktopThemeHistorySetting();
-            historySetting.RevertToDefault();
+            ActiveThemeService themeService = new ActiveThemeService();
+            themeService.ChangeActiveDesktopTheme(theme);
         }
         public void SetActiveLockscreenTheme(WallpaperTheme theme)
         {
             Debug.WriteLine($"Setting Active Lockscreen Theme To: {theme.ID} - {theme.Name}");
-            ActiveLockscreenThemeSetting setting = new ActiveLockscreenThemeSetting();
-            setting.Value = theme.ID;
-
-            ActiveLockscreenThemeHistorySetting historySetting = new ActiveLockscreenThemeHistorySetting();
-            historySetting.RevertToDefault();
+            ActiveThemeService themeService = new ActiveThemeService();
+            themeService.ChangeActiveLockscreenTheme(theme);
         }
     }
 }

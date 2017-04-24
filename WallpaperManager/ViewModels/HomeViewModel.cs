@@ -13,6 +13,7 @@ using WallpaperManager.Models.Settings;
 using Windows.UI.Xaml.Controls;
 using System.IO;
 using KillerrinStudiosToolkit.UserProfile;
+using WallpaperManager.Services;
 
 namespace WallpaperManager.ViewModels
 {
@@ -71,25 +72,12 @@ namespace WallpaperManager.ViewModels
 
         public override void OnNavigatedTo()
         {
-            try
-            {
-                if (ActiveDesktopThemeSetting.Value.HasValue)
-                {
-                    ActiveWallpaperTheme = ThemeRepository.Find(ActiveDesktopThemeSetting.Value.Value);
-                    Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme?.ID} - {ActiveWallpaperTheme?.Name}");
-                }
-            }
-            catch (Exception) { ActiveDesktopThemeSetting.RevertToDefault(); }
+            ActiveThemeService activeThemeService = new ActiveThemeService();
+            ActiveWallpaperTheme = activeThemeService.GetActiveDesktopTheme();
+            ActiveLockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
 
-            try
-            { 
-                if (ActiveLockscreenThemeSetting.Value.HasValue)
-                {
-                    ActiveLockscreenTheme = ThemeRepository.Find(ActiveLockscreenThemeSetting.Value.Value);
-                    Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme?.ID} - {ActiveLockscreenTheme?.Name}");
-                }
-            }
-            catch (Exception) { ActiveLockscreenThemeSetting.RevertToDefault(); }
+            Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme?.ID} - {ActiveWallpaperTheme?.Name}");
+            Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme?.ID} - {ActiveLockscreenTheme?.Name}");
         }
 
         public override void OnNavigatedFrom()
@@ -223,8 +211,8 @@ namespace WallpaperManager.ViewModels
 
             if (result == ContentDialogResult.Primary)
             {
-                ActiveDesktopThemeSetting.RevertToDefault();
-                ActiveDesktopThemeHistorySetting.RevertToDefault();
+                ActiveThemeService activeThemeService = new ActiveThemeService();
+                activeThemeService.DeselectActiveDesktopTheme();
                 ActiveWallpaperTheme = null;
             }
         }
@@ -253,8 +241,8 @@ namespace WallpaperManager.ViewModels
 
             if (result == ContentDialogResult.Primary)
             {
-                ActiveLockscreenThemeSetting.RevertToDefault();
-                ActiveLockscreenThemeHistorySetting.RevertToDefault();
+                ActiveThemeService activeThemeService = new ActiveThemeService();
+                activeThemeService.DeselectActiveLockscreenTheme();
                 ActiveLockscreenTheme = null;
             }
         }
