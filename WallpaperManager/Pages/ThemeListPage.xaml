@@ -98,6 +98,7 @@
 					<MenuFlyout.Items>
                         <MenuFlyoutItem x:Name="SetActiveWallpaper" Text="Set to Active Wallpaper" Click="MenuFlyoutItem_SetActiveWallpaper_Click"/>
                         <MenuFlyoutItem x:Name="SetActiveLockscreen" Text="Set to Active Lockscreen" Click="MenuFlyoutItem_SetActiveLockscreen_Click"/>
+                        <MenuFlyoutItem x:Name="CreateWindowsTheme" Text="Create Windows Theme" Click="MenuFlyoutItem_CreateWindowsTheme_Click"/>
                         <MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
 					</MenuFlyout.Items>
 				</MenuFlyout>

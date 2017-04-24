@@ -8,7 +8,7 @@ namespace WallpaperManager.Models.Enums
 {
     public enum ImageSelectionMethod
     {
-        Random,
-        Sequential
+        Sequential = 0,
+        Random = 1
     }
 }

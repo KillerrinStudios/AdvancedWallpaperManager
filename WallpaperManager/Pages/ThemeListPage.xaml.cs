@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using WallpaperManager.Models;
+using WallpaperManager.Services;
 using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -91,6 +92,15 @@ namespace WallpaperManager.Pages
 
             ViewModel.SetActiveLockscreenTheme(m_rightClickedWallPaperTheme);
             m_rightClickedWallPaperTheme = null;
+        }
+
+        private async void MenuFlyoutItem_CreateWindowsTheme_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_rightClickedWallPaperTheme == null)
+                return;
+
+            WindowsThemeService service = new WindowsThemeService();
+            await service.CreateWindowsTheme(m_rightClickedWallPaperTheme);
         }
     }
 }
