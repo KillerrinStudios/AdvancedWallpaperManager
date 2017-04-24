@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.DAL.Repositories;
+using WallpaperManager.Models.Enums;
 
 namespace WallpaperManager.Models
 {
@@ -31,6 +32,20 @@ namespace WallpaperManager.Models
                 RaisePropertyChanged(nameof(Name));
             }
         }
+
+        [JsonIgnore]
+        [NotMapped]
+        private ImageSelectionMethod m_selectionMethod = ImageSelectionMethod.Random;
+        public ImageSelectionMethod SelectionMethod
+        {
+            get { return m_selectionMethod; }
+            set
+            {
+                m_selectionMethod = value;
+                RaisePropertyChanged(nameof(SelectionMethod));
+            }
+        } 
+
 
         [JsonIgnore]
         [NotMapped]
