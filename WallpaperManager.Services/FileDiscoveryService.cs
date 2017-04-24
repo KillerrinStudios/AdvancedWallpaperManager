@@ -48,6 +48,16 @@ namespace WallpaperManager.Services
                 Context.Dispose();
         }
 
+        public List<FileDiscoveryCache> GetCache(WallpaperTheme theme)
+        {
+            List<FileDiscoveryCache> cache = FileCacheRepo.GetAllQuery()
+                .Where(x => x.WallpaperThemeID == theme.ID)
+                .OrderBy(x => x.FolderPath)
+                .ThenBy(x => x.FilePath)
+                .ToList();
+            return cache;
+        }
+
         public async Task<List<FileDiscoveryCache>> PreformFileDiscoveryAll(IProgress<IndicatorProgressReport> progress)
         {
             // Cache the old Progress Variable
