@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WallpaperManager.DAL.Repositories;
 using WallpaperManager.Models;
+using WallpaperManager.Models.Enums;
+using WallpaperManager.Models.Settings;
 using WallpaperManager.Pages;
 using WallpaperManager.Services;
 using Windows.Storage;
@@ -26,7 +28,6 @@ namespace WallpaperManager.ViewModels
 {
     public partial class ThemeDetailsViewModel : WallpaperManagerViewModelBase
     {
-        #region Themes
         private WallpaperTheme m_theme;
         public WallpaperTheme Theme
         {
@@ -37,14 +38,76 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(Theme));
             }
         }
-        private string m_newThemeName = "";
-        public string NewThemeName
+
+        #region Settings
+        private string m_themeName = "";
+        public string ThemeName
         {
-            get { return m_newThemeName; }
+            get { return m_themeName; }
             set
             {
-                m_newThemeName = value;
-                RaisePropertyChanged(nameof(NewThemeName));
+                m_themeName = value;
+                RaisePropertyChanged(nameof(ThemeName));
+            }
+        }
+
+        public List<ImageSelectionMethod> WallpaperSelectionMethods = new List<ImageSelectionMethod>();
+        private ImageSelectionMethod m_wallpaperSelectionMethod = ImageSelectionMethod.Random;
+        public ImageSelectionMethod WallpaperSelectionMethod
+        {
+            get { return m_wallpaperSelectionMethod; }
+            set
+            {
+                m_wallpaperSelectionMethod = value;
+                RaisePropertyChanged(nameof(WallpaperSelectionMethod));
+            }
+        }
+
+        public List<int> DaysList { get; } = new List<int>();
+        private int m_frequencyDays = 0;
+        public int FrequencyDays
+        {
+            get { return m_frequencyDays; }
+            set
+            {
+                m_frequencyDays = value;
+                RaisePropertyChanged(nameof(FrequencyDays));
+            }
+        }
+
+        public List<int> HoursList { get; } = new List<int>();
+        private int m_frequencyHours = 0;
+        public int FrequencyHours
+        {
+            get { return m_frequencyHours; }
+            set
+            {
+                m_frequencyHours = value;
+                RaisePropertyChanged(nameof(FrequencyHours));
+            }
+        }
+
+        public List<int> MinutesList { get; } = new List<int>();
+        private int m_frequencyMinutes = 0;
+        public int FrequencyMinutes
+        {
+            get { return m_frequencyMinutes; }
+            set
+            {
+                m_frequencyMinutes = value;
+                RaisePropertyChanged(nameof(FrequencyMinutes));
+            }
+        }
+
+        public List<int> SecondsList { get; } = new List<int>();
+        private int m_frequencySeconds = 0;
+        public int FrequencySeconds
+        {
+            get { return m_frequencySeconds; }
+            set
+            {
+                m_frequencySeconds = value;
+                RaisePropertyChanged(nameof(FrequencySeconds));
             }
         }
         #endregion
@@ -58,6 +121,27 @@ namespace WallpaperManager.ViewModels
             {
                 m_newDirectory = value;
                 RaisePropertyChanged(nameof(NewDirectory));
+            }
+        }
+
+        private ObservableCollection<WallpaperDirectory> m_wallpaperDirectories = new ObservableCollection<WallpaperDirectory>();
+        public ObservableCollection<WallpaperDirectory> WallpaperDirectories
+        {
+            get { return m_wallpaperDirectories; }
+            set
+            {
+                m_wallpaperDirectories = value;
+                RaisePropertyChanged(nameof(WallpaperDirectories));
+            }
+        }
+        private ObservableCollection<WallpaperDirectory> m_excludedWallpaperDirectories = new ObservableCollection<WallpaperDirectory>();
+        public ObservableCollection<WallpaperDirectory> ExcludedWallpaperDirectories
+        {
+            get { return m_excludedWallpaperDirectories; }
+            set
+            {
+                m_excludedWallpaperDirectories = value;
+                RaisePropertyChanged(nameof(ExcludedWallpaperDirectories));
             }
         }
 
@@ -89,6 +173,28 @@ namespace WallpaperManager.ViewModels
                 // Code runs "for real"
             }
 
+            // Populate the Selection Methods
+            WallpaperSelectionMethods = new List<ImageSelectionMethod>();
+            WallpaperSelectionMethods.Add(ImageSelectionMethod.Random);
+            WallpaperSelectionMethods.Add(ImageSelectionMethod.Sequential);
+
+            // Populate the Timespan Selector Lists
+            DaysList = new List<int>();
+            for (int i = 0; i <= 7; i++)
+                DaysList.Add(i);
+
+            HoursList = new List<int>();
+            for (int i = 0; i < 24; i++)
+                HoursList.Add(i);
+
+            MinutesList = new List<int>();
+            for (int i = 0; i < 60; i++)
+                MinutesList.Add(i);
+
+            SecondsList = new List<int>();
+            for (int i = 0; i < 60; i++)
+                SecondsList.Add(i);
+
             ResetViewModel();
         }
 
@@ -109,6 +215,12 @@ namespace WallpaperManager.ViewModels
             Theme = (WallpaperTheme)NavigationService.Parameter;
             FileCache.Clear();
 
+            // Update the UI Elements in Settings
+            RevertNameChangeCommand.Execute(null);
+            RevertWallpaperSelectionMethodCommand.Execute(null);
+            RevertWallpaperChangeFrequencyCommand.Execute(null);
+            RefreshDirectoriesCommand.Execute(null);
+
             // Load the files
             Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
             progress.ProgressChanged += Progress_ProgressChanged;
@@ -127,6 +239,7 @@ namespace WallpaperManager.ViewModels
         {
         }
 
+        #region File Cache
         private void LoadFileCache(IProgress<IndicatorProgressReport> progress)
         {
             if (Theme == null) return;
@@ -143,7 +256,7 @@ namespace WallpaperManager.ViewModels
                 RefreshFileCache(progress);
         }
 
-        public async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
+        private async void RefreshFileCache(IProgress<IndicatorProgressReport> progress)
         {
             if (Theme == null) return;
 
@@ -175,6 +288,7 @@ namespace WallpaperManager.ViewModels
                 }
             });
         }
+        #endregion
 
         #region Commands
         public RelayCommand RefreshFileCacheCommand
@@ -189,6 +303,92 @@ namespace WallpaperManager.ViewModels
                 });
             }
         }
+
+        public RelayCommand RefreshDirectoriesCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    var allDirectories = DirectoryRepository.GetAllQuery().Where(x => x.WallpaperThemeID == Theme.ID).ToList();
+
+                    // Set the Non-Excluded Directories
+                    var directories = allDirectories.Where(x => !x.IsExcluded).ToList();
+                    WallpaperDirectories.Clear();
+                    foreach (var item in directories)
+                        WallpaperDirectories.Add(item);
+
+                    // Set the Excluded Directories
+                    var excludedDirectories = allDirectories.Where(x => x.IsExcluded).ToList();
+                    ExcludedWallpaperDirectories.Clear();
+                    foreach (var item in excludedDirectories)
+                        ExcludedWallpaperDirectories.Add(item);
+                });
+            }
+        }
+
+        #region General Commands
+        public RelayCommand RevertNameChangeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ThemeName = "" + Theme.Name;
+                });
+            }
+        }
+
+        public RelayCommand RevertWallpaperSelectionMethodCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    WallpaperSelectionMethod = Theme.WallpaperSelectionMethod;
+                });
+            }
+        }
+
+        public RelayCommand RevertWallpaperChangeFrequencyCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    FrequencyDays = Theme.WallpaperChangeFrequency.Days;
+                    FrequencyHours = Theme.WallpaperChangeFrequency.Hours;
+                    FrequencyMinutes = Theme.WallpaperChangeFrequency.Minutes;
+                    FrequencySeconds = Theme.WallpaperChangeFrequency.Seconds;
+                });
+            }
+        }
+
+        public RelayCommand EditThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    // Ensure the Theme Name isn't blank
+                    if (string.IsNullOrWhiteSpace(ThemeName))
+                        return;
+
+                    // Ensure the Updated Time has atleast 1 second
+                    var updatedChangeFrequency = new TimeSpan(FrequencyDays, FrequencyHours, FrequencyMinutes, FrequencySeconds);
+                    if (updatedChangeFrequency < TimeSpan.FromSeconds(1.0))
+                        return;
+
+                    // Update the Theme
+                    Theme.Name = "" + ThemeName;
+                    Theme.WallpaperSelectionMethod = WallpaperSelectionMethod;
+                    Theme.WallpaperChangeFrequency = updatedChangeFrequency;
+                    Theme.DateLastModified = DateTime.UtcNow;
+                    ThemeRepository.UpdateAndCommit(Theme);
+                });
+            }
+        }
+        #endregion
 
         #region Open Folder Browser
         public RelayCommand OpenFolderBrowserCommand
@@ -219,6 +419,7 @@ namespace WallpaperManager.ViewModels
         public event EventHandler FolderBrowserClosed;
         #endregion
 
+        #region Directory Commands
         public RelayCommand AddDirectoryCommand
         {
             get
@@ -261,6 +462,11 @@ namespace WallpaperManager.ViewModels
                     NewDirectory.StorageLocation = Models.Enums.StorageLocation.Local;
                     DirectoryRepository.AddAndCommit(NewDirectory);
 
+                    // Add to the correct UI Directory Collection
+                    if (NewDirectory.IsExcluded)
+                        ExcludedWallpaperDirectories.Add(NewDirectory);
+                    else WallpaperDirectories.Add(NewDirectory);
+
                     // Reinstantiate the variable to prepare for additional potential Directory Additions
                     NewDirectory = new WallpaperDirectory();
 
@@ -274,29 +480,38 @@ namespace WallpaperManager.ViewModels
                 });
             }
         }
-
-
-        public RelayCommand EditThemeCommand
+        public async void RemoveDirectory(WallpaperDirectory directory)
         {
-            get
+            ContentDialog removeDialog = new ContentDialog
             {
-                return new RelayCommand(() =>
-                {
-                    if (string.IsNullOrWhiteSpace(NewThemeName))
-                        return;
+                Title = "Remove Directory?",
+                Content = "Are you sure you want to remove this directory from the theme?",
+                PrimaryButtonText = "Remove",
+                CloseButtonText = "Cancel"
+            };
 
-                    // Update the Theme
-                    Theme.Name = "" + NewThemeName;
-                    Theme.DateLastModified = DateTime.UtcNow;
-                    ThemeRepository.UpdateAndCommit(Theme);
+            ContentDialogResult result = await removeDialog.ShowAsync();
 
-                    // Reset the Variables
-                    NewThemeName = "";
-                });
+            if (result == ContentDialogResult.Primary)
+            {
+                // Remove from the Lists
+                if (directory.IsExcluded)
+                    ExcludedWallpaperDirectories.Remove(directory);
+                else
+                    WallpaperDirectories.Remove(directory);
+
+                // Delete the Directory
+                DirectoryRepository.RemoveAndCommit(directory.ID);
+
+                // Update the Cache
+                Progress<IndicatorProgressReport> progress = new Progress<IndicatorProgressReport>();
+                progress.ProgressChanged += Progress_ProgressChanged;
+                RefreshFileCache(progress);
             }
         }
+        #endregion
 
-        #region Delete
+        #region Delete Theme
         public RelayCommand DeleteThemeCommand
         {
             get
@@ -322,6 +537,13 @@ namespace WallpaperManager.ViewModels
 
             if (result == ContentDialogResult.Primary)
             {
+                // Check the Active Themes and get rid of them if needed
+                ActiveThemeService activeThemeService = new ActiveThemeService();
+                if (activeThemeService.GetActiveDesktopThemeID() == Theme.ID)
+                    activeThemeService.DeselectActiveDesktopTheme();
+                if (activeThemeService.GetActiveLockscreenThemeID() == Theme.ID)
+                    activeThemeService.DeselectActiveLockscreenTheme();
+
                 // Delete the theme
                 var theme = ThemeRepository.Find(Theme.ID);
                 if (theme == null)
@@ -331,7 +553,6 @@ namespace WallpaperManager.ViewModels
                 // Redirect to the MainPage
                 MainViewModel.Instance.NavigateThemesCommand.Execute(null);
             }
-
         }
         #endregion
         #endregion

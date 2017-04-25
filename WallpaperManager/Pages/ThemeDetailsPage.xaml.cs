@@ -53,16 +53,6 @@ namespace WallpaperManager.Pages
             base.OnNavigatedFrom(e);
         }
 
-        private void EditTheme_Save_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            EditThemeFlyout.Hide();
-        }
-
-        private void EditTheme_Delete_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //EditThemeFlyout.Hide();
-        }
-
         private void ViewModel_FolderBrowserClosed(object sender, EventArgs e)
         {
             addDirectoryButton.Flyout.ShowAt(addDirectoryButton);
@@ -99,6 +89,13 @@ namespace WallpaperManager.Pages
                 launchOptions.ItemsToSelect.Add(file);
                 StorageTask.OpenFolderInExplorer(folder, launchOptions);
             }
+        }
+
+        private void DeleteDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            var directory = btn.DataContext as WallpaperDirectory;
+            ViewModel.RemoveDirectory(directory);
         }
     }
 }

@@ -62,6 +62,7 @@ namespace WallpaperManager.Services
         #endregion
 
         #region Get Theme
+        public int? GetActiveDesktopThemeID() { return m_activeDesktopThemeSetting.Value; }
         public WallpaperTheme GetActiveDesktopTheme()
         {
             var value = m_activeDesktopThemeSetting.Value;
@@ -69,6 +70,8 @@ namespace WallpaperManager.Services
 
             return GetTheme(value.Value);
         }
+
+        public int? GetActiveLockscreenThemeID() { return m_activeLockscreenThemeSetting.Value; }
         public WallpaperTheme GetActiveLockscreenTheme()
         {
             var value = m_activeLockscreenThemeSetting.Value;
