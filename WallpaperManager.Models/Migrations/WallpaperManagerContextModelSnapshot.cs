@@ -97,7 +97,9 @@ namespace WallpaperManager.Models.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("SelectionMethod");
+                    b.Property<TimeSpan>("WallpaperChangeFrequency");
+
+                    b.Property<int>("WallpaperSelectionMethod");
 
                     b.HasKey("ID");
 

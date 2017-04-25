@@ -9,8 +9,8 @@ using WallpaperManager.Models.Enums;
 namespace WallpaperManager.Models.Migrations
 {
     [DbContext(typeof(WallpaperManagerContext))]
-    [Migration("20170424084735_AddedImageSelectionMethod")]
-    partial class AddedImageSelectionMethod
+    [Migration("20170425070556_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,7 +98,9 @@ namespace WallpaperManager.Models.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("SelectionMethod");
+                    b.Property<TimeSpan>("WallpaperChangeFrequency");
+
+                    b.Property<int>("WallpaperSelectionMethod");
 
                     b.HasKey("ID");
 

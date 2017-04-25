@@ -32,7 +32,9 @@ namespace WallpaperManager.Models.Migrations
                     DateCacheDiscovered = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateLastModified = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    WallpaperChangeFrequency = table.Column<TimeSpan>(nullable: false),
+                    WallpaperSelectionMethod = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

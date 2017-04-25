@@ -112,13 +112,9 @@
     <Compile Include="Enums\StorageLocation.cs" />
     <Compile Include="FileAccessToken.cs" />
     <Compile Include="FileDiscoveryCache.cs" />
-    <Compile Include="Migrations\20170423054925_InitialMigration.cs" />
-    <Compile Include="Migrations\20170423054925_InitialMigration.designer.cs">
-      <DependentUpon>20170423054925_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170424084735_AddedImageSelectionMethod.cs" />
-    <Compile Include="Migrations\20170424084735_AddedImageSelectionMethod.designer.cs">
-      <DependentUpon>20170424084735_AddedImageSelectionMethod.cs</DependentUpon>
+    <Compile Include="Migrations\20170425070556_InitialMigration.cs" />
+    <Compile Include="Migrations\20170425070556_InitialMigration.designer.cs">
+      <DependentUpon>20170425070556_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

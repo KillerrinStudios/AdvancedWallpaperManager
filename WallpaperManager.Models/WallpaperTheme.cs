@@ -35,17 +35,29 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
-        private ImageSelectionMethod m_selectionMethod = ImageSelectionMethod.Random;
-        public ImageSelectionMethod SelectionMethod
+        private ImageSelectionMethod m_wallpaperSelectionMethod = ImageSelectionMethod.Random;
+        public ImageSelectionMethod WallpaperSelectionMethod
         {
-            get { return m_selectionMethod; }
+            get { return m_wallpaperSelectionMethod; }
             set
             {
-                m_selectionMethod = value;
-                RaisePropertyChanged(nameof(SelectionMethod));
+                m_wallpaperSelectionMethod = value;
+                RaisePropertyChanged(nameof(WallpaperSelectionMethod));
             }
-        } 
+        }
 
+        [JsonIgnore]
+        [NotMapped]
+        private TimeSpan m_wallpaperChangeFrequency = TimeSpan.FromMinutes(15);
+        public TimeSpan WallpaperChangeFrequency
+        {
+            get { return m_wallpaperChangeFrequency; }
+            set
+            {
+                m_wallpaperChangeFrequency = value;
+                RaisePropertyChanged(nameof(WallpaperChangeFrequency));
+            }
+        }
 
         [JsonIgnore]
         [NotMapped]

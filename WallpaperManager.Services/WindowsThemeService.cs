@@ -49,7 +49,7 @@ namespace WallpaperManager.Services
                 //builder.AppendLine($"PicturePosition={4}");
                 builder.AppendLine($"TileWallpaper={0}");
                 builder.AppendLine("; 0: The wallpaper picture should not be tiled");
-                builder.AppendLine("; 0: The wallpaper picture should not be tiled");
+                builder.AppendLine("; 1: The wallpaper picture should be tiled ");
                 builder.AppendLine($"WallpaperStyle={10}");
                 builder.AppendLine("; 0:  The image is centered if TileWallpaper = 0 or tiled if TileWallpaper = 1");
                 builder.AppendLine("; 2:  The image is stretched to fill the screen");
@@ -57,13 +57,13 @@ namespace WallpaperManager.Services
                 builder.AppendLine("; 10: The image is resized and cropped to fill the screen while maintaining the aspect ratio. (Windows 7 and later)");
                 builder.AppendLine();
                 builder.AppendLine("[Slideshow]");
-                builder.AppendLine($"Interval={300000}");
+                builder.AppendLine($"Interval={theme.WallpaperChangeFrequency.TotalMilliseconds}");
                 builder.AppendLine("; Interval is a number that determines how often the background changes. It is measured in milliseconds.");
-                switch (theme.SelectionMethod)
+                switch (theme.WallpaperSelectionMethod)
                 {
                     case ImageSelectionMethod.Random:
                     case ImageSelectionMethod.Sequential:
-                        builder.AppendLine($"Shuffle={(int)theme.SelectionMethod}");
+                        builder.AppendLine($"Shuffle={(int)theme.WallpaperSelectionMethod}");
                         break;
                     default:
                         builder.AppendLine($"Shuffle={0}");
