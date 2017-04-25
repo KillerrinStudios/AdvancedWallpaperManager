@@ -11,12 +11,12 @@
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_ThemeDetailsViewModel}">
 
-    <Page.Resources>
-        <DataTemplate x:Key="DirectoriesTemplate">
-            <Grid>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="RemoveDirectoryButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="DeleteDirectoryButton_Click" />
-                    <TextBlock Margin="10,0,0,0">
+	<Page.Resources>
+		<DataTemplate x:Key="DirectoriesTemplate">
+			<Grid>
+				<StackPanel Orientation="Horizontal">
+					<Button x:Name="RemoveDirectoryButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="DeleteDirectoryButton_Click" />
+					<TextBlock Margin="10,0,0,0">
 														<Run>ID: </Run>
 														<Run Text="{Binding ID}"/>
 														<Run Text=" | "/>
@@ -26,12 +26,12 @@
 														<Run Text=" | "/>
 														<Run>Include Subdirectories: </Run>
 														<Run Text="{Binding IncludeSubdirectories}" />
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
-    
+					</TextBlock>
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+	</Page.Resources>
+	
 	<Grid>
 		<Pivot LeftHeader="{Binding Theme.Name}">
 			<Pivot.RightHeader>
@@ -190,7 +190,7 @@
 									</Button>
 								</StackPanel>
 
-								<Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="200" Margin="0,10,0,0">
+								<Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="400" Margin="0,10,0,0">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
@@ -202,11 +202,11 @@
 
 							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 								<TextBlock Text="Directories" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="addDirectoryButton" Width="200">
+								<Button x:Name="addDirectoryButton" Width="400">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-											<TextBlock Text="Add Directories" Margin="10,0,0,0" VerticalAlignment="Center"/>
+											<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
 										</StackPanel>
 									</Button.Content>
 
@@ -237,13 +237,13 @@
 									</Button.Flyout>
 								</Button>
 
-                                <ListView Header="Wallpaper Directories" Margin="0,10,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}" />
-                                <ListView Header="Excluded Wallpaper Directories" ItemsSource="{Binding ExcludedWallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}"/>
-                            </StackPanel>
+								<ListView Header="Wallpaper Directories" Margin="0,10,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}" />
+								<ListView Header="Excluded Wallpaper Directories" ItemsSource="{Binding ExcludedWallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}"/>
+							</StackPanel>
 
 							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 								<TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="DeleteThemeButton" Width="200" Command="{Binding DeleteThemeCommand}">
+								<Button x:Name="DeleteThemeButton" Width="100" Command="{Binding DeleteThemeCommand}">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
