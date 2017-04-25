@@ -212,7 +212,7 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(ThemeDetailsViewModel)} - {nameof(OnNavigatedTo)}");
 
             // Grab the parameter
-            Theme = (WallpaperTheme)NavigationService.Parameter;
+            Theme = ThemeRepository.Find(((WallpaperTheme)NavigationService.Parameter).ID);
             FileCache.Clear();
 
             // Update the UI Elements in Settings
