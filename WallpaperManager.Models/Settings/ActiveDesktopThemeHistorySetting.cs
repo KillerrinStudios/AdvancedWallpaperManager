@@ -10,19 +10,19 @@ using Windows.Storage;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class ActiveDesktopThemeHistorySetting : ApplicationSettingBase<Queue<string>>
+    public class ActiveDesktopThemeHistorySetting : ApplicationSettingBase<List<string>>
     {
         public const int MAX_ITEMS = 5;
         /// <summary>
         /// In order to modify the list you must assign it to a temporary variable and re-assign to Value when complete
         /// </summary>
-        public override Queue<string> Value
+        public override List<string> Value
         {
-            get { return JsonConvert.DeserializeObject<Queue<string>>((string)Container.Values[Key]); }
+            get { return JsonConvert.DeserializeObject<List<string>>((string)Container.Values[Key]); }
             set
             {
                 // Limit the number of items on the Recent List
-                while (value.Count > MAX_ITEMS) value.Dequeue();
+                while (value.Count > MAX_ITEMS) value.RemoveAt(MAX_ITEMS);
 
                 Container.Values[Key] = JsonConvert.SerializeObject(value);
                 RaisePropertyChanged(nameof(Value));
@@ -30,7 +30,7 @@ namespace WallpaperManager.Models.Settings
         }
 
         public ActiveDesktopThemeHistorySetting()
-            :base(StorageTask.LocalSettings, "ActiveDesktopThemeHistory", new Queue<string>())
+            :base(StorageTask.LocalSettings, "ActiveDesktopThemeHistory", new List<string>())
         {
         }
 
@@ -38,11 +38,11 @@ namespace WallpaperManager.Models.Settings
         {
             // Save the Value to a Temp variable then Enqueue the item
             var tmpValue = Value;
-            tmpValue.Enqueue(str);
+            tmpValue.Insert(0, str);
 
             // Restrict to the MAX_ITEMS
             while (tmpValue.Count > MAX_ITEMS)
-                tmpValue.Dequeue();
+                tmpValue.RemoveAt(MAX_ITEMS);
 
             // Reupdate the Value
             Value = tmpValue;

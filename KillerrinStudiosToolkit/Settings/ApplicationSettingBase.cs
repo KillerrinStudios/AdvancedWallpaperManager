@@ -39,6 +39,15 @@ namespace KillerrinStudiosToolkit.Settings
             Value = DefaultValue;
         }
 
+        public virtual void RaiseValuePropertyChanged()
+        {
+            RaisePropertyChanged(nameof(Value));
+        }
+        public void RaiseDefaultValuePropertyChanged()
+        {
+            RaisePropertyChanged(nameof(DefaultValue));
+        }
+
         public override string ToString()
         {
             return $"Application Setting: {Key} | {Value.ToString()}";

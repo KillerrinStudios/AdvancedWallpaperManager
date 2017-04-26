@@ -48,6 +48,51 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+
+        private ActiveThemeService m_activeThemeService = new ActiveThemeService();
+        private string m_currentWallpaperImagePath = "";
+        public string CurrentWallpaperImagePath
+        {
+            get { return m_currentWallpaperImagePath; }
+            set
+            {
+                m_currentWallpaperImagePath = value;
+                RaisePropertyChanged(nameof(CurrentWallpaperImagePath));
+            }
+        }
+
+        private string m_nextWallpaperImagePath = "";
+        public string NextWallpaperImagePath
+        {
+            get { return m_nextWallpaperImagePath; }
+            set
+            {
+                m_nextWallpaperImagePath = value;
+                RaisePropertyChanged(nameof(NextWallpaperImagePath));
+            }
+        }
+
+        private string m_currentLockscreenImagePath = "";
+        public string CurrentLockscreenImagePath
+        {
+            get { return m_currentLockscreenImagePath; }
+            set
+            {
+                m_currentLockscreenImagePath = value;
+                RaisePropertyChanged(nameof(CurrentLockscreenImagePath));
+            }
+        }
+        private string m_nextLockscreenImagePath = "";
+        public string NextLockscreenImagePath
+        {
+            get { return m_nextLockscreenImagePath; }
+            set
+            {
+                m_nextLockscreenImagePath = value;
+                RaisePropertyChanged(nameof(NextLockscreenImagePath));
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -72,9 +117,14 @@ namespace WallpaperManager.ViewModels
 
         public override void OnNavigatedTo()
         {
-            ActiveThemeService activeThemeService = new ActiveThemeService();
-            ActiveWallpaperTheme = activeThemeService.GetActiveDesktopTheme();
-            ActiveLockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
+            ActiveWallpaperTheme = m_activeThemeService.GetActiveDesktopTheme();
+            ActiveLockscreenTheme = m_activeThemeService.GetActiveLockscreenTheme();
+
+            CurrentWallpaperImagePath = m_activeThemeService.GetCurrentDesktopImagePath();
+            CurrentLockscreenImagePath = m_activeThemeService.GetCurrentLockscreenImagePath();
+
+            NextWallpaperImagePath = m_activeThemeService.GetNextDesktopImagePath();
+            NextLockscreenImagePath = m_activeThemeService.GetNextLockscreenImagePath();
 
             Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme?.ID} - {ActiveWallpaperTheme?.Name}");
             Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme?.ID} - {ActiveLockscreenTheme?.Name}");
@@ -103,29 +153,10 @@ namespace WallpaperManager.ViewModels
         }
         public async void NextDesktopWallpaper()
         {
-            if (ActiveWallpaperTheme == null) return;
-            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Begin");
-
-            // Grab a Random Image
-            string randomImagePath = ActiveWallpaperTheme.RandomImageFromCache;
-            Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Random Image Selected: {randomImagePath}");
-
-            // Get the Storage File
-            StorageTask storageTask = new StorageTask();
-            var file = await storageTask.GetFileFromPath(new Uri(randomImagePath));
-            Debug.WriteLine($"{nameof(NextLockscreen)} - Converted Path to File: {file.Name}");
-
-            // Set the Wallpaper
-            ActiveDesktopThemeHistorySetting.Add(randomImagePath);
-            KillerrinStudiosToolkit.UserProfile.WallpaperManager wallpaperTools = new KillerrinStudiosToolkit.UserProfile.WallpaperManager();
-            if (await wallpaperTools.SetImage(file))
-            {
-                // Add it to the history if successful
-                ActiveDesktopThemeHistorySetting.Add(randomImagePath);
-
-                Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Successfully Changed Image");
-            }
-            else { Debug.WriteLine($"{nameof(NextDesktopWallpaper)} - Failed"); }
+            await m_activeThemeService.NextDesktopBackground(NextWallpaperImagePath);
+            CurrentWallpaperImagePath = NextWallpaperImagePath;
+            NextWallpaperImagePath = m_activeThemeService.GetNextDesktopImagePath();
+            ActiveDesktopThemeHistorySetting.RaiseValuePropertyChanged();
         }
 
         public RelayCommand NextLockscreenCommand
@@ -141,25 +172,10 @@ namespace WallpaperManager.ViewModels
 
         public async void NextLockscreen()
         {
-            if (ActiveLockscreenTheme == null) return;
-            Debug.WriteLine($"{nameof(NextLockscreen)} - Begin");
-
-            // Grab a Random Image
-            string randomImagePath = ActiveLockscreenTheme.RandomImageFromCache;
-            var randomImageName = Path.GetFileNameWithoutExtension(randomImagePath);
-            Debug.WriteLine($"{nameof(NextLockscreen)} - Random Image Selected: {randomImagePath}");
-
-            // Set the Lockscreen
-            ActiveLockscreenThemeHistorySetting.Add(randomImagePath);
-            LockscreenManager lockscreenTools = new LockscreenManager();
-            if (await lockscreenTools.SetImageFromFileSystem(randomImagePath))
-            {
-                // Add it to the history if successful
-                ActiveLockscreenThemeHistorySetting.Add(randomImagePath);
-
-                Debug.WriteLine($"{nameof(NextLockscreen)} - Successfully Changed Image");
-            }
-            else { Debug.WriteLine($"{nameof(NextLockscreen)} - Failed"); }
+            await m_activeThemeService.NextLockscreenBackground(NextLockscreenImagePath);
+            CurrentLockscreenImagePath = NextLockscreenImagePath;
+            NextLockscreenImagePath = m_activeThemeService.GetNextLockscreenImagePath();
+            ActiveLockscreenThemeHistorySetting.RaiseValuePropertyChanged();
         }
         #endregion
 

@@ -107,7 +107,11 @@ namespace WallpaperManager.Models
                 using (var context = new WallpaperManagerContext())
                 {
                     var repo = new GenericRepository<FileDiscoveryCache>(context);
-                    var files = repo.GetAllQuery().Where(x => x.WallpaperThemeID == ID).ToList();
+                    var files = repo.GetAllQuery()
+                        .Where(x => x.WallpaperThemeID == ID)
+                        .OrderBy(x => x.FolderPath)
+                        .ThenBy(x => x.FilePath)
+                        .ToList();
 
                     if (files.Count == 0) return "";
 
@@ -120,14 +124,18 @@ namespace WallpaperManager.Models
 
         [JsonIgnore]
         [NotMapped]
-        public string FirstImageImageFromDirectories
+        public string FirstImageFromCache
         {
             get
             {
                 using (var context = new WallpaperManagerContext())
                 {
                     var repo = new GenericRepository<FileDiscoveryCache>(context);
-                    var files = repo.GetAllQuery().Where(x => x.WallpaperThemeID == ID).ToList();
+                    var files = repo.GetAllQuery()
+                        .Where(x => x.WallpaperThemeID == ID)
+                        .OrderBy(x => x.FolderPath)
+                        .ThenBy(x => x.FilePath)
+                        .ToList();
 
                     if (files.Count == 0) return "";
 

@@ -31,7 +31,7 @@ namespace WallpaperManager.Models.Settings
             set
             {
                 Container.Values[Key] = value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                RaiseValuePropertiesChanged();
+                RaiseValuePropertyChanged();
             }
         }
         public DateTime ValueLocalTime
@@ -54,7 +54,7 @@ namespace WallpaperManager.Models.Settings
         {
         }
 
-        public void RaiseValuePropertiesChanged()
+        public override void RaiseValuePropertyChanged()
         {
             RaisePropertyChanged(nameof(Value));
             RaisePropertyChanged(nameof(ValueLocalTime));

@@ -42,7 +42,7 @@ namespace WallpaperManager.Services
                 builder.AppendLine($"DisplayName={theme.Name}");
                 builder.AppendLine();
                 builder.AppendLine(@"[Control Panel\Desktop]");
-                builder.AppendLine($"Wallpaper={theme.FirstImageImageFromDirectories}");
+                builder.AppendLine($"Wallpaper={theme.FirstImageFromCache}");
                 builder.AppendLine("; The path to the wallpaper picture can point to a .bmp, .gif, .jpg, .png, or .tif file.");
                 builder.AppendLine("Pattern=");
                 //builder.AppendLine($"MultimonBackgrounds={0}");

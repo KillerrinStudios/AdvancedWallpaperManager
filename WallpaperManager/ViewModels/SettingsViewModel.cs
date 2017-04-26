@@ -118,7 +118,7 @@ namespace WallpaperManager.ViewModels
             if (e.Percentage >= 100.0)
             {
                 ProgressService.Hide();
-                FileDiscoveryLastRun.RaiseValuePropertiesChanged();
+                FileDiscoveryLastRun.RaiseValuePropertyChanged();
             }
         }
 
