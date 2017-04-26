@@ -9,6 +9,12 @@
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_HomeViewModel}">
 
+    <Page.Resources>
+        <DataTemplate x:Key="RecentImagesItemTemplate">
+            <Image x:Name="RecentImagesImage" Source="{Binding}" MaxWidth="200" MaxHeight="200" />
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -54,7 +60,7 @@
 					IsRightTapEnabled="True" RightTapped="ActiveThemeGridTapped_OpenFlyout">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <FlyoutBase.AttachedFlyout>
@@ -92,6 +98,7 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Stretch" Margin="10,0,0,0">
                             <TextBlock Text="Recent Images" Style="{ThemeResource TitleTextBlockStyle}" TextWrapping="WrapWholeWords"/>
+                            <GridView ItemsSource="{Binding ActiveDesktopThemeHistorySetting.Value}" ItemTemplate="{ThemeResource RecentImagesItemTemplate}" />
                         </StackPanel>
                     </Grid>
                     <Grid Visibility="{Binding ActiveWallpaperTheme, Converter={StaticResource InverseNullToVisibility}}">
@@ -108,7 +115,7 @@
 					IsRightTapEnabled="True" RightTapped="ActiveThemeGridTapped_OpenFlyout">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <FlyoutBase.AttachedFlyout>
@@ -146,6 +153,7 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Stretch" Margin="10,0,0,0">
                             <TextBlock Text="Recent Images" Style="{ThemeResource TitleTextBlockStyle}" TextWrapping="WrapWholeWords"/>
+                            <GridView ItemsSource="{Binding ActiveLockscreenThemeHistorySetting.Value}" ItemTemplate="{ThemeResource RecentImagesItemTemplate}" />
                         </StackPanel>
                     </Grid>
                     <Grid Visibility="{Binding ActiveLockscreenTheme, Converter={StaticResource InverseNullToVisibility}}">

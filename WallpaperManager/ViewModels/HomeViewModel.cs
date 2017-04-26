@@ -116,6 +116,7 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(NextLockscreen)} - Converted Path to File: {file.Name}");
 
             // Set the Wallpaper
+            ActiveDesktopThemeHistorySetting.Add(randomImagePath);
             KillerrinStudiosToolkit.UserProfile.WallpaperManager wallpaperTools = new KillerrinStudiosToolkit.UserProfile.WallpaperManager();
             if (await wallpaperTools.SetImage(file))
             {
@@ -149,6 +150,7 @@ namespace WallpaperManager.ViewModels
             Debug.WriteLine($"{nameof(NextLockscreen)} - Random Image Selected: {randomImagePath}");
 
             // Set the Lockscreen
+            ActiveLockscreenThemeHistorySetting.Add(randomImagePath);
             LockscreenManager lockscreenTools = new LockscreenManager();
             if (await lockscreenTools.SetImageFromFileSystem(randomImagePath))
             {
