@@ -86,7 +86,7 @@ namespace WallpaperManager.Services
             {
                 var themeRepo = new WallpaperThemeRepository(context);
 
-                try { return themeRepo.Find(m_activeLockscreenThemeSetting.Value.Value); }
+                try { return themeRepo.Find(id); }
                 catch (Exception) { }
             }
 
