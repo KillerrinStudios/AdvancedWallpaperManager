@@ -21,7 +21,7 @@
 			<StackPanel Orientation="Vertical">
 				<StackPanel Orientation="Vertical">
 					<TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />
-                    <TextBlock>
+                    <TextBlock Margin="0,5,0,0">
                         <Run>File Discovery Last Run: </Run>
                         <Run Text="{Binding FileDiscoveryLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
                     </TextBlock>
@@ -33,10 +33,10 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
-                    
-                    <ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}"/>
 
-					<TextBlock Text="File Discovery Frequency" />
+                    <ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}" Margin="0,5,0,0"/>
+
+                    <TextBlock Text="File Discovery Frequency" Margin="0,5,0,0"/>
                     <StackPanel Orientation="Horizontal">
                         <ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
                         <ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
@@ -62,14 +62,14 @@
 				
 				<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 					<TextBlock Text="Developer" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-					<Button Width="200" Command="{Binding ShowProgressCommand}" >
+                    <Button Width="200" Command="{Binding ShowProgressCommand}" Margin="0,5,0,0">
 						<Button.Content>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Show Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Button.Content>
 					</Button>
-					<Button Width="200" Command="{Binding HideProgressCommand}" >
+                    <Button Width="200" Command="{Binding HideProgressCommand}" Margin="0,5,0,0">
 						<Button.Content>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Hide Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
@@ -81,7 +81,24 @@
 				<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 					<TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
 
-					<Button Width="200" Command="{Binding DeleteFileCacheCommand}" >
+                    <Button Width="300" Command="{Binding DeselectActiveDesktopThemeCommand}" Margin="0,5,0,0">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                <TextBlock Text="Deselect Active Desktop Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Width="300" Command="{Binding DeselectActiveLockscreenThemeCommand}" Margin="0,5,0,0">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                <TextBlock Text="Deselect Active Lockscreen Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <Button Width="200" Command="{Binding DeleteFileCacheCommand}" Margin="0,5,0,0">
 						<Button.Content>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>

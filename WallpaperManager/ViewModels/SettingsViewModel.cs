@@ -196,5 +196,28 @@ namespace WallpaperManager.ViewModels
                 });
             }
         }
+
+        public RelayCommand DeselectActiveDesktopThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ActiveThemeService service = new ActiveThemeService();
+                    service.DeselectActiveDesktopTheme();
+                });
+            }
+        }
+        public RelayCommand DeselectActiveLockscreenThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ActiveThemeService service = new ActiveThemeService();
+                    service.DeselectActiveLockscreenTheme();
+                });
+            }
+        }
     }
 }
