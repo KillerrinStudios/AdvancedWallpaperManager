@@ -32,16 +32,14 @@ namespace WallpaperManager.Services
         public void ChangeActiveDesktopTheme(WallpaperTheme theme)
         {
             if (!ServiceEnabled) return;
+            DeselectActiveDesktopTheme();
             m_activeDesktopThemeSetting.Value = theme.ID;
-            m_activeDesktopThemeHistorySetting.RevertToDefault();
-            m_wallpaperManager.DeleteFilesInFolders();
         }
         public void ChangeActiveLockscreenTheme(WallpaperTheme theme)
         {
             if (!ServiceEnabled) return;
+            DeselectActiveLockscreenTheme();
             m_activeLockscreenThemeSetting.Value = theme.ID;
-            m_activeLockscreenThemeHistorySetting.RevertToDefault();
-            m_lockscreenManager.DeleteFilesInFolders();
         }
         #endregion
 
