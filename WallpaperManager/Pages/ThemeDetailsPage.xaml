@@ -31,7 +31,7 @@
 			</Grid>
 		</DataTemplate>
 	</Page.Resources>
-	
+
 	<Grid>
 		<Pivot LeftHeader="{Binding Theme.Name}">
 			<Pivot.RightHeader>
@@ -121,7 +121,7 @@
 						<StackPanel Orientation="Vertical">
 							<StackPanel Orientation="Vertical">
 								<TextBlock Text="Details" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<TextBlock>
+								<TextBlock Margin="0,5,0,0">
 								<Run>ID: </Run>
 								<Run Text="{Binding Theme.ID}"/>
 								</TextBlock>
@@ -145,11 +145,14 @@
 								<Run>Wallpaper Change Frequency: </Run>
 								<Run Text="{Binding Theme.WallpaperChangeFrequency}"/>
 								</TextBlock>
+
+								<Button Content="Set to Active Desktop Theme" Command="{Binding SetToActiveDesktopThemeCommand}" IsEnabled="{Binding SetActiveDesktopThemeButtonEnabled}" Width="400" Margin="0,5,0,0" />
+								<Button Content="Set to Active Lockscreen Theme" Command="{Binding SetToActiveLockscreenThemeCommand}" IsEnabled="{Binding SetActiveLockscreenThemeButtonEnabled}" Width="400" Margin="0,5,0,0" />
 							</StackPanel>
 
 							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
-								<TextBlock Text="General" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<TextBlock Text="Theme Name" VerticalAlignment="Center"/>
+								<TextBlock Text="Edit" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+								<TextBlock Text="Theme Name" VerticalAlignment="Center" Margin="0,5,0,0"/>
 								<StackPanel Orientation="Horizontal">
 									<TextBox PlaceholderText="Theme Name" Text="{Binding ThemeName, Mode=TwoWay}" Width="400" VerticalAlignment="Center"/>
 									<Button VerticalAlignment="Bottom" Command="{Binding RevertNameChangeCommand}" Margin="10,0,0,0">
@@ -163,7 +166,7 @@
 								</StackPanel>
 
 								<StackPanel Orientation="Horizontal">
-									<ComboBox Header="Wallpaper Selection Method" ItemsSource="{Binding WallpaperSelectionMethods}" SelectedValue="{Binding WallpaperSelectionMethod, Mode=TwoWay}" Margin="0,10,0,0" />
+									<ComboBox Header="Wallpaper Selection Method" ItemsSource="{Binding WallpaperSelectionMethods}" SelectedValue="{Binding WallpaperSelectionMethod, Mode=TwoWay}" Margin="0,5,0,0" />
 									<Button VerticalAlignment="Bottom" Command="{Binding RevertWallpaperSelectionMethodCommand}" Margin="10,0,0,0">
 										<Button.Content>
 											<StackPanel Orientation="Horizontal">
@@ -174,7 +177,7 @@
 									</Button>
 								</StackPanel>
 
-								<TextBlock Text="Wallpaper Change Frequency" Margin="0,10,0,0"/>
+								<TextBlock Text="Wallpaper Change Frequency" Margin="0,5,0,0"/>
 								<StackPanel Orientation="Horizontal">
 									<ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
 									<ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
@@ -190,7 +193,7 @@
 									</Button>
 								</StackPanel>
 
-								<Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="400" Margin="0,10,0,0">
+								<Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="400" Margin="0,5,0,0">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
@@ -202,7 +205,7 @@
 
 							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 								<TextBlock Text="Directories" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="addDirectoryButton" Width="400">
+								<Button x:Name="addDirectoryButton" Width="400" Margin="0,5,0,0">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
@@ -237,13 +240,13 @@
 									</Button.Flyout>
 								</Button>
 
-								<ListView Header="Wallpaper Directories" Margin="0,10,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}" />
+								<ListView Header="Wallpaper Directories" Margin="0,5,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}" />
 								<ListView Header="Excluded Wallpaper Directories" ItemsSource="{Binding ExcludedWallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}"/>
 							</StackPanel>
 
 							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 								<TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="DeleteThemeButton" Width="100" Command="{Binding DeleteThemeCommand}">
+								<Button x:Name="DeleteThemeButton" Width="100" Command="{Binding DeleteThemeCommand}" Margin="0,5,0,0">
 									<Button.Content>
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>

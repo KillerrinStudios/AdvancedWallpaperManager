@@ -40,6 +40,27 @@ namespace WallpaperManager.ViewModels
         }
 
         #region Settings
+        private bool m_setActiveDesktopThemeButtonEnabled = true;
+        public bool SetActiveDesktopThemeButtonEnabled
+        {
+            get { return m_setActiveDesktopThemeButtonEnabled; }
+            set
+            {
+                m_setActiveDesktopThemeButtonEnabled = value;
+                RaisePropertyChanged(nameof(SetActiveDesktopThemeButtonEnabled));
+            }
+        }
+        private bool m_setActiveLockscreenThemeButtonEnabled = true;
+        public bool SetActiveLockscreenThemeButtonEnabled
+        {
+            get { return m_setActiveLockscreenThemeButtonEnabled; }
+            set
+            {
+                m_setActiveLockscreenThemeButtonEnabled = value;
+                RaisePropertyChanged(nameof(SetActiveLockscreenThemeButtonEnabled));
+            }
+        }
+
         private string m_themeName = "";
         public string ThemeName
         {
@@ -215,6 +236,16 @@ namespace WallpaperManager.ViewModels
             Theme = ThemeRepository.Find(((WallpaperTheme)NavigationService.Parameter).ID);
             FileCache.Clear();
 
+            // Enable or Disable the Active Theme Buttons
+            ActiveThemeService activeThemeService = new ActiveThemeService();
+            if (activeThemeService.GetActiveDesktopThemeID() == Theme.ID)
+                SetActiveDesktopThemeButtonEnabled = false;
+            else SetActiveDesktopThemeButtonEnabled = true;
+
+            if (activeThemeService.GetActiveLockscreenThemeID() == Theme.ID)
+                SetActiveLockscreenThemeButtonEnabled = false;
+            else SetActiveLockscreenThemeButtonEnabled = true;
+
             // Update the UI Elements in Settings
             RevertNameChangeCommand.Execute(null);
             RevertWallpaperSelectionMethodCommand.Execute(null);
@@ -291,6 +322,37 @@ namespace WallpaperManager.ViewModels
         #endregion
 
         #region Commands
+        public RelayCommand SetToActiveDesktopThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Theme == null) return;
+
+                    ActiveThemeService service = new ActiveThemeService();
+                    service.ChangeActiveDesktopTheme(Theme);
+                    SetActiveDesktopThemeButtonEnabled = false;
+                });
+            }
+        }
+        public RelayCommand SetToActiveLockscreenThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Theme == null) return;
+
+                    ActiveThemeService service = new ActiveThemeService();
+                    service.ChangeActiveLockscreenTheme(Theme);
+                    SetActiveLockscreenThemeButtonEnabled = false;
+                });
+            }
+        }
+
+
+        #region Refresh
         public RelayCommand RefreshFileCacheCommand
         {
             get
@@ -326,6 +388,7 @@ namespace WallpaperManager.ViewModels
                 });
             }
         }
+        #endregion
 
         #region General Commands
         public RelayCommand RevertNameChangeCommand
