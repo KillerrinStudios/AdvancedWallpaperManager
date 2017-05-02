@@ -43,6 +43,9 @@ namespace KillerrinStudiosToolkit.BackgroundTasks
         protected abstract BackgroundTaskBuilder BuildTask();
         protected abstract bool CancelTaskRegistration();
 
+        public bool IsTaskRegistered { get { return m_backgroundTaskTools.IsTaskRegistered(TaskName); } }
+        public IBackgroundTaskRegistration GetTask { get { return m_backgroundTaskTools.GetRegisteredTask(TaskName); } }
+
         public void UnregisterTask()
         {
             var existingTask = m_backgroundTaskTools.GetRegisteredTask(TaskName);

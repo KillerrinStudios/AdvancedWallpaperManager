@@ -21,12 +21,17 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <uap:Extension Category="windows.lockScreenCall" />
+        <Extension Category="windows.backgroundTasks" EntryPoint="WallpaperManager.BackgroundTasks.ActiveThemeBackgroundTask">
+          <BackgroundTasks>
+            <Task Type="timer" />
+          </BackgroundTasks>
+        </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="WallpaperManager.BackgroundTasks.FileDiscoveryBackgroundTask">
           <BackgroundTasks>
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
+        <uap:Extension Category="windows.lockScreenCall" />
       </Extensions>
     </Application>
   </Applications>
