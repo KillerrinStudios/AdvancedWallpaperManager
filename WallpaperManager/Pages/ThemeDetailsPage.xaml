@@ -11,12 +11,12 @@
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_ThemeDetailsViewModel}">
 
-	<Page.Resources>
-		<DataTemplate x:Key="DirectoriesTemplate">
-			<Grid>
-				<StackPanel Orientation="Horizontal">
-					<Button x:Name="RemoveDirectoryButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="DeleteDirectoryButton_Click" />
-					<TextBlock Margin="10,0,0,0">
+    <Page.Resources>
+        <DataTemplate x:Key="DirectoriesTemplate">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="RemoveDirectoryButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="DeleteDirectoryButton_Click" />
+                    <TextBlock Margin="10,0,0,0">
 														<Run>ID: </Run>
 														<Run Text="{Binding ID}"/>
 														<Run Text=" | "/>
@@ -26,253 +26,290 @@
 														<Run Text=" | "/>
 														<Run>Include Subdirectories: </Run>
 														<Run Text="{Binding IncludeSubdirectories}" />
-					</TextBlock>
-				</StackPanel>
-			</Grid>
-		</DataTemplate>
-	</Page.Resources>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
-	<Grid>
-		<Pivot LeftHeader="{Binding Theme.Name}">
-			<Pivot.RightHeader>
-				<StackPanel Orientation="Vertical" Margin="0,2,0,-2">
-					<Button Command="{Binding RefreshFileCacheCommand}">
-						<Button.Content>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-								<TextBlock Text="Refresh Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Button.Content>
-					</Button>
-					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Grid>
+        <Pivot LeftHeader="{Binding Theme.Name}">
+            <Pivot.RightHeader>
+                <StackPanel Orientation="Vertical" Margin="0,2,0,-2">
+                    <Button Command="{Binding RefreshFileCacheCommand}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                <TextBlock Text="Refresh Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
 						<Run Text="{Binding Theme.DateCacheDiscovered, Converter={StaticResource RelativeDateTime}}" />
-					</TextBlock>
-				</StackPanel>
-			</Pivot.RightHeader>
-			<PivotItem Header="Display">
-				<Grid>
-					<ListView ItemsSource="{Binding FileCache}"
+                    </TextBlock>
+                </StackPanel>
+            </Pivot.RightHeader>
+            <PivotItem Header="Display">
+                <Grid>
+                    <ListView ItemsSource="{Binding FileCache}"
 				  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 				  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollMode="Disabled"
 				  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Auto">
-						<ListView.ItemContainerStyle>
-							<Style TargetType="ListViewItem">
-								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-								<Setter Property="HorizontalAlignment" Value="Stretch"/>
-							</Style>
-						</ListView.ItemContainerStyle>
-						<ListView.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<controls:Expander Header="{Binding FolderPath}" IsExpanded="False" VerticalAlignment="Top">
-										<GridView ItemsSource="{Binding Files}" 
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <controls:Expander Header="{Binding FolderPath}" IsExpanded="False" VerticalAlignment="Top">
+                                        <GridView ItemsSource="{Binding Files}" 
 									  HorizontalAlignment="Stretch" VerticalAlignment="Top"
 									  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollMode="Disabled"
 									  ScrollViewer.VerticalScrollBarVisibility="Auto"	ScrollViewer.VerticalScrollMode="Auto">
-											<GridView.ItemsPanel>
-												<ItemsPanelTemplate>
-													<ItemsWrapGrid Orientation="Horizontal" ItemWidth="100" ItemHeight="100" Margin="0,5,0,5"
+                                            <GridView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <ItemsWrapGrid Orientation="Horizontal" ItemWidth="100" ItemHeight="100" Margin="0,5,0,5"
 													   ScrollViewer.HorizontalScrollBarVisibility="Visible"
 													   ScrollViewer.VerticalScrollBarVisibility="Disabled" />
-												</ItemsPanelTemplate>
-											</GridView.ItemsPanel>
-											<GridView.ItemTemplate>
-												<DataTemplate>
-													<Grid IsTapEnabled="True" IsRightTapEnabled="True" Tapped="ImageGridTapped_OpenFlyout" RightTapped="ImageGridRightTapped_OpenFlyout">
-														<Image Source="{Binding FilePath}" />
-														<FlyoutBase.AttachedFlyout>
-															<Flyout>
-																<StackPanel Orientation="Vertical" Margin="0,10,0,10">
-																	<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-																		<TextBlock Text="{Binding FileName}" Width="430" TextWrapping="WrapWholeWords" HorizontalAlignment="Center"/>
-																		<Image Source="{Binding FilePath}" Width="430" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-																	</StackPanel>
-																	<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
-																		<Button Click="OpenFileButton">
-																			<StackPanel Orientation="Horizontal">
-																				<TextBlock Text="&#xE8E5;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-																				<TextBlock Text="Open File" Margin="10,0,0,0" VerticalAlignment="Center"/>
-																			</StackPanel>
-																		</Button>
-																		<Button Click="OpenDirectoryButton">
-																			<StackPanel Orientation="Horizontal">
-																				<TextBlock Text="&#xE8DA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-																				<TextBlock Text="Open Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
-																			</StackPanel>
-																		</Button>
-																	</StackPanel>
-																</StackPanel>
-															</Flyout>
-														</FlyoutBase.AttachedFlyout>
-													</Grid>
-												</DataTemplate>
-											</GridView.ItemTemplate>
-										</GridView>
-									</controls:Expander>
-								</Grid>
-							</DataTemplate>
-						</ListView.ItemTemplate>
-					</ListView>
-				</Grid>
-			</PivotItem>
-			<PivotItem Header="Settings">
-				<Grid>
-					<ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
-						<StackPanel Orientation="Vertical">
-							<StackPanel Orientation="Vertical">
-								<TextBlock Text="Details" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<TextBlock Margin="0,5,0,0">
+                                                </ItemsPanelTemplate>
+                                            </GridView.ItemsPanel>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid IsTapEnabled="True" IsRightTapEnabled="True" Tapped="ImageGridTapped_OpenFlyout" RightTapped="ImageGridRightTapped_OpenFlyout">
+                                                        <Image Source="{Binding FilePath}" />
+                                                        <FlyoutBase.AttachedFlyout>
+                                                            <Flyout>
+                                                                <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+                                                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                                                        <TextBlock Text="{Binding FileName}" Width="430" TextWrapping="WrapWholeWords" HorizontalAlignment="Center"/>
+                                                                        <Image Source="{Binding FilePath}" Width="430" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                                                    </StackPanel>
+                                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
+                                                                        <Button Click="OpenFileButton">
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="&#xE8E5;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                                                <TextBlock Text="Open File" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                            </StackPanel>
+                                                                        </Button>
+                                                                        <Button Click="OpenDirectoryButton">
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="&#xE8DA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                                                <TextBlock Text="Open Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                            </StackPanel>
+                                                                        </Button>
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </Flyout>
+                                                        </FlyoutBase.AttachedFlyout>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </controls:Expander>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Settings">
+                <Grid>
+                    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Details" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                                <TextBlock Margin="0,5,0,0">
 								<Run>ID: </Run>
 								<Run Text="{Binding Theme.ID}"/>
-								</TextBlock>
-								<TextBlock>
+                                </TextBlock>
+                                <TextBlock>
 								<Run>Name: </Run>
 								<Run Text="{Binding Theme.Name}"/>
-								</TextBlock>
-								<TextBlock>
+                                </TextBlock>
+                                <TextBlock>
 								<Run>Created: </Run>
 								<Run Text="{Binding Theme.DateCreated}"/>
-								</TextBlock>
-								<TextBlock>
+                                </TextBlock>
+                                <TextBlock>
 								<Run>Modified: </Run>
 								<Run Text="{Binding Theme.DateLastModified}"/>
-								</TextBlock>
-								<TextBlock>
+                                </TextBlock>
+                                <TextBlock>
 								<Run>Wallpaper Selection Method: </Run>
 								<Run Text="{Binding Theme.WallpaperSelectionMethod, Converter={StaticResource EnumStringConverter}}"/>
-								</TextBlock>
-								<TextBlock>
+                                </TextBlock>
+                                <TextBlock>
 								<Run>Wallpaper Change Frequency: </Run>
 								<Run Text="{Binding Theme.WallpaperChangeFrequency}"/>
-								</TextBlock>
+                                </TextBlock>
 
-								<Button Command="{Binding SetToActiveDesktopThemeCommand}" IsEnabled="{Binding SetActiveDesktopThemeButtonEnabled}" Width="400" Margin="0,5,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Vertical">
-											<TextBlock Text="Set to Active Desktop Theme" TextAlignment="Center" Visibility="{Binding SetActiveDesktopThemeButtonEnabled, Converter={StaticResource BooleanToVisibility}}"/>
-											<TextBlock Text="Currently the Active Desktop Theme" TextAlignment="Center" Visibility="{Binding SetActiveDesktopThemeButtonEnabled, Converter={StaticResource InverseBooleanToVisibility}}"/>
-										</StackPanel>
-									</Button.Content>
-								</Button>
-								<Button Command="{Binding SetToActiveLockscreenThemeCommand}" IsEnabled="{Binding SetActiveLockscreenThemeButtonEnabled}" Width="400" Margin="0,5,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Vertical">
-											<TextBlock Text="Set to Active Lockscreen Theme" TextAlignment="Center" Visibility="{Binding SetActiveLockscreenThemeButtonEnabled, Converter={StaticResource BooleanToVisibility}}"/>
-											<TextBlock Text="Currently the Active Lockscreen Theme" TextAlignment="Center" Visibility="{Binding SetActiveLockscreenThemeButtonEnabled, Converter={StaticResource InverseBooleanToVisibility}}"/>
-										</StackPanel>
-									</Button.Content>
-								</Button>
-							</StackPanel>
+                                <Button Command="{Binding SetToActiveDesktopThemeCommand}" IsEnabled="{Binding SetActiveDesktopThemeButtonEnabled}" Width="400" Margin="0,5,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="Set to Active Desktop Theme" TextAlignment="Center" Visibility="{Binding SetActiveDesktopThemeButtonEnabled, Converter={StaticResource BooleanToVisibility}}"/>
+                                            <TextBlock Text="Currently the Active Desktop Theme" TextAlignment="Center" Visibility="{Binding SetActiveDesktopThemeButtonEnabled, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Command="{Binding SetToActiveLockscreenThemeCommand}" IsEnabled="{Binding SetActiveLockscreenThemeButtonEnabled}" Width="400" Margin="0,5,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="Set to Active Lockscreen Theme" TextAlignment="Center" Visibility="{Binding SetActiveLockscreenThemeButtonEnabled, Converter={StaticResource BooleanToVisibility}}"/>
+                                            <TextBlock Text="Currently the Active Lockscreen Theme" TextAlignment="Center" Visibility="{Binding SetActiveLockscreenThemeButtonEnabled, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
 
-							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
-								<TextBlock Text="Edit" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<TextBlock Text="Theme Name" VerticalAlignment="Center" Margin="0,5,0,0"/>
-								<StackPanel Orientation="Horizontal">
-									<TextBox PlaceholderText="Theme Name" Text="{Binding ThemeName, Mode=TwoWay}" Width="400" VerticalAlignment="Center"/>
-									<Button VerticalAlignment="Bottom" Command="{Binding RevertNameChangeCommand}" Margin="10,0,0,0">
-										<Button.Content>
-											<StackPanel Orientation="Horizontal">
-												<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-												<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
-											</StackPanel>
-										</Button.Content>
-									</Button>
-								</StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <TextBlock Text="Edit" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                                <TextBlock Text="Theme Name" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox PlaceholderText="Theme Name" Text="{Binding ThemeName, Mode=TwoWay}" Width="400" VerticalAlignment="Center"/>
+                                    <Button VerticalAlignment="Bottom" Command="{Binding RevertNameChangeCommand}" Margin="10,0,0,0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
 
-								<StackPanel Orientation="Horizontal">
-									<ComboBox Header="Wallpaper Selection Method" ItemsSource="{Binding WallpaperSelectionMethods}" SelectedValue="{Binding WallpaperSelectionMethod, Mode=TwoWay}" Margin="0,5,0,0" />
-									<Button VerticalAlignment="Bottom" Command="{Binding RevertWallpaperSelectionMethodCommand}" Margin="10,0,0,0">
-										<Button.Content>
-											<StackPanel Orientation="Horizontal">
-												<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-												<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
-											</StackPanel>
-										</Button.Content>
-									</Button>
-								</StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox ItemsSource="{Binding WallpaperSelectionMethods}" SelectedIndex="{Binding WallpaperSelectionMethod, Mode=TwoWay}" Margin="0,5,0,0">
+                                        <ComboBox.Header>
+                                            <TextBlock Text="Wallpaper Selection Method" Style="{ThemeResource TitleTextBlockStyle}"/>
+                                        </ComboBox.Header>
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumStringConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
-								<TextBlock Text="Wallpaper Change Frequency" Margin="0,5,0,0"/>
-								<StackPanel Orientation="Horizontal">
-									<ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
-									<ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
-									<ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
-									<ComboBox x:Name="Frequency_SecondsComboBox" Header="Seconds" ItemsSource="{Binding SecondsList}" SelectedValue="{Binding FrequencySeconds, Mode=TwoWay}"/>
-									<Button VerticalAlignment="Bottom" Command="{Binding RevertWallpaperChangeFrequencyCommand}" Margin="10,0,0,0">
-										<Button.Content>
-											<StackPanel Orientation="Horizontal">
-												<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-												<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
-											</StackPanel>
-										</Button.Content>
-									</Button>
-								</StackPanel>
+                                    <Button VerticalAlignment="Bottom" Command="{Binding RevertWallpaperSelectionMethodCommand}" Margin="10,0,0,0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
 
-								<Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="400" Margin="0,5,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-											<TextBlock Text="Save Changes" Margin="10,0,0,0" VerticalAlignment="Center"/>
-										</StackPanel>
-									</Button.Content>
-								</Button>
-							</StackPanel>
+                                <StackPanel Orientation="Horizontal"  Margin="0,5,0,0">
+                                    <TextBlock Text="Wallpaper Change Frequency" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center"/>
+                                    <Button Content="API Limitations" Command="{Binding ShowFrequencyLimitationsCommand}" Margin="10,5,0,0"/>
+                                </StackPanel>
 
-							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
-								<TextBlock Text="Directories" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="addDirectoryButton" Width="400" Margin="0,5,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-											<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
-										</StackPanel>
-									</Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
+                                    <ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
+                                    <ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
+                                    <ComboBox x:Name="Frequency_SecondsComboBox" Header="Seconds" ItemsSource="{Binding SecondsList}" SelectedValue="{Binding FrequencySeconds, Mode=TwoWay}"/>
+                                    <Button VerticalAlignment="Bottom" Command="{Binding RevertWallpaperChangeFrequencyCommand}" Margin="10,0,0,0">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
 
-									<Button.Flyout>
-										<Flyout x:Name="AddDirectoryFlyout">
-											<StackPanel Orientation="Vertical">
+                                <Button VerticalAlignment="Bottom" Command="{Binding EditThemeCommand}" Width="400" Margin="0,5,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Save Changes" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
 
-												<TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
-												<Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}"
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <TextBlock Text="Directories" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+
+
+                                <Button x:Name="addDirectoryButton" Width="400" Margin="0,5,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+
+                                    <Button.Flyout>
+                                        <Flyout x:Name="AddDirectoryFlyout">
+                                            <Flyout.FlyoutPresenterStyle>
+                                                <Style TargetType="FlyoutPresenter">
+                                                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"></Setter>
+                                                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"></Setter>
+                                                </Style>
+                                            </Flyout.FlyoutPresenterStyle>
+                                            <StackPanel Orientation="Vertical" Height="250" Width="400">
+
+                                                <TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
+                                                <Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}"
 										HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
 
-												<ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
+                                                <ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
 											  HorizontalAlignment="Stretch"/>
-												<ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
+                                                <ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
 											  HorizontalAlignment="Stretch"/>
 
-												<Button Command="{Binding AddDirectoryCommand}"
-										HorizontalAlignment="Stretch" Margin="0,20,0,0">
-													<Button.Content>
-														<StackPanel Orientation="Horizontal">
-															<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-															<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
-														</StackPanel>
-													</Button.Content>
-												</Button>
-											</StackPanel>
-										</Flyout>
-									</Button.Flyout>
-								</Button>
+                                                <Button Command="{Binding AddDirectoryCommand}"
+											HorizontalAlignment="Stretch" Margin="0,20,0,0">
+                                                    <Button.Content>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                </Button>
 
-								<ListView Header="Wallpaper Directories" Margin="0,5,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}" />
-								<ListView Header="Excluded Wallpaper Directories" ItemsSource="{Binding ExcludedWallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}"/>
-							</StackPanel>
+                                <ListView  Margin="0,5,0,0" ItemsSource="{Binding WallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}">
+                                    <ListView.Header>
+                                        <TextBlock Text="Wallpaper Directories" Style="{ThemeResource TitleTextBlockStyle}" />
+                                    </ListView.Header>
+                                </ListView>
+                                <ListView ItemsSource="{Binding ExcludedWallpaperDirectories}" ItemTemplate="{ThemeResource DirectoriesTemplate}">
+                                    <ListView.Header>
+                                        <TextBlock Text="Excluded Wallpaper Directories" Style="{ThemeResource TitleTextBlockStyle}" />
+                                    </ListView.Header>
+                                </ListView>
+                            </StackPanel>
 
-							<StackPanel Orientation="Vertical" Margin="0,20,0,0">
-								<TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-								<Button x:Name="DeleteThemeButton" Width="100" Command="{Binding DeleteThemeCommand}" Margin="0,5,0,0">
-									<Button.Content>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-											<TextBlock Text="Delete" Margin="10,0,0,0" VerticalAlignment="Center"/>
-										</StackPanel>
-									</Button.Content>
-								</Button>
-							</StackPanel>
-						</StackPanel>
-					</ScrollViewer>
-				</Grid>
-			</PivotItem>
-		</Pivot>
-	</Grid>
+
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <TextBlock Text="Other" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                                <Button x:Name="GenerateWindowsThemeButton" Content="Generate Windows Theme" Width="400" Command="{Binding GenerateWindowsThemeCommand}" Margin="0,5,0,0" />
+                            </StackPanel>
+
+
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                                <Button x:Name="DeleteThemeButton" Width="100" Command="{Binding DeleteThemeCommand}" Margin="0,5,0,0">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Delete" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+    </Grid>
 </Page>

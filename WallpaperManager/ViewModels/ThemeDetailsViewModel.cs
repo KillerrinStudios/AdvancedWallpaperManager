@@ -22,6 +22,7 @@ using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
 namespace WallpaperManager.ViewModels
@@ -72,14 +73,14 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        public List<ImageSelectionMethod> WallpaperSelectionMethods = new List<ImageSelectionMethod>();
+        public List<ImageSelectionMethod> WallpaperSelectionMethods { get; private set; } = new List<ImageSelectionMethod>() { ImageSelectionMethod.Sequential, ImageSelectionMethod.Random };
         private ImageSelectionMethod m_wallpaperSelectionMethod = ImageSelectionMethod.Random;
-        public ImageSelectionMethod WallpaperSelectionMethod
+        public int WallpaperSelectionMethod
         {
-            get { return m_wallpaperSelectionMethod; }
+            get { return WallpaperSelectionMethods.IndexOf(m_wallpaperSelectionMethod); }
             set
             {
-                m_wallpaperSelectionMethod = value;
+                m_wallpaperSelectionMethod = WallpaperSelectionMethods[value];
                 RaisePropertyChanged(nameof(WallpaperSelectionMethod));
             }
         }
@@ -193,11 +194,6 @@ namespace WallpaperManager.ViewModels
             {
                 // Code runs "for real"
             }
-
-            // Populate the Selection Methods
-            WallpaperSelectionMethods = new List<ImageSelectionMethod>();
-            WallpaperSelectionMethods.Add(ImageSelectionMethod.Random);
-            WallpaperSelectionMethods.Add(ImageSelectionMethod.Sequential);
 
             // Populate the Timespan Selector Lists
             DaysList = new List<int>();
@@ -351,6 +347,24 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        public RelayCommand GenerateWindowsThemeCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    GenerateWindowsTheme();
+                });
+            }
+        }
+
+        public async void GenerateWindowsTheme()
+        {
+            if (Theme == null) return;
+
+            WindowsThemeService service = new WindowsThemeService();
+            await service.CreateWindowsTheme(Theme);
+        }
 
         #region Refresh
         public RelayCommand RefreshFileCacheCommand
@@ -408,7 +422,7 @@ namespace WallpaperManager.ViewModels
             {
                 return new RelayCommand(() =>
                 {
-                    WallpaperSelectionMethod = Theme.WallpaperSelectionMethod;
+                    WallpaperSelectionMethod = (int)Theme.WallpaperSelectionMethod;
                 });
             }
         }
@@ -425,6 +439,24 @@ namespace WallpaperManager.ViewModels
                     FrequencySeconds = Theme.WallpaperChangeFrequency.Seconds;
                 });
             }
+        }
+
+        public RelayCommand ShowFrequencyLimitationsCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    ShowFrequencyLimitations();
+                });
+            }
+        }
+        public async void ShowFrequencyLimitations()
+        {
+            MessageDialog dialogue = new MessageDialog(
+                "Due to an API Limitation. The Active Theme Background Task will only run on a minimum interval of 15 Minutes. If the value is set to less than this the agent will simply activate once every 15 minutes. If you want to use a time that is less than 15 Minutes, it is recommended that you generate a Windows Theme from this Theme as that limitation will be removed",
+                "API Limitations");
+            await dialogue.ShowAsync();
         }
 
         public RelayCommand EditThemeCommand
@@ -444,7 +476,7 @@ namespace WallpaperManager.ViewModels
 
                     // Update the Theme
                     Theme.Name = "" + ThemeName;
-                    Theme.WallpaperSelectionMethod = WallpaperSelectionMethod;
+                    Theme.WallpaperSelectionMethod = m_wallpaperSelectionMethod;
                     Theme.WallpaperChangeFrequency = updatedChangeFrequency;
                     Theme.DateLastModified = DateTime.UtcNow;
                     ThemeRepository.UpdateAndCommit(Theme);
@@ -453,7 +485,7 @@ namespace WallpaperManager.ViewModels
         }
         #endregion
 
-        #region Open Folder Browser
+        #region Directory Commands
         public RelayCommand OpenFolderBrowserCommand
         {
             get
@@ -467,22 +499,25 @@ namespace WallpaperManager.ViewModels
 
         private async void OpenFolderBrowser()
         {
+            // Spawn off the folderpicker
             FolderPicker folderPicker = new FolderPicker();
             folderPicker.FileTypeFilter.Add("*");
             m_storageFolder = await folderPicker.PickSingleFolderAsync();
 
-            FolderBrowserClosed?.Invoke(this, new EventArgs());
-
+            // Assign the Directories Path from the result
             if (m_storageFolder != null)
             {
                 NewDirectory.Path = m_storageFolder.Path;
             }
+
+            // Finally, notify that the browser is closed so we can re-open the flyout
+            //await Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            //() => {
+            FolderBrowserClosed?.Invoke(null, null);
+            //});
         }
-
         public event EventHandler FolderBrowserClosed;
-        #endregion
 
-        #region Directory Commands
         public RelayCommand AddDirectoryCommand
         {
             get
@@ -619,5 +654,6 @@ namespace WallpaperManager.ViewModels
         }
         #endregion
         #endregion
+
     }
 }
