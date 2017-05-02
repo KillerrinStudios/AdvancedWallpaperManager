@@ -55,7 +55,14 @@ namespace WallpaperManager.Pages
 
         private void ViewModel_FolderBrowserClosed(object sender, EventArgs e)
         {
-            addDirectoryButton.Flyout.ShowAt(addDirectoryButton);
+            try
+            {
+                addDirectoryButton.Flyout.ShowAt(addDirectoryButton);
+            }
+            catch(Exception ex)
+            {
+                DebugTools.PrintOutException(ex, nameof(ViewModel_FolderBrowserClosed));
+            }
         }
 
         private void ImageGridTapped_OpenFlyout(object sender, TappedRoutedEventArgs e)
