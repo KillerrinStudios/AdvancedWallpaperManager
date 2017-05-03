@@ -39,12 +39,37 @@ namespace WallpaperManager.BackgroundTasks
 
                 // Preform the service for the Active Desktop Theme
                 Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Started");
-                await activeThemeService.NextDesktopBackground();
+                var desktopTheme = activeThemeService.GetActiveDesktopTheme();
+                if (desktopTheme != null)
+                {
+                    var desktopLastRunSetting = new ActiveDesktopThemeLastRunSetting();
+                    DateTime nextRun = desktopLastRunSetting.Value + desktopTheme.WallpaperChangeFrequency;
+
+                    if (nextRun <= DateTime.UtcNow)
+                    {
+                        Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Changing Desktop Background");
+                        await activeThemeService.NextDesktopBackground();
+                        desktopLastRunSetting.Value = DateTime.UtcNow;
+                    }
+                    else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Not enough time passed");
+                }
                 Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Completed");
 
                 // Preform the service for the Active Lockscreen Theme
                 Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Started");
-                await activeThemeService.NextLockscreenBackground();
+                var lockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
+                if (lockscreenTheme != null)
+                {
+                    var lockscreenLastRunSetting = new ActiveLockscreenThemeLastRunSetting();
+                    DateTime nextRun = lockscreenLastRunSetting.Value + lockscreenTheme.WallpaperChangeFrequency;
+                    if (nextRun <= DateTime.UtcNow)
+                    {
+                        Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Changing Desktop Background");
+                        await activeThemeService.NextLockscreenBackground();
+                        lockscreenLastRunSetting.Value = DateTime.UtcNow;
+                    }
+                    else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Not enough time passed");
+                }
                 Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Completed");
             }
 

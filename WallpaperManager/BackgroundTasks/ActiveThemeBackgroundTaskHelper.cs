@@ -23,9 +23,7 @@ namespace WallpaperManager.BackgroundTasks
             builder.Name = TaskName;
             builder.TaskEntryPoint = TaskEntryPoint;
 
-            var fileDiscoveryFrequency = new FileDiscoveryFrequencySetting();
-            //builder.SetTrigger(new MaintenanceTrigger((uint)fileDiscoveryFrequency.Value.TotalMinutes, false));
-            builder.SetTrigger(new TimeTrigger((uint)fileDiscoveryFrequency.Value.TotalMinutes, false));
+            builder.SetTrigger(new TimeTrigger(15, false));
 
             return builder;
         }
