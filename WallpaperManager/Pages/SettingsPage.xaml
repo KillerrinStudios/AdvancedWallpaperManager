@@ -21,11 +21,17 @@
 			<StackPanel Orientation="Vertical">
 				<StackPanel Orientation="Vertical">
 					<TextBlock Text="General" Style="{ThemeResource SubheaderTextBlockStyle}" />
-					<TextBlock Margin="0,5,0,0">
+
+                    <TextBlock Text="Background Task Status" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,5,0,0"/>
+                    <TextBlock Margin="0,5,0,0">
 						<Run>Active Theme Background Task Last Run: </Run>
-						<Run Text="{Binding ActiveThemeLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
+						<Run Text="{Binding ActiveThemeTaskLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
 					</TextBlock>
-				</StackPanel>
+                    <TextBlock Margin="0,5,0,0">
+						<Run>File Discovery Background Task Last Run: </Run>
+						<Run Text="{Binding FileDiscoveryTaskLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
+                    </TextBlock>
+                </StackPanel>
 				
 				<StackPanel Orientation="Vertical" Margin="0,20,0,0">
 					<TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />

@@ -18,12 +18,12 @@ namespace WallpaperManager.Services
         KillerrinStudiosToolkit.UserProfile.WallpaperManager m_wallpaperManager = new KillerrinStudiosToolkit.UserProfile.WallpaperManager();
         ActiveDesktopThemeSetting m_activeDesktopThemeSetting = new ActiveDesktopThemeSetting();
         ActiveDesktopThemeHistorySetting m_activeDesktopThemeHistorySetting = new ActiveDesktopThemeHistorySetting();
-        ActiveDesktopThemeLastRunSetting m_activeDesktopThemeLastRunSetting = new ActiveDesktopThemeLastRunSetting();
+        ActiveDesktopThemeNextRunSetting m_activeDesktopThemeNextRunSetting = new ActiveDesktopThemeNextRunSetting();
 
         LockscreenManager m_lockscreenManager = new LockscreenManager();
         ActiveLockscreenThemeSetting m_activeLockscreenThemeSetting = new ActiveLockscreenThemeSetting();
         ActiveLockscreenThemeHistorySetting m_activeLockscreenThemeHistorySetting = new ActiveLockscreenThemeHistorySetting();
-        ActiveLockscreenThemeLastRunSetting m_activeLockscreenThemeLastRunSetting = new ActiveLockscreenThemeLastRunSetting();
+        ActiveLockscreenThemeNextRunSetting m_activeLockscreenThemeNextRunSetting = new ActiveLockscreenThemeNextRunSetting();
 
         public ActiveThemeService()
         {
@@ -51,7 +51,7 @@ namespace WallpaperManager.Services
             if (!ServiceEnabled) return;
             m_activeDesktopThemeSetting.RevertToDefault();
             m_activeDesktopThemeHistorySetting.RevertToDefault();
-            m_activeDesktopThemeLastRunSetting.RevertToDefault();
+            m_activeDesktopThemeNextRunSetting.RevertToDefault();
             m_wallpaperManager.DeleteFilesInFolders();
         }
         public void DeselectActiveLockscreenTheme()
@@ -59,7 +59,7 @@ namespace WallpaperManager.Services
             if (!ServiceEnabled) return;
             m_activeLockscreenThemeSetting.RevertToDefault();
             m_activeLockscreenThemeHistorySetting.RevertToDefault();
-            m_activeLockscreenThemeLastRunSetting.RevertToDefault();
+            m_activeLockscreenThemeNextRunSetting.RevertToDefault();
             m_lockscreenManager.DeleteFilesInFolders();
         }
         #endregion
@@ -190,6 +190,9 @@ namespace WallpaperManager.Services
         }
         public async Task NextDesktopBackground(string path)
         {
+            var activeDesktopTheme = GetActiveDesktopTheme();
+            if (activeDesktopTheme == null) return;
+
             // Get the Storage File
             StorageTask storageTask = new StorageTask();
             var file = await storageTask.GetFileFromPath(new Uri(path));
@@ -201,7 +204,7 @@ namespace WallpaperManager.Services
             {
                 // Add it to the history if successful
                 m_activeDesktopThemeHistorySetting.Add(path);
-                m_activeDesktopThemeLastRunSetting.Value = DateTime.UtcNow;
+                m_activeDesktopThemeNextRunSetting.Value = DateTime.UtcNow.Add(activeDesktopTheme.WallpaperChangeFrequency);
                 Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Successfully Changed Image");
             }
             else { Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Failed"); }
@@ -221,13 +224,16 @@ namespace WallpaperManager.Services
         }
         public async Task NextLockscreenBackground(string path)
         {
+            var activeLockscreenTheme = GetActiveLockscreenTheme();
+            if (activeLockscreenTheme == null) return;
+
             // Set the Lockscreen
             m_activeLockscreenThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
             if (await m_lockscreenManager.SetImageFromFileSystem(path))
             {
                 // Add it to the history if successful
                 m_activeLockscreenThemeHistorySetting.Add(path);
-                m_activeLockscreenThemeLastRunSetting.Value = DateTime.UtcNow;
+                m_activeLockscreenThemeNextRunSetting.Value = DateTime.UtcNow.Add(activeLockscreenTheme.WallpaperChangeFrequency);
                 Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Successfully Changed Image");
             }
             else { Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Failed"); }

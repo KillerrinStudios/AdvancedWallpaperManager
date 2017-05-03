@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class ActiveLockscreenThemeLastRunSetting : ApplicationSettingBase<DateTime>
+    public class ActiveLockscreenThemeNextRunSetting : ApplicationSettingBase<DateTime>
     {
         public override DateTime Value
         {
@@ -49,8 +49,8 @@ namespace WallpaperManager.Models.Settings
             get { return ValueLocalTime.ToString(); }
         }
 
-        public ActiveLockscreenThemeLastRunSetting()
-            : base(StorageTask.LocalSettings, "ActiveLockscreenThemeLastRun", DateTime.MinValue)
+        public ActiveLockscreenThemeNextRunSetting()
+            : base(StorageTask.LocalSettings, "ActiveLockscreenThemeNextRun", DateTime.MinValue)
         {
         }
 

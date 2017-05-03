@@ -35,14 +35,12 @@ namespace WallpaperManager.BackgroundTasks
             var desktopTheme = activeThemeService.GetActiveDesktopTheme();
             if (desktopTheme != null)
             {
-                var desktopLastRunSetting = new ActiveDesktopThemeLastRunSetting();
-                DateTime nextRun = desktopLastRunSetting.Value.Add(desktopTheme.WallpaperChangeFrequency);
+                var desktopNextRunSetting = new ActiveDesktopThemeNextRunSetting();
 
-                if (nextRun <= DateTime.UtcNow)
+                if (DateTime.UtcNow >= desktopNextRunSetting.Value)
                 {
                     Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Changing Desktop Background");
                     await activeThemeService.NextDesktopBackground();
-                    desktopLastRunSetting.Value = DateTime.UtcNow;
                 }
                 else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Not enough time passed");
             }
@@ -51,20 +49,18 @@ namespace WallpaperManager.BackgroundTasks
             var lockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
             if (lockscreenTheme != null)
             {
-                var lockscreenLastRunSetting = new ActiveLockscreenThemeLastRunSetting();
-                DateTime nextRun = lockscreenLastRunSetting.Value.Add(lockscreenTheme.WallpaperChangeFrequency);
-                if (nextRun <= DateTime.UtcNow)
+                var lockscreenNextRunSetting = new ActiveLockscreenThemeNextRunSetting();
+                if (DateTime.UtcNow >= lockscreenNextRunSetting.Value)
                 {
                     Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Changing Lockscreen Background");
                     await activeThemeService.NextLockscreenBackground();
-                    lockscreenLastRunSetting.Value = DateTime.UtcNow;
                 }
                 else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Not enough time passed");
             }
 
             // Update the ActiveThemeLastRun
-            ActiveThemeLastRunSetting activeThemeLastRun = new ActiveThemeLastRunSetting();
-            activeThemeLastRun.Value = DateTime.UtcNow;
+            ActiveThemeTaskLastRunSetting activeThemeTaskLastRun = new ActiveThemeTaskLastRunSetting();
+            activeThemeTaskLastRun.Value = DateTime.UtcNow;
 
             // Trigger the task is compelted
             Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - {nameof(Run)} - Completed");

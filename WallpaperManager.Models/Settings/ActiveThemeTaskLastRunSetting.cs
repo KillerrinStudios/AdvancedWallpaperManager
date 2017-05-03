@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace WallpaperManager.Models.Settings
 {
-    public class ActiveDesktopThemeLastRunSetting : ApplicationSettingBase<DateTime>
+    public class ActiveThemeTaskLastRunSetting : ApplicationSettingBase<DateTime>
     {
         public override DateTime Value
         {
@@ -49,8 +49,8 @@ namespace WallpaperManager.Models.Settings
             get { return ValueLocalTime.ToString(); }
         }
 
-        public ActiveDesktopThemeLastRunSetting()
-            : base(StorageTask.LocalSettings, "ActiveDesktopThemeLastRun", DateTime.MinValue)
+        public ActiveThemeTaskLastRunSetting()
+            : base(StorageTask.LocalSettings, "ActiveThemeTaskLastRun", DateTime.MinValue)
         {
         }
 

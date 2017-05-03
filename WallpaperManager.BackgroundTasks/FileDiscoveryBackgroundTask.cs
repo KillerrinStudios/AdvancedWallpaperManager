@@ -90,6 +90,10 @@ namespace WallpaperManager.BackgroundTasks
             var fileDiscoveryLastRunSetting = new FileDiscoveryLastRunSetting();
             fileDiscoveryLastRunSetting.Value = DateTime.UtcNow;
 
+            // Update the FileDiscovery Background Task Last Run
+            var fileDiscoveryTaskLastRunSetting = new FileDiscoveryTaskLastRunSetting();
+            fileDiscoveryTaskLastRunSetting.Value = DateTime.UtcNow;
+
             Debug.WriteLine($"{nameof(FileDiscoveryBackgroundTask)} - {nameof(Run)} - Completed");
             _deferral.Complete();
         }
