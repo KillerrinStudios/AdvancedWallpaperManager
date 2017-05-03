@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KillerrinStudiosToolkit.Settings;
 using Windows.Storage;
+using System.Collections.ObjectModel;
 
 namespace WallpaperManager.Models.Settings
 {
@@ -30,7 +31,7 @@ namespace WallpaperManager.Models.Settings
         }
 
         public ActiveDesktopThemeHistorySetting()
-            :base(StorageTask.LocalSettings, "ActiveDesktopThemeHistory", new List<string>())
+                : base(StorageTask.LocalSettings, "ActiveDesktopThemeHistory", new List<string>())
         {
         }
 

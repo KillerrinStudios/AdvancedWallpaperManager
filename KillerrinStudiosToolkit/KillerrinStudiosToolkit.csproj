@@ -120,6 +120,7 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringPathToBitmapImageConverter.cs" />
     <Compile Include="Converters\ObjectStringConverter.cs" />
     <Compile Include="Converters\OppositeBooleanConverter.cs" />
     <Compile Include="Converters\RelativeDateTimeConverter.cs" />
@@ -128,9 +129,11 @@
     <Compile Include="Helpers\AdaptiveTriggerConsts.cs" />
     <Compile Include="Helpers\DateTimeExtensions.cs" />
     <Compile Include="Helpers\IEnumerableExtensions.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="KillerrinApplicationData.cs" />
+    <Compile Include="Models\TaskCompletionNotifier.cs" />
     <Compile Include="UserProfile\PersonalizationManagerBase.cs" />
     <Compile Include="UserProfile\WallpaperManager.cs" />
     <Compile Include="UserProfile\LockscreenManager.cs" />

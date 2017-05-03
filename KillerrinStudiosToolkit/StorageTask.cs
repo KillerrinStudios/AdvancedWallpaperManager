@@ -42,7 +42,7 @@ namespace KillerrinStudiosToolkit
                 case StorageLocationPrefix.LocalFolder: return new Uri(LocalFolderPrefix + path, UriKind.Absolute);
                 case StorageLocationPrefix.RoamingFolder: return new Uri(RoamingFolderPrefix + path, UriKind.Absolute);
                 case StorageLocationPrefix.TempFolder: return new Uri(TempFolderPrefix + path, UriKind.Absolute);
-                case StorageLocationPrefix.None: 
+                case StorageLocationPrefix.None:
                 default: return new Uri(path, UriKind.RelativeOrAbsolute);
             }
         }
@@ -63,6 +63,11 @@ namespace KillerrinStudiosToolkit
 
         public static StorageFolder RoamingFolder { get { return ApplicationData.Current.RoamingFolder; } }
         public static ulong RoamingStorageQuota { get { return ApplicationData.Current.RoamingStorageQuota; } }
+
+        public static StorageFolder DocumentsLibrary { get { return KnownFolders.DocumentsLibrary; } }
+        public static StorageFolder PicturesLibrary { get { return KnownFolders.PicturesLibrary; } }
+        public static StorageFolder MusicLibrary { get { return KnownFolders.MusicLibrary; } }
+        public static StorageFolder VideoLibrary { get { return KnownFolders.VideosLibrary; } }
         #endregion
 
         #region Settings Data Containers
@@ -197,10 +202,6 @@ namespace KillerrinStudiosToolkit
         #region Save from Server
         public async Task<bool> SaveFileFromServer(StorageFolder folder, string fileName, Uri serverURI)
         {
-            //if (folder == null) return false;
-            //if (string.IsNullOrWhiteSpace(fileName)) return false;
-            //if (serverURI == null) return false;
-
             try
             {
                 Debug.WriteLine("Opening Client");
@@ -217,6 +218,11 @@ namespace KillerrinStudiosToolkit
         #endregion
 
         #region Read
+        public async Task<IRandomAccessStream> OpenFileStream(StorageFile file, FileAccessMode fileAccessMode = FileAccessMode.Read)
+        {
+            return await file.OpenAsync(fileAccessMode);
+        }
+
         public async Task<IBuffer> ReadFileBuffer(StorageFile file)
         {
             if (file == null) return null;
@@ -242,7 +248,7 @@ namespace KillerrinStudiosToolkit
         #endregion
 
         #region Move/Copy
-        public async Task<StorageFile> Copy (StorageFile item, StorageFolder destination)
+        public async Task<StorageFile> Copy(StorageFile item, StorageFolder destination)
         {
             return await item.CopyAsync(destination);
         }
@@ -258,6 +264,24 @@ namespace KillerrinStudiosToolkit
             var storageItem = await folder.TryGetItemAsync(name);
             return storageItem;
         }
+
+        #region Count
+        public async Task<int> FolderCount(StorageFolder folder)
+        {
+            var allItems = await GetAllFoldersInFolder(folder);
+            return allItems.Count;
+        }
+        public async Task<int> FileCount(StorageFolder folder)
+        {
+            var allItems = await GetAllFilesInFolder(folder);
+            return allItems.Count;
+        }
+        public async Task<int> ItemCount(StorageFolder folder)
+        {
+            var allItems = await GetAllItemsInFolder(folder, CommonFileQuery.DefaultQuery);
+            return allItems.Count;
+        }
+        #endregion
 
         #region Delete
         public async Task<bool> DeleteItem(IStorageItem item, StorageDeleteOption deletionOption)
@@ -297,6 +321,20 @@ namespace KillerrinStudiosToolkit
         {
             return (IStorageItem)folder;
         }
+
+        public static async Task<Windows.UI.Xaml.Media.Imaging.BitmapImage> StorageFileToBitmapImage(StorageFile file)
+        {
+            if (file == null) return null;
+
+            using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+            {
+                Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage = new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                bitmapImage.SetSource(fileStream);
+                return bitmapImage;
+            }
+        }
+
+
         #endregion
 
         #region Open

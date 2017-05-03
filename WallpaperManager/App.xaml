@@ -21,5 +21,6 @@
         <Converters:InverseNullToVisibilityConverter x:Key="InverseNullToVisibility"/>
         <Converters:OppositeBooleanConverter x:Key="OppositeBooleanConverter"/>
         <Converters:RelativeDateTimeConverter x:Key="RelativeDateTime"/>
+        <Converters:StringPathToBitmapImageConverter x:Key="StringPathToBitmapImage"/>
     </Application.Resources>
 </Application>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using KillerrinStudiosToolkit.Settings;
 using Windows.Storage;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace WallpaperManager.Models.Settings
 {
@@ -38,7 +39,7 @@ namespace WallpaperManager.Models.Settings
         {
             // Save the Value to a Temp variable then Enqueue the item
             var tmpValue = Value;
-            tmpValue.Insert(0, str);
+            tmpValue.Insert(0, str); 
 
             // Restrict to the MAX_ITEMS
             while (tmpValue.Count > MAX_ITEMS)

@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using KillerrinStudiosToolkit.UserProfile;
 
 namespace WallpaperManager
 {
@@ -35,6 +36,9 @@ namespace WallpaperManager
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            // Setup App Consts
+            SetupAppConsts();
+
             // Migrate and Update the DB
             using (var db = new WallpaperManagerContext())
             {
@@ -43,6 +47,11 @@ namespace WallpaperManager
 
             // Register the Background Tasks
             RegisterBackgroundTasks();
+        }
+
+        private void SetupAppConsts()
+        {
+            PersonalizationManagerBase.ClearImagesFolderEveryXImages = 10;
         }
 
         private async void RegisterBackgroundTasks()

@@ -13,6 +13,7 @@ namespace KillerrinStudiosToolkit.UserProfile
         public virtual bool IsSupported { get { return UserProfilePersonalizationSettings.IsSupported(); } }
         public bool IsSetupComplete { get { return ImagesFolder != null; } }
 
+        public static int ClearImagesFolderEveryXImages = 0;
         public StorageFolder ImagesFolder { get; private set; }
         public string ImagesFolderName { get; private set; }
 
@@ -29,6 +30,10 @@ namespace KillerrinStudiosToolkit.UserProfile
 
         protected abstract Task<StorageFolder> SetupImageFolder();
         public virtual async void DeleteFilesInFolders()
+        {
+            await DeleteFilesInFoldersAsync();
+        }
+        public virtual async Task DeleteFilesInFoldersAsync()
         {
             if (!IsSetupComplete) return;
             await StorageTask.Instance.DeleteAllFilesInFolder(ImagesFolder);
@@ -51,6 +56,13 @@ namespace KillerrinStudiosToolkit.UserProfile
         {
             if (!IsSetupComplete) return false;
 
+            if (ClearImagesFolderEveryXImages != 0)
+            {
+                int fileCount = await StorageTask.Instance.FileCount(ImagesFolder);
+                if (fileCount > ClearImagesFolderEveryXImages)
+                    await DeleteFilesInFoldersAsync();
+            }
+
             StorageFile file = null;
             if (await StorageTask.Instance.SaveFileFromServer(ImagesFolder, filename, internetImageUrl))
                 file = await StorageTask.Instance.GetFile(ImagesFolder, filename);
@@ -66,6 +78,13 @@ namespace KillerrinStudiosToolkit.UserProfile
         public virtual async Task<bool> SetImageFromFileSystem(string path)
         {
             if (!IsSetupComplete) return false;
+
+            if (ClearImagesFolderEveryXImages != 0)
+            {
+                int fileCount = await StorageTask.Instance.FileCount(ImagesFolder);
+                if (fileCount > ClearImagesFolderEveryXImages)
+                    await DeleteFilesInFoldersAsync();
+            }
 
             var tmpFile = await StorageFile.GetFileFromPathAsync(path);
             if (tmpFile == null) return false;

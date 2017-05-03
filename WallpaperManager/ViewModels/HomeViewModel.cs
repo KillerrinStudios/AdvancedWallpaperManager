@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Controls;
 using System.IO;
 using KillerrinStudiosToolkit.UserProfile;
 using WallpaperManager.Services;
+using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace WallpaperManager.ViewModels
 {
@@ -25,7 +27,9 @@ namespace WallpaperManager.ViewModels
         public ActiveLockscreenThemeSetting ActiveLockscreenThemeSetting { get; } = new ActiveLockscreenThemeSetting();
         public ActiveDesktopThemeHistorySetting ActiveDesktopThemeHistorySetting { get; } = new ActiveDesktopThemeHistorySetting();
         public ActiveLockscreenThemeHistorySetting ActiveLockscreenThemeHistorySetting { get; } = new ActiveLockscreenThemeHistorySetting();
+        private ActiveThemeService m_activeThemeService = new ActiveThemeService();
 
+        #region Active Themes
         WallpaperTheme m_activeWallpaperTheme = null;
         public WallpaperTheme ActiveWallpaperTheme
         {
@@ -47,10 +51,32 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(ActiveLockscreenTheme));
             }
         }
+        #endregion
 
-        public Windows.UI.Xaml.Media.Imaging.BitmapImage CurrentLockscreenImage { get { return LockscreenManager.GetLockscreenBitMapImage(); } }
+        #region Recent Images
+        private ObservableCollection<BitmapImage> m_activeDesktopThemeRecentHistory = new ObservableCollection<BitmapImage>();
+        public ObservableCollection<BitmapImage> ActiveDesktopThemeRecentHistory
+        {
+            get { return m_activeDesktopThemeRecentHistory; }
+            set
+            {
+                m_activeDesktopThemeRecentHistory = value;
+                RaisePropertyChanged(nameof(ActiveDesktopThemeRecentHistory));
+            }
+        }
+        private ObservableCollection<BitmapImage> m_activeLockscreenThemeRecentHistory = new ObservableCollection<BitmapImage>();
+        public ObservableCollection<BitmapImage> ActiveLockscreenThemeRecentHistory
+        {
+            get { return m_activeLockscreenThemeRecentHistory; }
+            set
+            {
+                m_activeLockscreenThemeRecentHistory = value;
+                RaisePropertyChanged(nameof(ActiveLockscreenThemeRecentHistory));
+            }
+        }
+        #endregion
 
-        private ActiveThemeService m_activeThemeService = new ActiveThemeService();
+        #region Current Images
         private string m_currentWallpaperImagePath = "";
         public string CurrentWallpaperImagePath
         {
@@ -62,6 +88,20 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        public Windows.UI.Xaml.Media.Imaging.BitmapImage CurrentLockscreenImage { get { return LockscreenManager.GetLockscreenBitMapImage(); } }
+        private string m_currentLockscreenImagePath = "";
+        public string CurrentLockscreenImagePath
+        {
+            get { return m_currentLockscreenImagePath; }
+            set
+            {
+                m_currentLockscreenImagePath = value;
+                RaisePropertyChanged(nameof(CurrentLockscreenImagePath));
+            }
+        }
+        #endregion
+
+        #region Next Images
         private string m_nextWallpaperImagePath = "";
         public string NextWallpaperImagePath
         {
@@ -73,16 +113,17 @@ namespace WallpaperManager.ViewModels
             }
         }
 
-        private string m_currentLockscreenImagePath = "";
-        public string CurrentLockscreenImagePath
+        private Windows.UI.Xaml.Media.Imaging.BitmapImage m_nextWallpaperBitmapImage = null;
+        public Windows.UI.Xaml.Media.Imaging.BitmapImage NextWallpaperBitmapImage
         {
-            get { return m_currentLockscreenImagePath; }
+            get { return m_nextWallpaperBitmapImage; }
             set
             {
-                m_currentLockscreenImagePath = value;
-                RaisePropertyChanged(nameof(CurrentLockscreenImagePath));
+                m_nextWallpaperBitmapImage = value;
+                RaisePropertyChanged(nameof(NextWallpaperBitmapImage));
             }
         }
+
         private string m_nextLockscreenImagePath = "";
         public string NextLockscreenImagePath
         {
@@ -93,6 +134,17 @@ namespace WallpaperManager.ViewModels
                 RaisePropertyChanged(nameof(NextLockscreenImagePath));
             }
         }
+        private Windows.UI.Xaml.Media.Imaging.BitmapImage m_nextLockscreenBitmapImage = null;
+        public Windows.UI.Xaml.Media.Imaging.BitmapImage NextLockscreenBitmapImage
+        {
+            get { return m_nextLockscreenBitmapImage; }
+            set
+            {
+                m_nextLockscreenBitmapImage = value;
+                RaisePropertyChanged(nameof(NextLockscreenBitmapImage));
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -116,7 +168,7 @@ namespace WallpaperManager.ViewModels
 
         }
 
-        public override void OnNavigatedTo()
+        public async override void OnNavigatedTo()
         {
             ActiveWallpaperTheme = m_activeThemeService.GetActiveDesktopTheme();
             ActiveLockscreenTheme = m_activeThemeService.GetActiveLockscreenTheme();
@@ -129,6 +181,11 @@ namespace WallpaperManager.ViewModels
 
             Debug.WriteLine($"Active Wallpaper Theme: {ActiveDesktopThemeSetting.Value} - {ActiveWallpaperTheme?.ID} - {ActiveWallpaperTheme?.Name}");
             Debug.WriteLine($"Active Lockscreen Theme: {ActiveLockscreenThemeSetting.Value} - {ActiveLockscreenTheme?.ID} - {ActiveLockscreenTheme?.Name}");
+
+            NextWallpaperBitmapImage = await GetImage(NextWallpaperImagePath);
+            NextLockscreenBitmapImage = await GetImage(NextLockscreenImagePath);
+            RefreshRecentWallpaper();
+            RefreshRecentLockscreen();
         }
 
         public override void OnNavigatedFrom()
@@ -140,6 +197,56 @@ namespace WallpaperManager.ViewModels
         {
 
         }
+
+        private async Task<Windows.UI.Xaml.Media.Imaging.BitmapImage> GetImage(string path)
+        {
+            var file = await StorageTask.Instance.GetFileFromPath(new Uri(path));
+            return await StorageTask.StorageFileToBitmapImage(file);
+        }
+
+        #region Refresh Recent
+        public RelayCommand RefreshRecentWallpaperCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    RefreshRecentWallpaper();
+                });
+            }
+        }
+        public async void RefreshRecentWallpaper()
+        {
+            ActiveDesktopThemeRecentHistory = new ObservableCollection<BitmapImage>();
+            var tmpHistory = ActiveDesktopThemeHistorySetting.Value;
+            foreach (var item in tmpHistory)
+            {
+                var img = await GetImage(item);
+                ActiveDesktopThemeRecentHistory.Add(img);
+            }
+        }
+
+        public RelayCommand RefreshRecentLockscreenCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    RefreshRecentLockscreen();
+                });
+            }
+        }
+        public async void RefreshRecentLockscreen()
+        {
+            ActiveLockscreenThemeRecentHistory = new ObservableCollection<BitmapImage>();
+            var tmpHistory = ActiveLockscreenThemeHistorySetting.Value;
+            foreach (var item in tmpHistory)
+            {
+                var img = await GetImage(item);
+                ActiveLockscreenThemeRecentHistory.Add(img);
+            }
+        }
+        #endregion
 
         #region Next Commands
         public RelayCommand NextDesktopWallpaperCommand
@@ -158,6 +265,9 @@ namespace WallpaperManager.ViewModels
             CurrentWallpaperImagePath = NextWallpaperImagePath;
             NextWallpaperImagePath = m_activeThemeService.GetNextDesktopImagePath();
             ActiveDesktopThemeHistorySetting.RaiseValuePropertyChanged();
+
+            NextWallpaperBitmapImage = await GetImage(NextWallpaperImagePath);
+            RefreshRecentWallpaper();
         }
 
         public RelayCommand NextLockscreenCommand
@@ -177,7 +287,10 @@ namespace WallpaperManager.ViewModels
             CurrentLockscreenImagePath = NextLockscreenImagePath;
             NextLockscreenImagePath = m_activeThemeService.GetNextLockscreenImagePath();
             ActiveLockscreenThemeHistorySetting.RaiseValuePropertyChanged();
+
+            NextLockscreenBitmapImage = await GetImage(NextLockscreenImagePath);
             RaisePropertyChanged(nameof(CurrentLockscreenImage));
+            RefreshRecentLockscreen();
         }
         #endregion
 
