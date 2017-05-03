@@ -11,6 +11,8 @@ namespace WallpaperManager.BackgroundTasks
 {
     public class ActiveThemeBackgroundTaskHelper : BackgroundTaskHelperBase
     {
+        ActiveThemeLastRunSetting m_activeThemeLastRun = new ActiveThemeLastRunSetting();
+
         public ActiveThemeBackgroundTaskHelper()
             :base("ActiveTheme", $"{nameof(WallpaperManager)}.{nameof(BackgroundTasks)}.{nameof(ActiveThemeBackgroundTask)}")
         {

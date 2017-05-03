@@ -119,11 +119,14 @@
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\ActiveDesktopThemeHistorySetting.cs" />
+    <Compile Include="Settings\ActiveThemeLastRunSetting.cs" />
     <Compile Include="Settings\ActiveDesktopThemeSetting.cs" />
     <Compile Include="Settings\ActiveLockscreenThemeHistorySetting.cs" />
+    <Compile Include="Settings\ActiveDesktopThemeLastRunSetting.cs" />
     <Compile Include="Settings\ActiveLockscreenThemeSetting.cs" />
     <Compile Include="Settings\FileDiscoveryEnableSetting.cs" />
     <Compile Include="Settings\FileDiscoveryFrequencySetting.cs" />
+    <Compile Include="Settings\ActiveLockscreenThemeLastRunSetting.cs" />
     <Compile Include="Settings\FileDiscoveryLastRunSetting.cs" />
     <Compile Include="WallpaperDirectory.cs" />
     <Compile Include="WallpaperManagerContext.cs" />

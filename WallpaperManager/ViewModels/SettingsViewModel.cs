@@ -23,6 +23,7 @@ namespace WallpaperManager.ViewModels
         public FileDiscoveryEnableSetting FileDiscoveryEnabled { get; } = new FileDiscoveryEnableSetting();
         public FileDiscoveryFrequencySetting FileDiscoveryFrequency { get; } = new FileDiscoveryFrequencySetting();
         public FileDiscoveryLastRunSetting FileDiscoveryLastRun { get; } = new FileDiscoveryLastRunSetting();
+        public ActiveThemeLastRunSetting ActiveThemeLastRun { get; } = new ActiveThemeLastRunSetting();
 
         public List<int> DaysList { get; } = new List<int>();
         private int m_frequencyDays = 0;

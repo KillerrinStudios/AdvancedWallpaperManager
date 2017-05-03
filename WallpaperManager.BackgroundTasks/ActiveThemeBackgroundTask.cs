@@ -15,11 +15,6 @@ namespace WallpaperManager.BackgroundTasks
 {
     public sealed class ActiveThemeBackgroundTask : IBackgroundTask
     {
-        public static bool IsTaskAllowedToRun()
-        {
-            return true;
-        }
-
         BackgroundTaskDeferral _deferral;
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -32,46 +27,44 @@ namespace WallpaperManager.BackgroundTasks
 
             // Create the deferal and jump into the Task
             _deferral = taskInstance.GetDeferral();
-            using (var context = new WallpaperManagerContext())
+
+            // Create the Active theme Service
+            var activeThemeService = new ActiveThemeService();
+
+            // Preform the service for the Active Desktop Theme
+            var desktopTheme = activeThemeService.GetActiveDesktopTheme();
+            if (desktopTheme != null)
             {
-                var themeRepo = new WallpaperThemeRepository(context);
-                var activeThemeService = new ActiveThemeService();
+                var desktopLastRunSetting = new ActiveDesktopThemeLastRunSetting();
+                DateTime nextRun = desktopLastRunSetting.Value.Add(desktopTheme.WallpaperChangeFrequency);
 
-                // Preform the service for the Active Desktop Theme
-                Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Started");
-                var desktopTheme = activeThemeService.GetActiveDesktopTheme();
-                if (desktopTheme != null)
+                if (nextRun <= DateTime.UtcNow)
                 {
-                    var desktopLastRunSetting = new ActiveDesktopThemeLastRunSetting();
-                    DateTime nextRun = desktopLastRunSetting.Value + desktopTheme.WallpaperChangeFrequency;
-
-                    if (nextRun <= DateTime.UtcNow)
-                    {
-                        Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Changing Desktop Background");
-                        await activeThemeService.NextDesktopBackground();
-                        desktopLastRunSetting.Value = DateTime.UtcNow;
-                    }
-                    else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Not enough time passed");
+                    Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Changing Desktop Background");
+                    await activeThemeService.NextDesktopBackground();
+                    desktopLastRunSetting.Value = DateTime.UtcNow;
                 }
-                Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Completed");
-
-                // Preform the service for the Active Lockscreen Theme
-                Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Started");
-                var lockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
-                if (lockscreenTheme != null)
-                {
-                    var lockscreenLastRunSetting = new ActiveLockscreenThemeLastRunSetting();
-                    DateTime nextRun = lockscreenLastRunSetting.Value + lockscreenTheme.WallpaperChangeFrequency;
-                    if (nextRun <= DateTime.UtcNow)
-                    {
-                        Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Changing Desktop Background");
-                        await activeThemeService.NextLockscreenBackground();
-                        lockscreenLastRunSetting.Value = DateTime.UtcNow;
-                    }
-                    else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Not enough time passed");
-                }
-                Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Completed");
+                else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Not enough time passed");
             }
+
+            // Preform the service for the Active Lockscreen Theme
+            var lockscreenTheme = activeThemeService.GetActiveLockscreenTheme();
+            if (lockscreenTheme != null)
+            {
+                var lockscreenLastRunSetting = new ActiveLockscreenThemeLastRunSetting();
+                DateTime nextRun = lockscreenLastRunSetting.Value.Add(lockscreenTheme.WallpaperChangeFrequency);
+                if (nextRun <= DateTime.UtcNow)
+                {
+                    Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Changing Lockscreen Background");
+                    await activeThemeService.NextLockscreenBackground();
+                    lockscreenLastRunSetting.Value = DateTime.UtcNow;
+                }
+                else Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Not enough time passed");
+            }
+
+            // Update the ActiveThemeLastRun
+            ActiveThemeLastRunSetting activeThemeLastRun = new ActiveThemeLastRunSetting();
+            activeThemeLastRun.Value = DateTime.UtcNow;
 
             // Trigger the task is compelted
             Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - {nameof(Run)} - Completed");
