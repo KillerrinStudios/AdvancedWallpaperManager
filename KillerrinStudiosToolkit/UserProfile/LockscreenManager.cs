@@ -53,12 +53,17 @@ namespace KillerrinStudiosToolkit.UserProfile
             }
 
             return true;
-        }    
+        }
 
         public static IRandomAccessStream GetLockscreenImageStream()
         {
-            IRandomAccessStream imageStream = LockScreen.GetImageStream();
-            return imageStream;
+            try
+            {
+                IRandomAccessStream imageStream = LockScreen.GetImageStream();
+                return imageStream;
+            }
+            catch (Exception) { }
+            return null;
         }
         public static BitmapImage GetLockscreenBitMapImage()
         {

@@ -104,7 +104,7 @@
 					<Grid Visibility="{Binding ActiveWallpaperTheme, Converter={StaticResource InverseNullToVisibility}}">
 						<StackPanel Orientation="Vertical">
 							<TextBlock Text="You do not have an Active Desktop Wallpaper Theme Selected" TextWrapping="WrapWholeWords"/>
-							<TextBlock Text="To select a theme, go to the Themes List page, Right Click/Long Press on the Theme you wish to select and Set as Active" TextWrapping="WrapWholeWords"/>
+							<TextBlock Text="To select a theme, go to the Themes List page, Right Click/Long Press on the Theme you wish to select and press Set as Active" TextWrapping="WrapWholeWords"/>
 						</StackPanel>
 					</Grid>
 				</StackPanel>
@@ -159,10 +159,15 @@
 					<Grid Visibility="{Binding ActiveLockscreenTheme, Converter={StaticResource InverseNullToVisibility}}">
 						<StackPanel Orientation="Vertical">
 							<TextBlock Text="You do not have an Active Lockscreen Theme Selected" TextWrapping="WrapWholeWords"/>
-							<TextBlock Text="To select a theme, go to the Themes List page, Right Click/Long Press on the Theme you wish to select and Set as Active" TextWrapping="WrapWholeWords"/>
+							<TextBlock Text="To select a theme, go to the Themes List page, Right Click/Long Press on the Theme you wish to select and press Set as Active" TextWrapping="WrapWholeWords"/>
 						</StackPanel>
 					</Grid>
 				</StackPanel>
+
+				<Rectangle Height="1" HorizontalAlignment="Stretch" Fill="White" Margin="20,20"/>
+
+				<TextBlock Text="Current Lockscreen Image" TextAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,20,0,0"/>
+				<Image x:Name="CurrentLockscreenImage" MaxHeight="500" MaxWidth="500" Margin="0,5,0,0" Source="{Binding CurrentLockscreenImage}" />
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

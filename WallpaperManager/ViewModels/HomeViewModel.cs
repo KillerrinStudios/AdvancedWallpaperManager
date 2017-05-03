@@ -48,6 +48,7 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        public Windows.UI.Xaml.Media.Imaging.BitmapImage CurrentLockscreenImage { get { return LockscreenManager.GetLockscreenBitMapImage(); } }
 
         private ActiveThemeService m_activeThemeService = new ActiveThemeService();
         private string m_currentWallpaperImagePath = "";
@@ -176,6 +177,7 @@ namespace WallpaperManager.ViewModels
             CurrentLockscreenImagePath = NextLockscreenImagePath;
             NextLockscreenImagePath = m_activeThemeService.GetNextLockscreenImagePath();
             ActiveLockscreenThemeHistorySetting.RaiseValuePropertyChanged();
+            RaisePropertyChanged(nameof(CurrentLockscreenImage));
         }
         #endregion
 

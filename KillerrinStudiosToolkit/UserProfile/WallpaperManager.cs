@@ -45,7 +45,7 @@ namespace KillerrinStudiosToolkit.UserProfile
             }
             catch (Exception e)
             {
-                DebugTools.PrintOutException(e, "Lockscreen: Set Image");
+                DebugTools.PrintOutException(e, "Wallpaper: Set Image");
                 return false;
             }
         }
