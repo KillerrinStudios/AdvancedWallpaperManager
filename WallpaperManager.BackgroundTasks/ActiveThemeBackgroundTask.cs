@@ -37,7 +37,7 @@ namespace WallpaperManager.BackgroundTasks
             {
                 var desktopNextRunSetting = new ActiveDesktopThemeNextRunSetting();
 
-                if (DateTime.UtcNow >= desktopNextRunSetting.Value)
+                if (DateTime.UtcNow >= desktopNextRunSetting.Value && desktopTheme.WallpaperChangeFrequency.TotalMilliseconds > 0.0)
                 {
                     Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Desktop - Changing Desktop Background");
                     await activeThemeService.NextDesktopBackground();
@@ -50,7 +50,7 @@ namespace WallpaperManager.BackgroundTasks
             if (lockscreenTheme != null)
             {
                 var lockscreenNextRunSetting = new ActiveLockscreenThemeNextRunSetting();
-                if (DateTime.UtcNow >= lockscreenNextRunSetting.Value)
+                if (DateTime.UtcNow >= lockscreenNextRunSetting.Value && lockscreenTheme.WallpaperChangeFrequency.TotalMilliseconds > 0.0)
                 {
                     Debug.WriteLine($"{nameof(ActiveThemeBackgroundTask)} - Active Lockscreen - Changing Lockscreen Background");
                     await activeThemeService.NextLockscreenBackground();
