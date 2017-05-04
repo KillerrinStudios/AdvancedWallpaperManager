@@ -104,5 +104,19 @@ namespace AdvancedWallpaperManager.Pages
             var directory = btn.DataContext as WallpaperDirectory;
             ViewModel.RemoveDirectory(directory);
         }
+
+        private void ChangeWallpaperButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            FileDiscoveryCache cache = btn.DataContext as FileDiscoveryCache;
+            ViewModel.SetDesktopImage(cache);
+        }
+
+        private void ChangeLockscreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            FileDiscoveryCache cache = btn.DataContext as FileDiscoveryCache;
+            ViewModel.SetLockscreenImage(cache);
+        }
     }
 }

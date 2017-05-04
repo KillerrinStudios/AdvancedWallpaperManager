@@ -40,6 +40,8 @@ namespace AdvancedWallpaperManager.ViewModels
             }
         }
 
+        private ActiveThemeService m_activeThemeService = new ActiveThemeService();
+
         #region Settings
         private bool m_setActiveDesktopThemeButtonEnabled = true;
         public bool SetActiveDesktopThemeButtonEnabled
@@ -365,6 +367,17 @@ namespace AdvancedWallpaperManager.ViewModels
             WindowsThemeService service = new WindowsThemeService();
             await service.CreateWindowsTheme(Theme);
         }
+
+        #region Image Commands
+        public async void SetDesktopImage(FileDiscoveryCache cache)
+        {
+            await m_activeThemeService.NextDesktopBackground(cache.FilePath);
+        }
+        public async void SetLockscreenImage(FileDiscoveryCache cache)
+        {
+            await m_activeThemeService.NextLockscreenBackground(cache.FilePath);
+        }
+        #endregion
 
         #region Refresh
         public RelayCommand RefreshFileCacheCommand

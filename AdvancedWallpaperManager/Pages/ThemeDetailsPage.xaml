@@ -101,6 +101,10 @@
 																			</StackPanel>
 																		</Button>
 																	</StackPanel>
+																	<StackPanel Orientation="Vertical" Margin="0,10,0,0" HorizontalAlignment="Stretch">
+																		<Button Content="Set Wallpaper Background" HorizontalAlignment="Stretch" Click="ChangeWallpaperButton_Click"/>
+																		<Button Content="Set Lockscreen Background" HorizontalAlignment="Stretch" Click="ChangeLockscreenButton_Click" />
+																	</StackPanel>
 																</StackPanel>
 															</Flyout>
 														</FlyoutBase.AttachedFlyout>

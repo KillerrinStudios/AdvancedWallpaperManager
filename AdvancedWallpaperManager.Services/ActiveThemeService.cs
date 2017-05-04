@@ -241,6 +241,8 @@ namespace AdvancedWallpaperManager.Services
             var activeLockscreenTheme = GetActiveLockscreenTheme();
             if (activeLockscreenTheme == null) return;
 
+            Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Setting Path: {path}");
+
             // Set the Lockscreen
             m_activeLockscreenThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
             if (await m_lockscreenManager.SetImageFromFileSystem(path))
