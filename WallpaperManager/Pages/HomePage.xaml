@@ -166,7 +166,7 @@
 
 				<Rectangle Height="1" HorizontalAlignment="Stretch" Fill="White" Margin="20,20"/>
 
-				<TextBlock Text="Current Lockscreen Image" TextAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,20,0,0"/>
+				<TextBlock Text="Current Lockscreen Image" TextAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,0,0,0"/>
 				<Image x:Name="CurrentLockscreenImage" MaxHeight="500" MaxWidth="500" Margin="0,5,0,5" Source="{Binding CurrentLockscreenImage}" />
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed" Margin="0,5,0,5">
