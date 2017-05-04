@@ -118,7 +118,9 @@
     </Compile>
     <Compile Include="Migrations\WallpaperManagerContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\ActiveDesktopThemeCurrentWallpaperSetting.cs" />
     <Compile Include="Settings\ActiveDesktopThemeHistorySetting.cs" />
+    <Compile Include="Settings\ActiveLockscreenThemeCurrentWallpaperSetting.cs" />
     <Compile Include="Settings\ActiveThemeTaskLastRunSetting.cs" />
     <Compile Include="Settings\ActiveDesktopThemeSetting.cs" />
     <Compile Include="Settings\ActiveLockscreenThemeHistorySetting.cs" />
