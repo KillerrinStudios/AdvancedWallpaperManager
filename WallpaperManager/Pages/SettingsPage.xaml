@@ -119,15 +119,42 @@
 						</Button.Content>
 					</Button>
 
-					<Button Width="200" Command="{Binding DeleteFileCacheCommand}" Margin="0,5,0,0">
-						<Button.Content>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-								<TextBlock Text="Delete File Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Button.Content>
-					</Button>
-				</StackPanel>
+                    <Button Width="200" Command="{Binding DeleteFileCacheCommand}" Margin="0,5,0,0">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                <TextBlock Text="Delete File Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <ListView Header="File Access Tokens" ItemsSource="{Binding FileAccessTokens}" Margin="0,5,0,0">
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}"/>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="RemoveFileAccessTokenButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="RemoveFileAccessTokenButton_Click" />
+                                        <TextBlock Margin="10,0,0,0" TextWrapping="Wrap">
+														<Run>ID: </Run>
+														<Run Text="{Binding ID}"/>
+														<Run Text=" | "/>
+														<Run Text="{Binding Path}"/>
+														<Run Text=" | "/>
+														<Run Text="{Binding AccessToken}"/>
+														<Run Text=" | "/>
+														<Run Text="{Binding AccessTokenType, Converter={StaticResource EnumSpaceConverter}}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

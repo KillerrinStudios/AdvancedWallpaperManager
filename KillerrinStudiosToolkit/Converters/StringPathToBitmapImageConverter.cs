@@ -16,33 +16,40 @@ namespace KillerrinStudiosToolkit.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             string pathString = ((string)value);
-
-            // Preform Early Exit
             if (string.IsNullOrWhiteSpace(pathString))
                 return null;
 
-            Debug.WriteLine($"{nameof(StringPathToBitmapImageConverter)} - Begin: {pathString}");
+            //Debug.WriteLine($"{nameof(StringPathToBitmapImageConverter)} - Begin: {pathString}");
+            Uri pathUri = new Uri(pathString);
+            BitmapImage image = new BitmapImage(pathUri);
+            image.ImageFailed += Image_ImageFailed;
+            image.ImageOpened += Image_ImageOpened;
 
-            var task = Task.Run(async () =>
-            {
-                try
-                {
-                    var file = await StorageTask.Instance.GetFileFromPath(new Uri(pathString));
-                    var bitmapFile = await StorageTask.StorageFileToBitmapImage(file);
-                    return bitmapFile;
-                }
-                catch (Exception ex)
-                {
-                    //DebugTools.PrintOutException(ex, "Error Converting Path");
-                    return null;
-                }
-            });
-            return new TaskCompletionNotifier<BitmapImage>(task);
+            return image;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
+        }
+
+        private static void Image_ImageOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            //Debug.WriteLine("Image successfully loaded");
+            BitmapImage image = (BitmapImage)sender;
+        }
+        private static async void Image_ImageFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
+        {
+            Debug.WriteLine(e.ErrorMessage);
+            BitmapImage image = (BitmapImage)sender;
+
+            Uri pathUri = new Uri(image.UriSource.LocalPath);
+            var file = await StorageTask.Instance.GetFileFromPath(pathUri);
+
+            using (var fileStream = await StorageTask.Instance.OpenFileStream(file, Windows.Storage.FileAccessMode.Read))
+            {
+                image.SetSource(fileStream);
+            }
         }
     }
 }

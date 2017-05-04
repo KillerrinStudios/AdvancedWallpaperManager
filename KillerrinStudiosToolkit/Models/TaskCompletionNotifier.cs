@@ -1,71 +1,92 @@
 ﻿// Author: Stephen Cleary
 // http://stackoverflow.com/questions/15003827/async-implementation-of-ivalueconverter
+// https://msdn.microsoft.com/en-us/magazine/dn605875.aspx
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace KillerrinStudiosToolkit.Models
 {
-    // Watches a task and raises property-changed notifications when the task completes.
-    public sealed class TaskCompletionNotifier<TResult> : INotifyPropertyChanged
+    public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {
-        public TaskCompletionNotifier(Task<TResult> task)
+        public NotifyTaskCompletion(Task<TResult> task)
         {
             Task = task;
             if (!task.IsCompleted)
             {
-                var scheduler = (SynchronizationContext.Current == null) ? TaskScheduler.Current : TaskScheduler.FromCurrentSynchronizationContext();
-                task.ContinueWith(t =>
-                {
-                    var propertyChanged = PropertyChanged;
-                    if (propertyChanged != null)
-                    {
-                        propertyChanged(this, new PropertyChangedEventArgs("IsCompleted"));
-                        if (t.IsCanceled)
-                        {
-                            propertyChanged(this, new PropertyChangedEventArgs("IsCanceled"));
-                        }
-                        else if (t.IsFaulted)
-                        {
-                            propertyChanged(this, new PropertyChangedEventArgs("IsFaulted"));
-                            propertyChanged(this, new PropertyChangedEventArgs("ErrorMessage"));
-                        }
-                        else
-                        {
-                            propertyChanged(this, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
-                            propertyChanged(this, new PropertyChangedEventArgs("Result"));
-                        }
-                    }
-                },
-                CancellationToken.None,
-                TaskContinuationOptions.ExecuteSynchronously,
-                scheduler);
+                var _ = WatchTaskAsync(task);
             }
         }
-
-        // Gets the task being watched. This property never changes and is never <c>null</c>.
+        private async Task WatchTaskAsync(Task task)
+        {
+            try
+            {
+                await task;
+            }
+            catch
+            {
+            }
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged == null)
+                return;
+            propertyChanged(this, new PropertyChangedEventArgs("Status"));
+            propertyChanged(this, new PropertyChangedEventArgs("IsCompleted"));
+            propertyChanged(this, new PropertyChangedEventArgs("IsNotCompleted"));
+            if (task.IsCanceled)
+            {
+                propertyChanged(this, new PropertyChangedEventArgs("IsCanceled"));
+            }
+            else if (task.IsFaulted)
+            {
+                propertyChanged(this, new PropertyChangedEventArgs("IsFaulted"));
+                propertyChanged(this, new PropertyChangedEventArgs("Exception"));
+                propertyChanged(this,
+                  new PropertyChangedEventArgs("InnerException"));
+                propertyChanged(this, new PropertyChangedEventArgs("ErrorMessage"));
+            }
+            else
+            {
+                propertyChanged(this,
+                  new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
+                propertyChanged(this, new PropertyChangedEventArgs("Result"));
+            }
+        }
         public Task<TResult> Task { get; private set; }
-
-        // Gets the result of the task. Returns the default value of TResult if the task has not completed successfully.
-        public TResult Result { get { return (Task.Status == TaskStatus.RanToCompletion) ? Task.Result : default(TResult); } }
-
-        // Gets whether the task has completed.
+        public TResult Result
+        {
+            get
+            {
+                return (Task.Status == TaskStatus.RanToCompletion) ? Task.Result : default(TResult);
+            }
+        }
+        public TaskStatus Status { get { return Task.Status; } }
         public bool IsCompleted { get { return Task.IsCompleted; } }
-
-        // Gets whether the task has completed successfully.
-        public bool IsSuccessfullyCompleted { get { return Task.Status == TaskStatus.RanToCompletion; } }
-
-        // Gets whether the task has been canceled.
+        public bool IsNotCompleted { get { return !Task.IsCompleted; } }
+        public bool IsSuccessfullyCompleted
+        {
+            get
+            {
+                return Task.Status == TaskStatus.RanToCompletion;
+            }
+        }
         public bool IsCanceled { get { return Task.IsCanceled; } }
-
-        // Gets whether the task has faulted.
         public bool IsFaulted { get { return Task.IsFaulted; } }
-
+        public AggregateException Exception { get { return Task.Exception; } }
+        public Exception InnerException
+        {
+            get
+            {
+                return (Exception == null) ? null : Exception.InnerException;
+            }
+        }
+        public string ErrorMessage
+        {
+            get
+            {
+                return (InnerException == null) ? null : InnerException.Message;
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

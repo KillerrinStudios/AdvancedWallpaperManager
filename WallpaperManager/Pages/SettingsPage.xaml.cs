@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WallpaperManager.Models;
 using WallpaperManager.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -45,6 +46,13 @@ namespace WallpaperManager.Pages
         {
             ViewModel.OnNavigatedFrom();
             base.OnNavigatedFrom(e);
+        }
+
+        private void RemoveFileAccessTokenButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            var token = btn.DataContext as FileAccessToken;
+            ViewModel.RemoveFileAccessToken(token);
         }
     }
 }

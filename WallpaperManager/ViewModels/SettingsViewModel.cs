@@ -4,6 +4,7 @@ using KillerrinStudiosToolkit.Models;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,7 @@ namespace WallpaperManager.ViewModels
         }
 
         public List<int> HoursList { get; } = new List<int>();
+
         private int m_frequencyHours = 0;
         public int FrequencyHours
         {
@@ -63,6 +65,16 @@ namespace WallpaperManager.ViewModels
             }
         }
 
+        private ObservableCollection<FileAccessToken> m_fileAccessTokens = new ObservableCollection<FileAccessToken>();
+        public ObservableCollection<FileAccessToken> FileAccessTokens
+        {
+            get { return m_fileAccessTokens; }
+            set
+            {
+                m_fileAccessTokens = value;
+                RaisePropertyChanged(nameof(FileAccessTokens));
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -102,6 +114,13 @@ namespace WallpaperManager.ViewModels
         {
             // Set the Defaults
             RevertFileDiscoveryFrequencyCommand.Execute(null);
+
+            // Refresh the File Access Tokens
+            var accessTokens = AccessTokenRepository.GetAll();
+            foreach (var token in accessTokens)
+            {
+                FileAccessTokens.Add(token);
+            }
         }
 
         public override void OnNavigatedFrom()
@@ -131,6 +150,31 @@ namespace WallpaperManager.ViewModels
             FileDiscoveryService fileDiscoveryService = new FileDiscoveryService((WallpaperManagerContext)ThemeRepository.DatabaseInfo.Context);
             var cache = await fileDiscoveryService.PreformFileDiscoveryAll(progress);
             Debug.WriteLine($"{nameof(SettingsViewModel)} - {nameof(RefreshFileCache)} - CACHE TASK COMPLETE");
+        }
+
+        public async void RemoveFileAccessToken(FileAccessToken token)
+        {
+            ContentDialog removeDialog = new ContentDialog
+            {
+                Title = "Remove File Access Token?",
+                Content = "By doing this, the application will no longer have access to these directories and their children. As a result the directories and their files will be removed from your Themes and will require resetting up themes which use them. Are you sure you want to remove this File Access Token from the App?",
+                PrimaryButtonText = "Remove",
+                CloseButtonText = "Cancel"
+            };
+
+            ContentDialogResult result = await removeDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                // Remove from the Lists
+                FileAccessTokens.Remove(token);
+
+                // Delete the Directory
+                AccessTokenRepository.RemoveAndCommit(token.ID);
+
+                // Update the Cache
+                RefreshFileCacheCommand.Execute(null);
+            }
         }
 
         public RelayCommand SaveFileDiscoveryFrequencyCommand

@@ -80,7 +80,7 @@
 							<RowDefinition Height="*"/>
 						</Grid.RowDefinitions>
 
-						<Image Source="{Binding RandomImageFromCache}" 
+                        <Image Source="{Binding RandomImageFromCache, Converter={StaticResource StringPathToBitmapImage}}" 
 							   Grid.Row="0" Grid.RowSpan="2" />
 
 						<Grid Grid.Row="1">

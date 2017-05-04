@@ -103,6 +103,10 @@ namespace KillerrinStudiosToolkit
         {
             return await StorageFile.GetFileFromPathAsync(uri.OriginalString);
         }
+        public async Task<StorageFile> GetFileFromApplicationUriAsync(Uri uri)
+        {
+            return await StorageFile.GetFileFromApplicationUriAsync(uri);
+        }
         public async Task<StorageFile> GetFile(StorageFolder folder, string fileName)
         {
             return await folder.GetFileAsync(fileName);
