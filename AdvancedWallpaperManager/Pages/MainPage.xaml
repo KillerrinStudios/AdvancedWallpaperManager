@@ -1,0 +1,82 @@
+﻿<Page
+	x:Class="AdvancedWallpaperManager.Pages.MainPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:AdvancedWallpaperManager.Pages"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	xmlns:appControls="using:KillerrinStudiosToolkit.Controls"
+	xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+	Loaded="Page_Loaded"
+	DataContext="{Binding Source={StaticResource Locator}, Path=vm_MainViewModel}">
+
+	<SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" CompactPaneLength="50" OpenPaneLength="150">
+		<SplitView.Pane>
+			<Grid Background="DarkSlateGray">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Button x:Name="HamburgerButton" Grid.Row="0"
+						FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+						Command="{Binding TogglePaneCommand}"
+						Width="50" Height="50" Background="Transparent" />
+
+				<StackPanel Orientation="Vertical" Grid.Row="1">
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE80F;"
+							Command="{Binding NavigateHomeCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="Home" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+					
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="ThemesButton" FontFamily="Segoe MDL2 Assets" Content="&#xE8A9;"
+							Command="{Binding NavigateThemesCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="Themes" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+				</StackPanel>
+
+				<StackPanel Orientation="Vertical" Grid.Row="2">
+
+					<Rectangle Margin="0,0" Height="1" Fill="White" Opacity="0.5"/>
+
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="RateButton" FontFamily="Segoe MDL2 Assets" Content="&#xE735;"
+							Command="{Binding RateAppCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="Rate" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+					
+					<Rectangle Margin="0,0" Height="1" Fill="White" Opacity="0.5"/>
+
+
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="AboutButton" FontFamily="Segoe MDL2 Assets" Content="&#xE897;"
+							Command="{Binding NavigateAboutCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="About" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Button x:Name="SettingsButton" FontFamily="Segoe MDL2 Assets" Content="&#xE713;"
+							Command="{Binding NavigateSettingsCommand}"
+							Width="50" Height="50" Background="Transparent"/>
+						<TextBlock Text="Settings" FontSize="18" VerticalAlignment="Center" />
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+		</SplitView.Pane>
+		<SplitView.Content>
+			<Grid Margin="10,0,0,0">
+				<Frame x:Name="MainFrame" Loaded="MainFrame_Loaded" />
+				<appControls:ProgressIndicator x:Name="MainProgressIndicator" Loaded="MainProgressIndicator_Loaded"
+													   VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0"
+													   Visibility="Collapsed"/>
+			</Grid>
+		</SplitView.Content>
+	</SplitView>
+</Page>
