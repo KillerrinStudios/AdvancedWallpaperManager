@@ -57,7 +57,8 @@ namespace WallpaperManager.Services
                 builder.AppendLine("; 10: The image is resized and cropped to fill the screen while maintaining the aspect ratio. (Windows 7 and later)");
                 builder.AppendLine();
                 builder.AppendLine("[Slideshow]");
-                builder.AppendLine($"Interval={theme.WallpaperChangeFrequency.TotalMilliseconds}");
+                if (theme.WallpaperChangeFrequency.TotalMilliseconds > 0.0) { builder.AppendLine($"Interval={theme.WallpaperChangeFrequency.TotalMilliseconds}"); }
+                else { builder.AppendLine($"Interval={TimeSpan.FromMinutes(5.0).TotalMilliseconds}"); }
                 builder.AppendLine("; Interval is a number that determines how often the background changes. It is measured in milliseconds.");
                 switch (theme.WallpaperSelectionMethod)
                 {
