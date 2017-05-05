@@ -59,7 +59,7 @@ namespace AdvancedWallpaperManager.ViewModels
         #region App Products
         public InAppPurchaseManager InAppPurchaseManager { get; }
 
-        private AppProduct m_productAWMPro = new AppProduct("AWMPro", false);
+        private AppProduct m_productAWMPro = new AppProduct("AWMPro", true);
         public AppProduct ProductAWMPro
         {
             get { return m_productAWMPro; }

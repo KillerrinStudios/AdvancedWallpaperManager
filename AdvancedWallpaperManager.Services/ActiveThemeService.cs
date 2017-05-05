@@ -212,7 +212,6 @@ namespace AdvancedWallpaperManager.Services
             Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Converted Path to File: {file.Name}");
 
             // Set the Wallpaper
-            m_activeDesktopThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
             if (await m_wallpaperManager.SetImage(file))
             {
                 // Add it to the history if successful
@@ -221,7 +220,13 @@ namespace AdvancedWallpaperManager.Services
                 m_activeDesktopThemeNextRunSetting.Value = DateTime.UtcNow.Add(activeDesktopTheme.WallpaperChangeFrequency);
                 Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Successfully Changed Image");
             }
-            else { Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Failed"); }
+            else
+            {
+                Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextDesktopBackground)} - Failed");
+
+                if (DebugTools.DebugMode)
+                    m_activeDesktopThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
+            }
         }
 
         public async Task NextLockscreenBackground()
@@ -244,7 +249,6 @@ namespace AdvancedWallpaperManager.Services
             Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Setting Path: {path}");
 
             // Set the Lockscreen
-            m_activeLockscreenThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
             if (await m_lockscreenManager.SetImageFromFileSystem(path))
             {
                 // Add it to the history if successful
@@ -253,7 +257,13 @@ namespace AdvancedWallpaperManager.Services
                 m_activeLockscreenThemeNextRunSetting.Value = DateTime.UtcNow.Add(activeLockscreenTheme.WallpaperChangeFrequency);
                 Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Successfully Changed Image");
             }
-            else { Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Failed"); }
+            else
+            {
+                Debug.WriteLine($"{nameof(ActiveThemeService)}.{nameof(NextLockscreenBackground)} - Failed");
+
+                if (DebugTools.DebugMode)
+                    m_activeLockscreenThemeHistorySetting.Add(path); // REMOVEME: DEBUGGING PURPOSES
+            }
         }
         #endregion
 
