@@ -133,6 +133,7 @@ namespace AdvancedWallpaperManager.ViewModels
 
         }
 
+        #region Settings
         private void Progress_ProgressChanged(object sender, IndicatorProgressReport e)
         {
             ProgressService.SetIndicatorAndShow(e.RingEnabled, e.Percentage, e.StatusMessage, e.WriteToDebugConsole);
@@ -266,5 +267,25 @@ namespace AdvancedWallpaperManager.ViewModels
                 });
             }
         }
+        #endregion
+
+        #region Support the App
+        public RelayCommand UnlockAWMCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    UnlockAWM();
+                });
+            }
+        }
+
+        public async void UnlockAWM()
+        {
+            var result = await InAppPurchaseManager.Purchase("AWMPro");
+            ProductAWMPro = result.Item1;
+        }
+        #endregion
     }
 }

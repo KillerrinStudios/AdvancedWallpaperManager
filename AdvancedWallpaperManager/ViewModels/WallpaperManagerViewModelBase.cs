@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using AdvancedWallpaperManager.DAL.Repositories;
 using KillerrinStudiosToolkit.Services;
+using KillerrinStudiosToolkit.Store;
 
 namespace AdvancedWallpaperManager.ViewModels
 {
@@ -55,18 +56,45 @@ namespace AdvancedWallpaperManager.ViewModels
 
         #endregion
 
+        #region App Products
+        public InAppPurchaseManager InAppPurchaseManager { get; }
+
+        private AppProduct m_productAWMPro = new AppProduct("AWMPro");
+        public AppProduct ProductAWMPro
+        {
+            get { return m_productAWMPro; }
+            set
+            {
+                m_productAWMPro = value;
+                RaisePropertyChanged(nameof(ProductAWMPro));
+            }
+        }
+        #endregion
+
+        #region Repositories
         public WallpaperThemeRepository ThemeRepository { get; set; }
         public WallpaperDirectoryRepository DirectoryRepository { get; set; }
         public FileAccessTokenRepository AccessTokenRepository { get; set; }
         public FileDiscoveryCacheRepository FileDiscoveryCacheRepository { get; set; }
+        #endregion
 
         public WallpaperManagerViewModelBase()
         {
+            // Setup the Repos
             var context = new WallpaperManagerContext();
             ThemeRepository = new WallpaperThemeRepository(context);
             DirectoryRepository = new WallpaperDirectoryRepository(context);
             AccessTokenRepository = new FileAccessTokenRepository(context);
             FileDiscoveryCacheRepository = new FileDiscoveryCacheRepository(context);
+
+            // Setup the AppProducts
+            InAppPurchaseManager = new InAppPurchaseManager();
+            InAppPurchaseManager.AppProductsChanged += InAppPurchaseManager_AppProductsChanged;
+        }
+
+        private void InAppPurchaseManager_AppProductsChanged(object sender, EventArgs e)
+        {
+            ProductAWMPro = InAppPurchaseManager.GetAppProduct("AWMPro");
         }
 
         public abstract void Loaded();
