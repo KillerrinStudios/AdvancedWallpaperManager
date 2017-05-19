@@ -31,24 +31,30 @@
 			</Grid>
 		</DataTemplate>
 	</Page.Resources>
+	<Page.BottomAppBar>
+		<AppBar>
+			<Grid>
+				<StackPanel Orientation="Vertical">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						<Button Command="{Binding RefreshFileCacheCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+									<TextBlock Text="Refresh Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<TextBlock VerticalAlignment="Center" Margin="10,0,0,0" >
+							<Run Text="{Binding Theme.DateCacheDiscovered, Converter={StaticResource RelativeDateTime}}" />
+						</TextBlock>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+		</AppBar>
+	</Page.BottomAppBar>
 
 	<Grid>
 		<Pivot LeftHeader="{Binding Theme.Name}">
-			<Pivot.RightHeader>
-				<StackPanel Orientation="Vertical" Margin="0,2,0,-2">
-					<Button Command="{Binding RefreshFileCacheCommand}">
-						<Button.Content>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-								<TextBlock Text="Refresh Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Button.Content>
-					</Button>
-					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-						<Run Text="{Binding Theme.DateCacheDiscovered, Converter={StaticResource RelativeDateTime}}" />
-					</TextBlock>
-				</StackPanel>
-			</Pivot.RightHeader>
 			<PivotItem Header="Display">
 				<Grid>
 					<ListView ItemsSource="{Binding FileCache}"
@@ -255,27 +261,24 @@
 													<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"></Setter>
 												</Style>
 											</Flyout.FlyoutPresenterStyle>
-											<StackPanel Orientation="Vertical" Height="250" Width="400">
+											<ScrollViewer>
+												<StackPanel Orientation="Vertical" Height="250" Width="400">
+													<TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
+													<Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}" HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
 
-												<TextBlock Text="{Binding NewDirectory.Path}" TextWrapping="Wrap"/>
-												<Button Content="Browse" Command="{Binding OpenFolderBrowserCommand}"
-										HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
+													<ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
+													<ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
 
-												<ToggleSwitch Header="Include Subdirectories" IsOn="{Binding NewDirectory.IncludeSubdirectories, Mode=TwoWay}"
-											  HorizontalAlignment="Stretch"/>
-												<ToggleSwitch Header="Exclude" IsOn="{Binding NewDirectory.IsExcluded, Mode=TwoWay}"
-											  HorizontalAlignment="Stretch"/>
-
-												<Button Command="{Binding AddDirectoryCommand}"
-											HorizontalAlignment="Stretch" Margin="0,20,0,0">
-													<Button.Content>
-														<StackPanel Orientation="Horizontal">
-															<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-															<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
-														</StackPanel>
-													</Button.Content>
-												</Button>
-											</StackPanel>
+													<Button Command="{Binding AddDirectoryCommand}"	HorizontalAlignment="Stretch" Margin="0,20,0,0">
+														<Button.Content>
+															<StackPanel Orientation="Horizontal">
+																<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+																<TextBlock Text="Add Directory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+															</StackPanel>
+														</Button.Content>
+													</Button>
+												</StackPanel>
+											</ScrollViewer>
 										</Flyout>
 									</Button.Flyout>
 								</Button>

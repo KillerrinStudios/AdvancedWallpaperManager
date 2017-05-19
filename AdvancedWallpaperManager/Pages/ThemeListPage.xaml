@@ -24,7 +24,7 @@
 			</Grid.ColumnDefinitions>
 
 			<TextBlock Text="Themes" Grid.Column="0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-			<Button Grid.Column="1" Width="150" Margin="20,0,20,0"
+			<Button Grid.Column="1" Margin="20,0,20,0"
 					HorizontalAlignment="Right" VerticalAlignment="Center">
 				<Button.Content>
 					<StackPanel Orientation="Horizontal">
@@ -32,27 +32,29 @@
 						<TextBlock Text="New" Margin="10,0,0,0" VerticalAlignment="Center"/>
 					</StackPanel>
 				</Button.Content>
-				
+
 				<Button.Flyout>
 					<Flyout x:Name="CreateThemeFlyout">
-						<StackPanel Orientation="Vertical">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="Name" VerticalAlignment="Center"/>
-								<TextBox PlaceholderText="Theme Name" Text="{Binding NewThemeName, Mode=TwoWay}"
+						<ScrollViewer>
+							<StackPanel Orientation="Vertical">
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="Name" VerticalAlignment="Center"/>
+									<TextBox PlaceholderText="Theme Name" Text="{Binding NewThemeName, Mode=TwoWay}"
 										 Margin="20,0,0,0" Width="250"
 										 VerticalAlignment="Center"/>
-							</StackPanel>
-							<Button x:Name="CreateThemeFlyoutButton" Command="{Binding CreateThemeCommand}" Tapped="NewTheme_Create_Tapped"
+								</StackPanel>
+								<Button x:Name="CreateThemeFlyoutButton" Command="{Binding CreateThemeCommand}" Tapped="NewTheme_Create_Tapped"
 									Margin="0,10,0,0"
 									HorizontalAlignment="Stretch">
-								<Button.Content>
-									<StackPanel Orientation="Horizontal">
-										<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-										<TextBlock Text="Create" Margin="10,0,0,0" VerticalAlignment="Center"/>
-									</StackPanel>
-								</Button.Content>
-							</Button>
-						</StackPanel>
+									<Button.Content>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+											<TextBlock Text="Create" Margin="10,0,0,0" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Button.Content>
+								</Button>
+							</StackPanel>
+						</ScrollViewer>
 					</Flyout>
 				</Button.Flyout>
 			</Button>
@@ -80,14 +82,14 @@
 							<RowDefinition Height="*"/>
 						</Grid.RowDefinitions>
 
-                        <Image Source="{Binding RandomImageFromCache, Converter={StaticResource StringPathToBitmapImage}}" 
+						<Image Source="{Binding RandomImageFromCache, Converter={StaticResource StringPathToBitmapImage}}" 
 							   Grid.Row="0" Grid.RowSpan="2" />
 
 						<Grid Grid.Row="1">
 							<Grid.Background>
 								<SolidColorBrush Color="Black" Opacity="0.5"/>
 							</Grid.Background>
-							
+
 							<TextBlock Text="{Binding Name}" TextWrapping="Wrap" TextAlignment="Center"/>
 						</Grid>
 					</Grid>
@@ -96,10 +98,10 @@
 			<GridView.Resources>
 				<MenuFlyout x:Name="themesMenuFlyout">
 					<MenuFlyout.Items>
-                        <MenuFlyoutItem x:Name="SetActiveWallpaper" Text="Set to Active Wallpaper" Click="MenuFlyoutItem_SetActiveWallpaper_Click"/>
-                        <MenuFlyoutItem x:Name="SetActiveLockscreen" Text="Set to Active Lockscreen" Click="MenuFlyoutItem_SetActiveLockscreen_Click"/>
-                        <MenuFlyoutItem x:Name="CreateWindowsTheme" Text="Create Windows Theme" Click="MenuFlyoutItem_CreateWindowsTheme_Click"/>
-                        <MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
+						<MenuFlyoutItem x:Name="SetActiveWallpaper" Text="Set to Active Wallpaper" Click="MenuFlyoutItem_SetActiveWallpaper_Click"/>
+						<MenuFlyoutItem x:Name="SetActiveLockscreen" Text="Set to Active Lockscreen" Click="MenuFlyoutItem_SetActiveLockscreen_Click"/>
+						<MenuFlyoutItem x:Name="CreateWindowsTheme" Text="Create Windows Theme" Click="MenuFlyoutItem_CreateWindowsTheme_Click"/>
+						<MenuFlyoutItem x:Name="Delete" Text="Delete" Click="MenuFlyoutItem_Delete_Click"/>
 					</MenuFlyout.Items>
 				</MenuFlyout>
 			</GridView.Resources>

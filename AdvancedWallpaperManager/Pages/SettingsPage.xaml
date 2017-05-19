@@ -9,139 +9,139 @@
 	Loaded="Page_Loaded"
 	DataContext="{Binding Source={StaticResource Locator}, Path=vm_SettingsViewModel}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-        <TextBlock Text="Settings" Style="{ThemeResource HeaderTextBlockStyle}"/>
+		<TextBlock Text="Settings" Style="{ThemeResource HeaderTextBlockStyle}"/>
 
-        <Pivot Grid.Row="1">
-            <PivotItem Header="Settings">
-                <ScrollViewer  ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="General" Style="{ThemeResource SubheaderTextBlockStyle}" />
+		<Pivot Grid.Row="1">
+			<PivotItem Header="Settings">
+				<ScrollViewer  ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Auto">
+					<StackPanel Orientation="Vertical">
+						<StackPanel Orientation="Vertical">
+							<TextBlock Text="General" Style="{ThemeResource SubheaderTextBlockStyle}" />
 
-                            <TextBlock Text="Background Task Status" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,5,0,0"/>
-                            <TextBlock Margin="0,5,0,0">
+							<TextBlock Text="Background Task Status" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,5,0,0"/>
+							<TextBlock Margin="0,5,0,0">
 						<Run>Active Theme Background Task Last Run: </Run>
 						<Run Text="{Binding ActiveThemeTaskLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
-                            </TextBlock>
-                            <TextBlock Margin="0,5,0,0">
+							</TextBlock>
+							<TextBlock Margin="0,5,0,0">
 						<Run>File Discovery Background Task Last Run: </Run>
 						<Run Text="{Binding FileDiscoveryTaskLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
-                            </TextBlock>
-                        </StackPanel>
+							</TextBlock>
+						</StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />
+						<StackPanel Orientation="Vertical" Margin="0,20,0,0">
+							<TextBlock Text="File Discovery" Style="{ThemeResource SubheaderTextBlockStyle}" />
 
-                            <TextBlock Margin="0,5,0,0">
+							<TextBlock Margin="0,5,0,0">
 						<Run>File Discovery Last Run: </Run>
 						<Run Text="{Binding FileDiscoveryLastRun.ValueLocalTimeAsString, Mode=OneWay}"/>
-                            </TextBlock>
-                            <Button Width="200" Margin="0,0,0,0" Command="{Binding RefreshFileCacheCommand}" >
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Preform File Discovery" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+							</TextBlock>
+							<Button Width="200" Margin="0,0,0,0" Command="{Binding RefreshFileCacheCommand}" >
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+										<TextBlock Text="Preform File Discovery" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
 
-                            <ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}" Margin="0,5,0,0">
-                                <ToggleSwitch.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}"/>
-                                    </DataTemplate>
-                                </ToggleSwitch.HeaderTemplate>
-                            </ToggleSwitch>
+							<ToggleSwitch Header="Enable File Discovery" IsOn="{Binding FileDiscoveryEnabled.Value, Mode=TwoWay}" Margin="0,5,0,0">
+								<ToggleSwitch.HeaderTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}"/>
+									</DataTemplate>
+								</ToggleSwitch.HeaderTemplate>
+							</ToggleSwitch>
 
-                            <TextBlock Text="File Discovery Frequency" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,5,0,0"/>
-                            <StackPanel Orientation="Horizontal">
-                                <ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
-                                <ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
-                                <ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
-                                <Button VerticalAlignment="Bottom" Command="{Binding RevertFileDiscoveryFrequencyCommand}" Margin="10,0,0,0">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                                <Button VerticalAlignment="Bottom" Command="{Binding SaveFileDiscoveryFrequencyCommand}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                            </StackPanel>
-                        </StackPanel>
+							<TextBlock Text="File Discovery Frequency" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,5,0,0"/>
+							<StackPanel Orientation="Horizontal">
+								<ComboBox x:Name="Frequency_DaysComboBox" Header="Days" ItemsSource="{Binding DaysList}" SelectedValue="{Binding FrequencyDays, Mode=TwoWay}"/>
+								<ComboBox x:Name="Frequency_HoursComboBox" Header="Hours" ItemsSource="{Binding HoursList}" SelectedValue="{Binding FrequencyHours, Mode=TwoWay}"/>
+								<ComboBox x:Name="Frequency_MinutesComboBox" Header="Minutes" ItemsSource="{Binding MinutesList}" SelectedValue="{Binding FrequencyMinutes, Mode=TwoWay}"/>
+								<Button VerticalAlignment="Bottom" Command="{Binding RevertFileDiscoveryFrequencyCommand}" Margin="10,0,0,0">
+									<Button.Content>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+											<TextBlock Text="Undo" Margin="10,0,0,0" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Button.Content>
+								</Button>
+								<Button VerticalAlignment="Bottom" Command="{Binding SaveFileDiscoveryFrequencyCommand}">
+									<Button.Content>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+											<TextBlock Text="Save" Margin="10,0,0,0" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Button.Content>
+								</Button>
+							</StackPanel>
+						</StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <TextBlock Text="Developer" Style="{ThemeResource SubheaderTextBlockStyle}"/>
-                            <Button Width="200" Command="{Binding ShowProgressCommand}" Margin="0,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Show Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Width="200" Command="{Binding HideProgressCommand}" Margin="0,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Hide Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                        </StackPanel>
+						<StackPanel Orientation="Vertical" Margin="0,20,0,0">
+							<TextBlock Text="Developer" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+							<Button Width="200" Command="{Binding ShowProgressCommand}" Margin="0,5,0,0">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="Show Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
+							<Button Width="200" Command="{Binding HideProgressCommand}" Margin="0,5,0,0">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="Hide Progress Bar" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
+						</StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+						<StackPanel Orientation="Vertical" Margin="0,20,0,0">
+							<TextBlock Text="Danger" Style="{ThemeResource SubheaderTextBlockStyle}"/>
 
-                            <Button Width="300" Command="{Binding DeselectActiveDesktopThemeCommand}" Margin="0,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Deselect Active Desktop Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Width="300" Command="{Binding DeselectActiveLockscreenThemeCommand}" Margin="0,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Deselect Active Lockscreen Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+							<Button Width="300" Command="{Binding DeselectActiveDesktopThemeCommand}" Margin="0,5,0,0">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+										<TextBlock Text="Deselect Active Desktop Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
+							<Button Width="300" Command="{Binding DeselectActiveLockscreenThemeCommand}" Margin="0,5,0,0">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE894;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+										<TextBlock Text="Deselect Active Lockscreen Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
 
-                            <Button Width="200" Command="{Binding DeleteFileCacheCommand}" Margin="0,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Delete File Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+							<Button Width="200" Command="{Binding DeleteFileCacheCommand}" Margin="0,5,0,0">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+										<TextBlock Text="Delete File Cache" Margin="10,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
 
-                            <ListView Header="File Access Tokens" ItemsSource="{Binding FileAccessTokens}" Margin="0,5,0,0">
-                                <ListView.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}"/>
-                                    </DataTemplate>
-                                </ListView.HeaderTemplate>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button x:Name="RemoveFileAccessTokenButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="RemoveFileAccessTokenButton_Click" />
-                                                <TextBlock Margin="10,0,0,0" TextWrapping="Wrap">
+							<ListView Header="File Access Tokens" ItemsSource="{Binding FileAccessTokens}" Margin="0,5,0,0">
+								<ListView.HeaderTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding}" Style="{ThemeResource TitleTextBlockStyle}"/>
+									</DataTemplate>
+								</ListView.HeaderTemplate>
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<Grid>
+											<StackPanel Orientation="Horizontal">
+												<Button x:Name="RemoveFileAccessTokenButton" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Click="RemoveFileAccessTokenButton_Click" />
+												<TextBlock Margin="10,0,0,0" TextWrapping="Wrap">
 														<Run>ID: </Run>
 														<Run Text="{Binding ID}"/>
 														<Run Text=" | "/>
@@ -150,70 +150,70 @@
 														<Run Text="{Binding AccessToken}"/>
 														<Run Text=" | "/>
 														<Run Text="{Binding AccessTokenType, Converter={StaticResource EnumSpaceConverter}}"/>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-            </PivotItem>
-            <PivotItem Header="Support The App">
-                <ScrollViewer  ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="purchaseThankYouMessage" Style="{ThemeResource TitleTextBlockStyle}"
-                                       Text="Thank you for purchasing the full version of Advanced Wallpaper Manager!"
-                                       Margin="0,0,0,20" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
-                                       Visibility="{Binding ProductAWMPro.Purchased, Converter={StaticResource BooleanToVisibility}}" />
+												</TextBlock>
+											</StackPanel>
+										</Grid>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
+						</StackPanel>
+					</StackPanel>
+				</ScrollViewer>
+			</PivotItem>
+			<PivotItem Header="Support The App">
+				<ScrollViewer  ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Auto">
+					<StackPanel Orientation="Vertical">
+						<TextBlock x:Name="purchaseThankYouMessage" Style="{ThemeResource TitleTextBlockStyle}"
+									   Text="Thank you for purchasing the full version of Advanced Wallpaper Manager!"
+									   Margin="0,0,0,20" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
+									   Visibility="{Binding ProductAWMPro.Purchased, Converter={StaticResource BooleanToVisibility}}" />
 
-                        <StackPanel x:Name="productInformation_StackPanel" Orientation="Vertical" Margin="0,0,0,0">
-                            <TextBlock  TextWrapping="Wrap">
-                                    <Run>Do you like Advanced Wallpaper Manager and want to help support its development? Why not consider purchasing the Pro Unlock?</Run>
-                                    <LineBreak />
-                                    <LineBreak />
-                                    <Run>Between school and work, I am only able to improve Advanced Wallpaper Manager on my spare time. </Run>
-                                    <Run>By purchasing the Pro Unlock, you will be allowing me to purchase caffeine which will go to supporting the late night coding sessions involved with improving Advanced Wallpaper Manager!</Run>
-                                    <LineBreak />
-                                    <LineBreak />
-                                    <Run>The full app features:</Run>
-                                    <LineBreak />
-                                    <Run>· Removed Ads</Run>
-                                    <LineBreak />
-                                    <Run>· Future Premium Items</Run>
-                                    <LineBreak />
-                                    <Run>· Many Thanks :)</Run>
-                            </TextBlock>
+						<StackPanel x:Name="productInformation_StackPanel" Orientation="Vertical" Margin="0,0,0,0">
+							<TextBlock  TextWrapping="Wrap">
+									<Run>Do you like Advanced Wallpaper Manager and want to help support its development? Why not consider purchasing the Pro Unlock?</Run>
+									<LineBreak />
+									<LineBreak />
+									<Run>Between school and work, I am only able to improve Advanced Wallpaper Manager on my spare time. </Run>
+									<Run>By purchasing the Pro Unlock, you will be allowing me to purchase caffeine which will go to supporting the late night coding sessions involved with improving Advanced Wallpaper Manager!</Run>
+									<LineBreak />
+									<LineBreak />
+									<Run>The full app features:</Run>
+									<LineBreak />
+									<Run>· Removed Ads</Run>
+									<LineBreak />
+									<Run>· Future Premium Items</Run>
+									<LineBreak />
+									<Run>· Many Thanks :)</Run>
+							</TextBlock>
 
-                            <TextBlock Text="Coming Soon!" Margin="0,20,0,0"/>
-                            <!--<Button x:Name="unlockAWM_Button" Margin="0,20,0,0" 
-                                        Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
-                                        IsEnabled="{Binding ProductAWMPro.Purchased, Converter={StaticResource OppositeBooleanConverter}}" 
-                                        Command="{Binding UnlockAWMCommand}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+							<!--<TextBlock Text="Coming Soon!" Margin="0,20,0,0"/>-->
+							<Button x:Name="unlockAWM_Button" Margin="0,20,0,0" 
+										Background="{ThemeResource SystemControlBackgroundAccentBrush}" 
+										IsEnabled="{Binding ProductAWMPro.Purchased, Converter={StaticResource OppositeBooleanConverter}}" 
+										Command="{Binding UnlockAWMCommand}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="Auto"/>
+									</Grid.ColumnDefinitions>
 
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0">
-                                        <TextBlock Text="Unlock Pro" Style="{ThemeResource TitleTextBlockStyle}"/>
-                                        <TextBlock Text="Unlocks all app functionality" TextWrapping="Wrap" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                                    </StackPanel>
+									<StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="0">
+										<TextBlock Text="Unlock Pro" Style="{ThemeResource TitleTextBlockStyle}"/>
+										<TextBlock Text="Unlocks all app functionality" TextWrapping="Wrap" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+									</StackPanel>
 
-                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Grid.Column="1" Margin="5,0,0,0">
-                                        <TextBlock Text="$0.99" Style="{ThemeResource TitleTextBlockStyle}" HorizontalAlignment="Right"/>
-                                        <TextBlock x:Name="purchasedText" Text="Purchased" HorizontalAlignment="Right"
-                                                       Style="{ThemeResource BodyTextBlockStyle}" 
-                                                       Visibility="{Binding ProductAWMPro.Purchased, Converter={StaticResource BooleanToVisibility}}"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Button>-->
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-            </PivotItem>
-        </Pivot>
-    </Grid>
+									<StackPanel Orientation="Vertical" VerticalAlignment="Top" Grid.Column="1" Margin="5,0,0,0">
+										<TextBlock Text="$0.99" Style="{ThemeResource TitleTextBlockStyle}" HorizontalAlignment="Right"/>
+										<TextBlock x:Name="purchasedText" Text="Purchased" HorizontalAlignment="Right"
+													   Style="{ThemeResource BodyTextBlockStyle}" 
+													   Visibility="{Binding ProductAWMPro.Purchased, Converter={StaticResource BooleanToVisibility}}"/>
+									</StackPanel>
+								</Grid>
+							</Button>
+						</StackPanel>
+					</StackPanel>
+				</ScrollViewer>
+			</PivotItem>
+		</Pivot>
+	</Grid>
 </Page>
