@@ -9,7 +9,19 @@ namespace KillerrinStudiosToolkit.Store
 {
     public class AppProduct : ModelBase
     {
-        public string ID { get; }
+        public string ProductID { get; }
+        public string StoreID { get; }
+
+        private ProductKind m_productType = ProductKind.Durable;
+        public ProductKind ProductType
+        {
+            get { return m_productType; }
+            set
+            {
+                m_productType = value;
+                RaisePropertyChanged(nameof(ProductType));
+            }
+        }
 
         private bool m_purchased = false;
         public bool Purchased
@@ -19,17 +31,6 @@ namespace KillerrinStudiosToolkit.Store
             {
                 m_purchased = value;
                 RaisePropertyChanged(nameof(Purchased));
-            }
-        }
-
-        private bool m_isConsumable = false;
-        public bool IsConsumable
-        {
-            get { return m_isConsumable; }
-            set
-            {
-                m_isConsumable = value;
-                RaisePropertyChanged(nameof(IsConsumable));
             }
         }
 
@@ -44,13 +45,63 @@ namespace KillerrinStudiosToolkit.Store
             }
         }
 
-        public AppProduct(string id) : this(id, false) { }
-        public AppProduct(string id, bool purchased)
+        private string m_name = "";
+        public string Name
         {
-            ID = id;
+            get { return m_name; }
+            set
+            {
+                m_name = value;
+                RaisePropertyChanged(nameof(Name));
+            }
+        }
+
+        private string m_description = "";
+        public string Description
+        {
+            get { return m_description; }
+            set
+            {
+                m_description = value;
+                RaisePropertyChanged(nameof(Description));
+            }
+        }
+
+        private string m_baseFormattedPrice = "0.00";
+        public string BaseFormattedPrice
+        {
+            get { return m_baseFormattedPrice; }
+            set
+            {
+                m_baseFormattedPrice = value;
+                RaisePropertyChanged(nameof(BaseFormattedPrice));
+            }
+        }
+        private string m_currentFormattedPrice = "0.00";
+        public string CurrentFormattedPrice
+        {
+            get { return m_currentFormattedPrice; }
+            set
+            {
+                m_currentFormattedPrice = value;
+                RaisePropertyChanged(nameof(CurrentFormattedPrice));
+            }
+        }
+
+
+        public AppProduct(string productID, string storeID) : this(productID, storeID, false) { }
+        public AppProduct(string productID, string storeID, bool purchased)
+        {
+            ProductID = productID;
+            StoreID = storeID;
             Purchased = purchased;
-            IsConsumable = false;
+            ProductType = ProductKind.Durable;
             ExpiryDate = DateTime.MaxValue;
+        }
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
     }
 }

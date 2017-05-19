@@ -14,6 +14,7 @@ using AdvancedWallpaperManager.Models;
 using AdvancedWallpaperManager.Models.Settings;
 using AdvancedWallpaperManager.Services;
 using Windows.UI.Xaml.Controls;
+using KillerrinStudiosToolkit.Store;
 
 namespace AdvancedWallpaperManager.ViewModels
 {
@@ -283,8 +284,8 @@ namespace AdvancedWallpaperManager.ViewModels
 
         public async void UnlockAWM()
         {
-            var result = await InAppPurchaseManager.Purchase("AWMPro");
-            ProductAWMPro = result.Item1;
+            var manager = InAppPurchaseManagerFactory.Create(true);
+            ProductAWMPro = await manager.PurchaseProduct(ProductAWMPro);
         }
         #endregion
     }

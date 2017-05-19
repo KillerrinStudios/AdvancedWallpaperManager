@@ -132,10 +132,16 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
+    <Compile Include="Services\SplitViewService.cs" />
+    <Compile Include="Store\AppProductIDType.cs" />
     <Compile Include="Store\InAppPurchaseManager.cs" />
+    <Compile Include="Store\InAppPurchaseLegacyManager.cs" />
     <Compile Include="KillerrinApplicationData.cs" />
     <Compile Include="Models\TaskCompletionNotifier.cs" />
     <Compile Include="Store\AppProduct.cs" />
+    <Compile Include="Store\InAppPurchaseManagerBase.cs" />
+    <Compile Include="Store\InAppPurchaseManagerFactory.cs" />
+    <Compile Include="Store\ProductKind.cs" />
     <Compile Include="UserProfile\PersonalizationManagerBase.cs" />
     <Compile Include="UserProfile\WallpaperManager.cs" />
     <Compile Include="UserProfile\LockscreenManager.cs" />

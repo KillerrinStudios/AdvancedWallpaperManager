@@ -30,19 +30,6 @@ namespace AdvancedWallpaperManager.ViewModels
         public VisualState CurrentVisualState;
 
         #region Properties
-        public RelayCommand TogglePaneCommand { get { return new RelayCommand(() => { IsPaneOpen = !IsPaneOpen; }); } }
-        private bool m_isPaneOpen = false;
-        public bool IsPaneOpen
-        {
-            get { return m_isPaneOpen; }
-            set
-            {
-                if (m_isPaneOpen == value) return;
-                m_isPaneOpen = value;
-                RaisePropertyChanged(nameof(IsPaneOpen));
-            }
-        }
-
         private NavigationLocation m_currentNavigationLocation = NavigationLocation.None;
         public NavigationLocation CurrentNavigationLocation
         {
@@ -78,7 +65,10 @@ namespace AdvancedWallpaperManager.ViewModels
 
         public override void Loaded()
         {
+            var splitView = SplitViewService;
+            
             // Handle Launch Args
+
         }
 
         public override void OnNavigatedTo()

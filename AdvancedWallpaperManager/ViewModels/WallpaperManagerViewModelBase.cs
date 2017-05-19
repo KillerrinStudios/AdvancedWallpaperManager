@@ -66,14 +66,13 @@ namespace AdvancedWallpaperManager.ViewModels
         #endregion
 
         #region App Products
-        public InAppPurchaseManager InAppPurchaseManager { get; }
-
-        private AppProduct m_productAWMPro = new AppProduct("AWMPro", true);
+        private static AppProduct m_productAWMPro = new AppProduct("AWMPro", "9nzm4xdbvpk0", false);
         public AppProduct ProductAWMPro
         {
             get { return m_productAWMPro; }
             set
             {
+                if (value == null) return;
                 m_productAWMPro = value;
                 RaisePropertyChanged(nameof(ProductAWMPro));
             }
@@ -97,13 +96,21 @@ namespace AdvancedWallpaperManager.ViewModels
             FileDiscoveryCacheRepository = new FileDiscoveryCacheRepository(context);
 
             // Setup the AppProducts
-            InAppPurchaseManager = new InAppPurchaseManager();
-            InAppPurchaseManager.AppProductsChanged += InAppPurchaseManager_AppProductsChanged;
+            InAppPurchaseManagerBase.AppProductsChanged += InAppPurchaseManager_AppProductsChanged;
+            var product = InAppPurchaseManagerFactory.Create(true).GetAppProductByStoreID("9nzm4xdbvpk0");
+            ProductAWMPro = product;
+            Debug.WriteLine($"{nameof(WallpaperManagerViewModelBase)} | {ProductAWMPro}");
         }
 
-        private void InAppPurchaseManager_AppProductsChanged(object sender, EventArgs e)
+        private void InAppPurchaseManager_AppProductsChanged(InAppPurchaseManagerBase sender, List<AppProduct> args)
         {
-            ProductAWMPro = InAppPurchaseManager.GetAppProduct("AWMPro");
+            Debug.WriteLine($"{nameof(InAppPurchaseManager_AppProductsChanged)}");
+            foreach (var product in args)
+            {
+                Debug.WriteLine($"New Product | {product}");
+            }
+
+            ProductAWMPro = sender.GetAppProductByStoreID("9nzm4xdbvpk0");
         }
 
         public abstract void Loaded();

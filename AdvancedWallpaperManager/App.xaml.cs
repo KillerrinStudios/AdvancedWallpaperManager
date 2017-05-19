@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using KillerrinStudiosToolkit.UserProfile;
+using KillerrinStudiosToolkit.Store;
 
 namespace AdvancedWallpaperManager
 {
@@ -52,6 +53,17 @@ namespace AdvancedWallpaperManager
         private void SetupAppConsts()
         {
             PersonalizationManagerBase.ClearImagesFolderEveryXImages = 10;
+
+            var purchaseManager = InAppPurchaseManagerFactory.Create(true);
+            if (purchaseManager is InAppPurchaseManager)
+            {
+                purchaseManager.RefreshAppProducts();
+            }
+            else
+            {
+                InAppPurchaseManagerBase.AppProducts.Add(new AppProduct("AWMPro", "9nzm4xdbvpk0", false));
+                purchaseManager.UpdateProduct(InAppPurchaseManagerBase.AppProducts[0]);
+            }
         }
 
         private async void RegisterBackgroundTasks()
