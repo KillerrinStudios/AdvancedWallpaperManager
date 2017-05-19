@@ -17,26 +17,16 @@
 			<VisualStateGroup>
 				<VisualState>
 					<VisualState.StateTriggers>
-						<AdaptiveTrigger MinWindowWidth="0"/>
+						<AdaptiveTrigger MinWindowWidth="800"/>
 					</VisualState.StateTriggers>
 					<VisualState.Setters>
-						<Setter Target="MainPageAdControl.Width" Value="300"/>
-						<Setter Target="MainPageAdControl.Height" Value="50"/>
+						<Setter Target="MainPageAdControl.Width" Value="728"/>
+						<Setter Target="MainPageAdControl.Height" Value="90"/>
+						<Setter Target="TopPanel.Visibility" Value="Collapsed"/>
+						<Setter Target="SplitViewContentGrid.Margin" Value="10,0,0,0"/>
+						<Setter Target="MainSplitView.DisplayMode" Value="CompactInline"/>
 					</VisualState.Setters>
 				</VisualState>
-			</VisualStateGroup>
-			<VisualStateGroup>
-				<VisualState>
-					<VisualState.StateTriggers>
-						<AdaptiveTrigger MinWindowWidth="400"/>
-					</VisualState.StateTriggers>
-					<VisualState.Setters>
-						<Setter Target="MainPageAdControl.Width" Value="320"/>
-						<Setter Target="MainPageAdControl.Height" Value="50"/>
-					</VisualState.Setters>
-				</VisualState>
-			</VisualStateGroup>
-			<VisualStateGroup>
 				<VisualState>
 					<VisualState.StateTriggers>
 						<AdaptiveTrigger MinWindowWidth="720"/>
@@ -44,49 +34,71 @@
 					<VisualState.Setters>
 						<Setter Target="MainPageAdControl.Width" Value="640"/>
 						<Setter Target="MainPageAdControl.Height" Value="100"/>
+						<Setter Target="TopPanel.Visibility" Value="Collapsed"/>
+						<Setter Target="SplitViewContentGrid.Margin" Value="10,0,0,0"/>
+						<Setter Target="MainSplitView.DisplayMode" Value="CompactInline"/>
 					</VisualState.Setters>
 				</VisualState>
-			</VisualStateGroup>
-			<VisualStateGroup>
 				<VisualState>
 					<VisualState.StateTriggers>
-						<AdaptiveTrigger MinWindowWidth="800"/>
+						<AdaptiveTrigger MinWindowWidth="400"/>
 					</VisualState.StateTriggers>
 					<VisualState.Setters>
-						<Setter Target="MainPageAdControl.Width" Value="728"/>
-						<Setter Target="MainPageAdControl.Height" Value="90"/>
+						<Setter Target="MainPageAdControl.Width" Value="320"/>
+						<Setter Target="MainPageAdControl.Height" Value="50"/>
+						<Setter Target="TopPanel.Visibility" Value="Visible"/>
+						<Setter Target="SplitViewContentGrid.Margin" Value="10,50,0,0"/>
+						<Setter Target="MainSplitView.DisplayMode" Value="Overlay"/>
+						<Setter Target="MainSplitView.IsPaneOpen" Value="False"/>
+					</VisualState.Setters>
+				</VisualState>
+				<VisualState>
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="0"/>
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<Setter Target="MainPageAdControl.Width" Value="300"/>
+						<Setter Target="MainPageAdControl.Height" Value="50"/>
+						<Setter Target="TopPanel.Visibility" Value="Visible"/>
+						<Setter Target="SplitViewContentGrid.Margin" Value="10,50,0,0"/>
+						<Setter Target="MainSplitView.DisplayMode" Value="Overlay"/>
+						<Setter Target="MainSplitView.IsPaneOpen" Value="False"/>
 					</VisualState.Setters>
 				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
-		
-		<SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" CompactPaneLength="50" OpenPaneLength="150">
+
+		<SplitView x:Name="MainSplitView" Loaded="MainSplitView_Loaded"
+				   DisplayMode="CompactInline" IsPaneOpen="True" CompactPaneLength="50" OpenPaneLength="150">
 			<SplitView.Pane>
 				<Grid Background="DarkSlateGray">
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="50"/>
 						<RowDefinition Height="*" />
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
-					<Button x:Name="HamburgerButton" Grid.Row="0"
-						FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-						Command="{Binding TogglePaneCommand}"
-						Width="50" Height="50" Background="Transparent" />
-
 					<StackPanel Orientation="Vertical" Grid.Row="1">
 						<StackPanel Orientation="Horizontal">
-							<Button x:Name="HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE80F;"
-							Command="{Binding NavigateHomeCommand}"
-							Width="50" Height="50" Background="Transparent"/>
-							<TextBlock Text="Home" FontSize="18" VerticalAlignment="Center" />
+							<Button x:Name="HomeButton" Command="{Binding NavigateHomeCommand}" Height="50" Background="Transparent">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE80F;" Padding="7,0,0,0" Width="50" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" />
+										<TextBlock Text="Home" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" />
+									</StackPanel>
+								</Button.Content>
+							</Button>
 						</StackPanel>
 
 						<StackPanel Orientation="Horizontal">
-							<Button x:Name="ThemesButton" FontFamily="Segoe MDL2 Assets" Content="&#xE8A9;"
-							Command="{Binding NavigateThemesCommand}"
-							Width="50" Height="50" Background="Transparent"/>
-							<TextBlock Text="Themes" FontSize="18" VerticalAlignment="Center" />
+							<Button x:Name="ThemesButton" Command="{Binding NavigateThemesCommand}" Height="50" Background="Transparent">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="&#xE8A9;" Padding="7,0,0,0" Width="50" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" />
+										<TextBlock Text="Themes" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" />
+									</StackPanel>
+								</Button.Content>
+							</Button>
 						</StackPanel>
 					</StackPanel>
 
@@ -94,33 +106,38 @@
 
 						<Rectangle Margin="0,0" Height="1" Fill="White" Opacity="0.5"/>
 
-						<StackPanel Orientation="Horizontal">
-							<Button x:Name="RateButton" FontFamily="Segoe MDL2 Assets" Content="&#xE735;"
-							Command="{Binding RateAppCommand}"
-							Width="50" Height="50" Background="Transparent"/>
-							<TextBlock Text="Rate" FontSize="18" VerticalAlignment="Center" />
-						</StackPanel>
+						<Button x:Name="SettingsButton" Command="{Binding NavigateSettingsCommand}" Height="50" Background="Transparent">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="&#xE713;" Padding="7,0,0,0" Width="50" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" />
+									<TextBlock Text="Settings" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" />
+								</StackPanel>
+							</Button.Content>
+						</Button>
 
 						<Rectangle Margin="0,0" Height="1" Fill="White" Opacity="0.5"/>
 
-
-						<StackPanel Orientation="Horizontal">
-							<Button x:Name="AboutButton" FontFamily="Segoe MDL2 Assets" Content="&#xE897;"
-							Command="{Binding NavigateAboutCommand}"
-							Width="50" Height="50" Background="Transparent"/>
-							<TextBlock Text="About" FontSize="18" VerticalAlignment="Center" />
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<Button x:Name="SettingsButton" FontFamily="Segoe MDL2 Assets" Content="&#xE713;"
-							Command="{Binding NavigateSettingsCommand}"
-							Width="50" Height="50" Background="Transparent"/>
-							<TextBlock Text="Settings" FontSize="18" VerticalAlignment="Center" />
-						</StackPanel>
+						<Button x:Name="AboutButton" Command="{Binding NavigateAboutCommand}" Height="50" Background="Transparent">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="&#xE897;" Padding="7,0,0,0" Width="50" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" />
+									<TextBlock Text="About" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" />
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<Button x:Name="RateButton" Command="{Binding RateAppCommand}" Height="50" Background="Transparent">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="&#xE735;" Padding="7,0,0,0" Width="50" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" />
+									<TextBlock Text="Rate" Margin="5,0,0,0" FontSize="18" VerticalAlignment="Center" />
+								</StackPanel>
+							</Button.Content>
+						</Button>
 					</StackPanel>
 				</Grid>
 			</SplitView.Pane>
 			<SplitView.Content>
-				<Grid Margin="10,0,0,0">
+				<Grid x:Name="SplitViewContentGrid" Margin="10,0,0,0">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*"/>
 						<RowDefinition Height="Auto"/>
@@ -140,5 +157,16 @@
 				</Grid>
 			</SplitView.Content>
 		</SplitView>
+
+		<Grid x:Name="TopPanel" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="50" Background="DarkSlateGray">
+			<StackPanel Orientation="Horizontal" Margin="50,0,0,0">
+				<TextBlock Text="{Binding TopNavBarText}" Margin="20,0,0,0" VerticalAlignment="Center" />
+			</StackPanel>
+		</Grid>
+
+		<Button x:Name="HamburgerButton" Loaded="HamburgerButton_Loaded"
+				VerticalAlignment="Top" HorizontalAlignment="Left"
+						FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+						Width="50" Height="50" Background="Transparent" />
 	</Grid>
 </Page>

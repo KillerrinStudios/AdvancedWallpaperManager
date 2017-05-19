@@ -43,6 +43,15 @@ namespace AdvancedWallpaperManager.ViewModels
             }
         }
 
+        public bool HasSplitViewService { get { return SimpleIoc.Default.IsRegistered<SplitViewService>(); } }
+        public SplitViewService SplitViewService
+        {
+            get
+            {
+                return SimpleIoc.Default.GetInstance<SplitViewService>(); ;
+            }
+        }
+
         public static string m_topNavBarText = "";
         public string TopNavBarText
         {

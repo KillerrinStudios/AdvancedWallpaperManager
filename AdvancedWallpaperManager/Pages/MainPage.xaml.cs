@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -38,6 +39,10 @@ namespace AdvancedWallpaperManager.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            // Set up any services which require multiple controls
+            RegisterSplitViewService();
+
+            // Finally, send the loading event
             ViewModel.Loaded();
         }
 
@@ -55,6 +60,7 @@ namespace AdvancedWallpaperManager.Pages
         #region Unavoidable Control Events 
         private void VisualStateGroup_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
+            Debug.WriteLine($"{nameof(VisualStateGroup_CurrentStateChanged)}");
             ViewModel.CurrentVisualState = e.NewState;
         }
         #endregion
@@ -79,5 +85,35 @@ namespace AdvancedWallpaperManager.Pages
             }
         }
         #endregion
+
+        bool hamburgerLoaded = false;
+        private void HamburgerButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            hamburgerLoaded = true;
+            RegisterSplitViewService();
+        }
+
+        bool splitViewLoaded = false;
+        private void MainSplitView_Loaded(object sender, RoutedEventArgs e)
+        {
+            splitViewLoaded = true;
+            RegisterSplitViewService();
+        }
+
+        private void RegisterSplitViewService()
+        {
+            if (hamburgerLoaded && splitViewLoaded)
+            {
+                Debug.WriteLine($"Registering {nameof(SplitViewService)}");
+                if (SimpleIoc.Default.IsRegistered<SplitViewService>()) return;
+                SimpleIoc.Default.Register<SplitViewService>(() => { return new SplitViewService(MainSplitView, HamburgerButton); });
+            }
+
+            //if (!SimpleIoc.Default.IsRegistered<SplitViewService>())
+            //{
+            //    Debug.WriteLine($"Registering {nameof(SplitViewService)}");
+            //    SimpleIoc.Default.Register<SplitViewService>(() => { return new SplitViewService(MainSplitView, HamburgerButton); });
+            //}
+        }
     }
 }
