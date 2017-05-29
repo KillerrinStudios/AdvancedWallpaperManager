@@ -284,8 +284,12 @@ namespace AdvancedWallpaperManager.ViewModels
 
         public async void UnlockAWM()
         {
-            var manager = InAppPurchaseManagerFactory.Create(true);
-            ProductAWMPro = await manager.PurchaseProduct(ProductAWMPro);
+            try
+            {
+                var manager = InAppPurchaseManagerFactory.Create(true);
+                ProductAWMPro = await manager.PurchaseProduct(ProductAWMPro);
+            }
+            catch (Exception) { }
         }
         #endregion
     }

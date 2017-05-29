@@ -151,6 +151,7 @@ namespace KillerrinStudiosToolkit.Store
             async () =>
             {
                 var results = await Purchase(appProduct.ProductID);
+                appProduct = results.Item1;
             });
 
             return appProduct;
@@ -164,7 +165,8 @@ namespace KillerrinStudiosToolkit.Store
             if (license == null)
             {
                 Debug.WriteLine("This product does not exist");
-                return (null, null);
+                throw new ArgumentException($"A product by ProductID of {id} does not exist", nameof(AppProduct.ProductID));
+                //return (null, null);
             }
 
             // If the license is valid, but we don't have the product, create the product

@@ -133,7 +133,8 @@ namespace KillerrinStudiosToolkit.Store
             if (appProduct == null)
             {
                 Debug.WriteLine($"{nameof(appProduct)} is Null");
-                return null;
+                throw new ArgumentNullException(nameof(appProduct));
+                //return null;
             }
 
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,

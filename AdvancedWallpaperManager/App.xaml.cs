@@ -54,16 +54,28 @@ namespace AdvancedWallpaperManager
         {
             PersonalizationManagerBase.ClearImagesFolderEveryXImages = 10;
 
-            var purchaseManager = InAppPurchaseManagerFactory.Create(true);
-            if (purchaseManager is InAppPurchaseManager)
+            try
             {
-                purchaseManager.RefreshAppProducts();
+                var purchaseManager = InAppPurchaseManagerFactory.Create(true);
+                if (purchaseManager is InAppPurchaseManager)
+                {
+                    purchaseManager.RefreshAppProducts();
+                }
+                else
+                {
+                    ManuallyAddAppProducts();
+                    purchaseManager.UpdateProduct(InAppPurchaseManagerBase.AppProducts[0]);
+                }
             }
-            else
-            {
-                InAppPurchaseManagerBase.AppProducts.Add(new AppProduct("AWMPro", "9nzm4xdbvpk0", false));
-                purchaseManager.UpdateProduct(InAppPurchaseManagerBase.AppProducts[0]);
+            catch (Exception) {
+                //ManuallyAddAppProducts();
             }
+        }
+
+        private void ManuallyAddAppProducts()
+        {
+            InAppPurchaseManagerBase.AppProducts.Clear();
+            InAppPurchaseManagerBase.AppProducts.Add(new AppProduct("AWMPro", "9nzm4xdbvpk0", false));
         }
 
         private async void RegisterBackgroundTasks()

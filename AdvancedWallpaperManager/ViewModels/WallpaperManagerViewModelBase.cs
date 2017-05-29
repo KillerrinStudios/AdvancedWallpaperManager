@@ -96,21 +96,29 @@ namespace AdvancedWallpaperManager.ViewModels
             FileDiscoveryCacheRepository = new FileDiscoveryCacheRepository(context);
 
             // Setup the AppProducts
-            InAppPurchaseManagerBase.AppProductsChanged += InAppPurchaseManager_AppProductsChanged;
-            var product = InAppPurchaseManagerFactory.Create(true).GetAppProductByStoreID("9nzm4xdbvpk0");
-            ProductAWMPro = product;
-            Debug.WriteLine($"{nameof(WallpaperManagerViewModelBase)} | {ProductAWMPro}");
+            try
+            {
+                InAppPurchaseManagerBase.AppProductsChanged += InAppPurchaseManager_AppProductsChanged;
+                var product = InAppPurchaseManagerFactory.Create(true).GetAppProductByStoreID("9nzm4xdbvpk0");
+                ProductAWMPro = product;
+                Debug.WriteLine($"{nameof(WallpaperManagerViewModelBase)} | {ProductAWMPro}");
+            }
+            catch (Exception) { }
         }
 
         private void InAppPurchaseManager_AppProductsChanged(InAppPurchaseManagerBase sender, List<AppProduct> args)
         {
-            Debug.WriteLine($"{nameof(InAppPurchaseManager_AppProductsChanged)}");
-            foreach (var product in args)
+            try
             {
-                Debug.WriteLine($"New Product | {product}");
-            }
+                Debug.WriteLine($"{nameof(InAppPurchaseManager_AppProductsChanged)}");
+                foreach (var product in args)
+                {
+                    Debug.WriteLine($"New Product | {product}");
+                }
 
-            ProductAWMPro = sender.GetAppProductByStoreID("9nzm4xdbvpk0");
+                ProductAWMPro = sender.GetAppProductByStoreID("9nzm4xdbvpk0");
+            }
+            catch (Exception) { }
         }
 
         public abstract void Loaded();
