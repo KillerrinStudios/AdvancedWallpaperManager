@@ -1,4 +1,4 @@
-# <img src="https://github.com/KillerrinStudios/AdvancedWallpaperManager/blob/master/Store/Screenshots/App%20Tile%20Icon.png?raw=true" width="48" alt="Logo"> Advanced Wallpaper Manager | Killerrin Studios
+# <img src="https://github.com/KillerrinStudios/AdvancedWallpaperManager/blob/master/Store/Screenshots/AppIcon.png?raw=true" width="48" alt="Logo"> Advanced Wallpaper Manager | Killerrin Studios
 ## Description
 An Advanced Wallpaper Manager for Windows 10 that has several advanced features for managing Wallpapers that Microsoft has removed from Windows
 
